@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//SSR(Server Side Rendering) 방식 :  웹페이지를 주로 전송하는 방식
+//SSR(Server Side Rendering) 방식 : 웹페이지를 주로 전송하는 방식
 @Controller
 @RequestMapping("/")
 public class HelloController
