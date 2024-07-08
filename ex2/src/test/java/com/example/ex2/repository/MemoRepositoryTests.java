@@ -17,8 +17,6 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class MemoRepositoryTests {
   @Autowired
@@ -31,12 +29,11 @@ class MemoRepositoryTests {
 
   @Test
   public void testInsertDummies() {
-//  rangeClosed 마지막 까지 포함함
     IntStream.rangeClosed(1, 100).forEach(new IntConsumer() {
       @Override
       public void accept(int value) {
         Memo memo = Memo.builder()
-            .memoText("Simple memo..." + value)
+            .memoText("Simple memo... " + value)
             .build();
         memoRepository.save(memo);
       }
@@ -55,14 +52,16 @@ class MemoRepositoryTests {
 
   @Test
   public void testUpdate() {
-    //주의 요함(column 이 2개 밖에 없어서 mno, memoText 만 수정,많을 경우는 먼저 불러와야함
     Memo memo = Memo.builder().mno(100L).memoText("update 100").build();
     memoRepository.save(memo);
 
+    //주의(컬럼 mno,memoText 외에 더 많은 컬럼이 있는 경우 먼저 불러와야함!)
     Long mno = 100L;
     Optional<Memo> result = memoRepository.findById(mno);
     if (result.isPresent()) {
-      Memo memo3 = Memo.builder().memoText("update 100").build();
+      Memo memo3 = Memo.builder()
+          .mno(result.get().getMno())
+          .memoText("update 100").build();
       memoRepository.save(memo3);
     }
   }
@@ -75,19 +74,21 @@ class MemoRepositoryTests {
 
   @Test
   public void testPageDefault() {
-    //페이지를 지정할 수 있는 객체
+    // 페이지를 지정할수 있는 객체
     Pageable pageable = PageRequest.of(0, 10);
+
+    // Paging 처리 후 결과를 담기 위한 객체 Page 사용
     Page<Memo> result = memoRepository.findAll(pageable);
     System.out.println(result);
-    System.out.println("========================================");
-    System.out.println("Total Page : " + result.getTotalPages());
-    System.out.println("Total Count : " + result.getTotalElements());
-    System.out.println("Page Number : " + result.getNumber());
-    System.out.println("Page Size : " + result.getSize());
-    System.out.println("has next Page : " + result.hasNext());
-    System.out.println("has Previous Page : " + result.hasPrevious());
-    System.out.println("first Page : " + result.isFirst());
-    System.out.println("last Page : " + result.isLast());
+    System.out.println("=======================================");
+    System.out.println("Total Page: " + result.getTotalPages());
+    System.out.println("Total Count: " + result.getTotalElements());
+    System.out.println("Page Number: " + result.getNumber());
+    System.out.println("Page Size: " + result.getSize());
+    System.out.println("has next page: " + result.hasNext());
+    System.out.println("has previous page: " + result.hasPrevious());
+    System.out.println("first page: " + result.isFirst());
+    System.out.println("last page: " + result.isLast());
 
     Sort sort = Sort.by("mno").descending();
     pageable = PageRequest.of(0, 10, sort);
@@ -96,26 +97,52 @@ class MemoRepositoryTests {
       System.out.println(memo);
     }
   }
+
   @Test
-  public void testQueryMethod(){
-    List<Memo> list = memoRepository.findByMemoTextContaining("7");
-    for(Memo memo : list){
+  public void testQueryMethod() {
+    List<Memo> list = memoRepository.findByMnoBetweenOrderByMnoDesc(70L, 80L);
+    for (Memo memo : list) {
       System.out.println(memo);
     }
   }
   @Test
-  public void testQueryMethodPagealbe(){
-    Pageable pageable
-        = PageRequest.of(0,10, Sort.by("mno").descending());
-    Page<Memo> result = memoRepository.findByMnoBetween(10L,50L,pageable);
-    result.get().forEach(memo -> System.out.println(memo));
-
+  public void testQueryMethod2() {
+    List<Memo> list = memoRepository.findByMemoTextContaining("7");
+    for (Memo memo : list) {
+      System.out.println(memo);
+    }
   }
-  //쿼리메서드에 deleteBy 가 있는 경우 검색후 삭제이기 떄문에 @Commit @Test 를 붙여줘야함
-  @Transactional
+
+  @Test
+  public void testQueryMethodPageable() {
+    Pageable pageable = PageRequest.of(
+        0, 10, Sort.by("mno").descending());
+    Page<Memo> result = memoRepository.findByMnoBetween(10L, 50L, pageable);
+    result.get().forEach(new Consumer<Memo>() {
+      @Override
+      public void accept(Memo memo) {
+        System.out.println(memo);
+      }
+    });
+  }
+
+  @Transactional //쿼리메서드에 DeleteBy가 있는 경우 검색후 삭제이기 때문
   @Commit
   @Test
-  public void testDeleteQueryMethod(){
-    memoRepository.deleteMemoByMnoLessThan(10L); //10보다 작은수 다 지움
+  public void testDeleteQueryMethod() {
+    memoRepository.deleteMemoByMnoLessThan(10L);
+  }
+
+  @Test
+  public void getListDesc() {
+    List<Memo> list = memoRepository.getListDesc();
+    for (Memo m : list) System.out.println(m);
+  }
+  @Test
+  public void updateMemoText() {
+    //int i = memoRepository.updateMemoText(10L,"Update");
+    Memo memo = Memo.builder().mno(10L).memoText("Update2").build();
+    int i = memoRepository.updateMemoText(memo);
+    System.out.println("변경횟수 : "+ i);
   }
 }
