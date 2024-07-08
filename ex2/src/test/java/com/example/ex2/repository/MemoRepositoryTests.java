@@ -145,4 +145,32 @@ class MemoRepositoryTests {
     int i = memoRepository.updateMemoText(memo);
     System.out.println("변경횟수 : "+ i);
   }
+
+  @Test
+  public  void getListWithQuery(){
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<Memo>  result =  memoRepository.getListWithQuery(10L, pageable);
+    result.get().forEach(memo -> System.out.println(memo));
+  }
+  @Test
+  public void testGetListWithQueryObject() {
+    Pageable pageable = PageRequest.of(0, 10);
+    // Paging 처리 후 결과를 담기 위한 객체 Page 사용
+    Page<Object[]> result = memoRepository.getListWithQueryObject(10L, pageable);
+    result.get().forEach(obj -> {
+      for (int i = 0; i < obj.length; i++) {
+        if (i != 0) System.out.print(",");
+        System.out.print(obj[i]);
+      }
+      System.out.println();
+    });
+  }
+
+  @Test
+  public void getNativeResult(){
+    List<Memo> result = memoRepository.getNativeResult();
+    for(Memo m: result){
+     System.out.println(m);
+   }
+  }
 }
