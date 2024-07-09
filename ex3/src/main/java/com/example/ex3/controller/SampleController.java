@@ -10,7 +10,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.LongFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -57,28 +56,32 @@ public class SampleController {
     model.addAttribute("list", list);
   }
 
+  // Redirect 재전송할 경우
+  // RedirectAttributes 사용, return에 "redirect:"로 시작, return type은 String
+  // addFlashAttribute 사용
   @GetMapping("/exInline")
-  public String exInline(Model model, RedirectAttributes ra) { //void:요청된 url이 렌더링주소와 같다
+  public String exInline(Model model, RedirectAttributes ra) {
     log.info("exInline...........");
     SampleDTO dto = SampleDTO.builder()
-        .sno(100L).first("First...100" ).last("Last...100")
+        .sno(100L).first("First...100").last("Last...100")
         .regTime(LocalDateTime.now()).build();
-    model.addAttribute("dtoModel", dto.toString());
-    ra.addAttribute("dtoRA",dto.toString());
-    ra.addFlashAttribute("dtoFlash",dto.toString());
-    ra.addFlashAttribute("result","success");
-    return "redirect:/sample/ex3";
+    model.addAttribute("dtoModel", dto);//재전송안됨.
+    ra.addAttribute("dtoRA", dto.toString());//재전송안됨.
+    ra.addFlashAttribute("dtoFlash", dto);//재전송됨.일회성
+    ra.addFlashAttribute("result", "success");//재전송됨.일회성
+    return "redirect:/sample/ex3";  // controller로 재전송
   }
+
   @GetMapping("/ex3")
-  public String ex3(Model model, RedirectAttributes ra) { //void:요청된 url이 렌더링주소와 같다
-    log.info("exInline...........");
+  public String ex3(Model model, RedirectAttributes ra) {
+    log.info("ex3...........");
     SampleDTO dto = SampleDTO.builder()
-        .sno(100L).first("First...100" ).last("Last...100")
+        .sno(100L).first("First...100").last("Last...100")
         .regTime(LocalDateTime.now()).build();
-    model.addAttribute("dtoModel1", dto.toString());
-    ra.addAttribute("dtoRA1",dto.toString());
-    ra.addFlashAttribute("dtoFlash1",dto.toString());
-    ra.addFlashAttribute("result1","success");
-    return "/sample/ex3";
+    model.addAttribute("dtoModel1", dto);// 전송됨
+    ra.addAttribute("dtoRA1", dto.toString());//전송안됨
+    ra.addFlashAttribute("dtoFlash1", dto);//전송안됨
+    ra.addFlashAttribute("result1", "success");//전송안됨
+    return "/sample/ex3";  //redirect:/ 없어서 전송안됨. 물리적주소 이동
   }
 }
