@@ -6,7 +6,11 @@
 </head>
 <body>
 <h3>선택 변수 *{ }</h3>
+<h3>message #{}</h3>
+<p th:text=
+       "#{msg.login.ok(${sampleDTO.getFirst()+' '+sampleDTO.getLast()}, ${sampleDTO.getRegTime()})}"></p>
 <xmp>
+
   <div th:object="${sampleDTO}">
     <p>
       <span>sampleDTO ${}</span><br>

@@ -22,9 +22,9 @@ public class SampleController {
   public void ex1() {
     log.info("ex1...........");
   }
-  @GetMapping("/selection")
+  @GetMapping("/expression")
   public void selection(Model model) {
-    log.info("selection...........");
+    log.info("expression...........");
     SampleDTO sampleDTO = SampleDTO.builder()
         .sno(1L)
         .first("Park")
