@@ -1,0 +1,9 @@
+<!--src/main/resources/templates/sample/exTemplate.html-->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <th:block th:replace="~{layout/layout1 :: setContent(~{this :: content})}">
+    <th:block th:fragment="content">
+      <h1>exTempate Page1</h1>
+    </th:block>
+  </th:block>
+</html>
