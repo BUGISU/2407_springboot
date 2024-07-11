@@ -53,6 +53,7 @@ class GuestbookRepositoryTests {
   //단일 항목
   @Test
   public void testQuery1(){
+    //페이지 정보(첫 페이지, 갯수, 정렬)를 가진객체
     //페이징 객체 선언 :: 데이터가 많으닌까 페이징 처리를 함
     Pageable pageable = PageRequest.of(0,10, Sort.by("gno").descending()); //페이지 10개
     //동적 질의를 위한 Gusetbook 객체의 QGuestbook 준비
