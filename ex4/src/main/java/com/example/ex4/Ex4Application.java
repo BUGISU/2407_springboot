@@ -14,5 +14,4 @@ public class Ex4Application {
 		SpringApplication.run(Ex4Application.class, args);
 		System.out.println("http://localhost:8080/ex4");
 	}
-
 }
