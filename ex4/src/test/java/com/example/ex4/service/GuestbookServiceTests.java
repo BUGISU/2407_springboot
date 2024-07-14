@@ -1,4 +1,3 @@
-//src/test/java/com/example/ex4/service/GuestbookServiceTests.java
 package com.example.ex4.service;
 
 import com.example.ex4.dto.GuestbookDTO;
@@ -8,6 +7,8 @@ import com.example.ex4.entity.Guestbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class GuestbookServiceTests {
@@ -29,11 +30,22 @@ class GuestbookServiceTests {
   @Test
   public void testList() {
     PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-        .page(1).size(10).build();
+        .page(22).size(10).build();
     PageResultDTO<GuestbookDTO, Guestbook> resultDTO =
         guestbookService.getList(pageRequestDTO);
-    for (GuestbookDTO dto : resultDTO.getDtoList()) {
-      System.out.println(dto);
+
+    System.out.println("PREV:"+resultDTO.isPrev());
+    System.out.println("NEXT:"+resultDTO.isNext());
+    System.out.println("TOTAL:"+resultDTO.getTotalPage());
+    System.out.println("=======================================================");
+    for (GuestbookDTO guestbookDTO : resultDTO.getDtoList()) {
+      System.out.println(guestbookDTO);
     }
+    System.out.println("=======================================================");
+    resultDTO.getPageList().forEach(i -> {
+      if(i%10 != 1) System.out.print(", ");
+      System.out.print(i);
+    });
+    System.out.println();
   }
 }

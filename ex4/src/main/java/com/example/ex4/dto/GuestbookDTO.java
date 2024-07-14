@@ -1,4 +1,3 @@
-//src/main/java/com/example/ex4/dto/GuestbookDTO.java
 package com.example.ex4.dto;
 
 import lombok.AllArgsConstructor;
@@ -12,8 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class GuestbookDTO
-{
+public class GuestbookDTO {
   private Long gno;
   private String title;
   private String content;

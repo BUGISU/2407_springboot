@@ -1,4 +1,3 @@
-//src/main/java/com/example/ex4/entity/BasicEntity.java
 package com.example.ex4.entity;
 
 import jakarta.persistence.Column;
@@ -23,4 +22,5 @@ abstract class BasicEntity {
   @LastModifiedDate
   @Column(name = "moddate")
   private LocalDateTime modDate;
+
 }

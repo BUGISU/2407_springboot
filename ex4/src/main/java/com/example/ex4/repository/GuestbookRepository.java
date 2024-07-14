@@ -1,4 +1,3 @@
-//src/main/java/com/example/ex4/repository/GuestbookRepository.java
 package com.example.ex4.repository;
 
 import com.example.ex4.entity.Guestbook;

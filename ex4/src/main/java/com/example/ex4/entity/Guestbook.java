@@ -1,4 +1,3 @@
-//src/main/java/com/example/ex4/entity/Guestbook.java
 package com.example.ex4.entity;
 
 import jakarta.persistence.*;
@@ -18,6 +17,12 @@ public class Guestbook extends BasicEntity {
   @Column(length = 100, nullable = false)
   private String title;
 
+  @Column(length = 1500, nullable = false)
+  private String content;
+
+  @Column(length = 50, nullable = false)
+  private String writer;
+
   public void changeTitle(String title) {
     this.title = title;
   }
@@ -25,11 +30,4 @@ public class Guestbook extends BasicEntity {
   public void changeContent(String content) {
     this.content = content;
   }
-
-  @Column(length = 1500, nullable = false)
-  private String content;
-
-  @Column(length = 50, nullable = false)
-  private String writer;
-
 }

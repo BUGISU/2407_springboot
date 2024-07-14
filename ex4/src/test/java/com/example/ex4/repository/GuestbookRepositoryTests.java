@@ -1,6 +1,8 @@
-//src/test/java/com/example/ex4/repository/GuestbookRepositoryTest.java
 package com.example.ex4.repository;
 
+import com.example.ex4.dto.GuestbookDTO;
+import com.example.ex4.dto.PageRequestDTO;
+import com.example.ex4.dto.PageResultDTO;
 import com.example.ex4.entity.Guestbook;
 import com.example.ex4.entity.QGuestbook;
 import com.querydsl.core.BooleanBuilder;
@@ -40,33 +42,32 @@ class GuestbookRepositoryTests {
     });
   }
   @Test
-  public void testUpdate(){
+  public void testUpdate() {
     Optional<Guestbook> result = guestbookRepository.findById(300L);
-    if(result.isPresent()){
-      Guestbook guestbook =result.get();
+    if (result.isPresent()) {
+      Guestbook guestbook = result.get();
       guestbook.changeTitle("Changed Title...");
       guestbook.changeContent("Changed Content...");
       guestbookRepository.save(guestbook);
-
     }
   }
-  //단일 항목
+
+  //단일 항목 검색
   @Test
-  public void testQuery1(){
-    //페이지 정보(첫 페이지, 갯수, 정렬)를 가진객체
-    //페이징 객체 선언 :: 데이터가 많으닌까 페이징 처리를 함
-    Pageable pageable = PageRequest.of(0,10, Sort.by("gno").descending()); //페이지 10개
-    //동적 질의를 위한 Gusetbook 객체의 QGuestbook 준비
-    QGuestbook qGuestbook = QGuestbook.guestbook; //동적 검색 가능
-    //검색할 변수
-    String keyword ="1";//1이 포함된 것을 검색
-    //검색을 실행 할 객체
+  public void testQuery1() {
+    // Pageable :: 페이지 정보(첫페이지,갯수,정렬)를 가진 객체
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending());
+    // 동적 질의를 위한 Guestbook 객체의 QGuestbook 준비
+    QGuestbook qGuestbook = QGuestbook.guestbook;
+    // 검색할 변수
+    String keyword = "1";
+    // 검색을 실행할 객체
     BooleanBuilder builder = new BooleanBuilder();
-    //검색 조건을 설정할 객체
-    BooleanExpression expression = qGuestbook.title.contains(keyword); //keyword 가 포함되 있는지 확인
-    //검색 실행 준비
+    // 검색 조건 설정할 객체
+    BooleanExpression expression = qGuestbook.title.contains(keyword);
+    // 검색 실행 준비 완료
     builder.and(expression);
-    //검색 실행후, Page 객체에 담음
+    // 검색 실행 후 Page 객체에 담음.
     Page<Guestbook> result = guestbookRepository.findAll(builder, pageable);
     result.stream().forEach(new Consumer<Guestbook>() {
       @Override
@@ -75,21 +76,21 @@ class GuestbookRepositoryTests {
       }
     });
   }
-  //다중항목 검색
-  @Test
-  public void testQuery2(){
-    Pageable pageable = PageRequest.of(0,10, Sort.by("gno").descending());
-    QGuestbook qGuestbook = QGuestbook.guestbook;
-    String keyword ="1";
 
+  // 다중 항목 검색
+  @Test
+  public void testQuery2() {
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending());
+    QGuestbook qGuestbook = QGuestbook.guestbook;
+    String keyword = "1";
     BooleanBuilder builder = new BooleanBuilder();
-    BooleanExpression exTitle= qGuestbook.title.contains(keyword);
+    BooleanExpression exTitle = qGuestbook.title.contains(keyword);
     BooleanExpression exContent = qGuestbook.content.contains(keyword);
     BooleanExpression exAll = exTitle.or(exContent);
     builder.and(exAll);
-
-    builder.and(qGuestbook.gno.gt(0L)); //0보다 클 경우에 :: 형식적이지만 추가해서 조건을 온전하게 함.
+    builder.and(qGuestbook.gno.gt(0L)); //형식적이지만 추가해서 조건을 온전하게 함.
     Page<Guestbook> result = guestbookRepository.findAll(builder, pageable);
     result.stream().forEach(guestbook -> System.out.println(guestbook));
   }
+
 }
