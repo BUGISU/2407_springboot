@@ -23,7 +23,9 @@ public class PageResultDTO<DTO, EN> {
 
   // 생성자를 통해서 페이징된 result의 각각의 원소에 대한 함수 적용
   public PageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
+    //Page를 List로 변경 처리
     dtoList = result.stream().map(fn).collect(Collectors.toList());
+    //전체 페이지 개수 구하기
     totalPage = result.getTotalPages();
     makePageList(result.getPageable());
   }

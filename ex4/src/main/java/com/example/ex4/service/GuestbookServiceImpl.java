@@ -38,6 +38,7 @@ public class GuestbookServiceImpl implements GuestbookService {
     Page<Guestbook> result = guestbookRepository.findAll(pageable);
 
     // 목록을 처리하기 위한 함수 정의
+    //Page의 Guestbook 을 GuestbookDTO 로 변환해주는 함수
     Function<Guestbook, GuestbookDTO> fn = new Function<Guestbook, GuestbookDTO>() {
       @Override
       public GuestbookDTO apply(Guestbook guestbook) {

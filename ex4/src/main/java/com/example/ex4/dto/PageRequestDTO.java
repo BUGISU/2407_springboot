@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 @Data
 @Builder
 @AllArgsConstructor
+
 public class PageRequestDTO {
   private int page; // 요청되는 page 번호
   private int size; // 페이지당 목록 갯수

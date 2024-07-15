@@ -34,7 +34,8 @@ public class GuestbookController {
   public String registerPost(GuestbookDTO guestbookDTO, RedirectAttributes ra) {
     log.info("register post........");
     Long gno = guestbookService.register(guestbookDTO);
-    ra.addFlashAttribute("msg", gno);
+    ra.addFlashAttribute("msg", gno); //일회성 전송을 의미함
+    //redirect = 컨트롤러로 재전송한다는 의미
     return "redirect:/guestbook/list";
   }
 }
