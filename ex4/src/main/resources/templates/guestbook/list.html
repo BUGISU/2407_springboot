@@ -16,7 +16,11 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="guestbookDTO : ${pageResultDTO.dtoList}">
+      <tr th:each="guestbookDTO : ${pageResultDTO.dtoList}"
+          style="cursor:pointer;"
+          onmouseover="this.style.background = '#e8fafc';" onmouseout="this.style.background = 'white';"
+          th:onclick="|location.href='@{/guestbook/read(gno=${guestbookDTO.gno}
+          ,page=${pageResultDTO.page})}'|">
         <th scope="row">[[${guestbookDTO.gno}]]</th>
         <td>[[${guestbookDTO.title}]]</td>
         <td>[[${guestbookDTO.writer}]]</td>
@@ -60,14 +64,13 @@
       window.onload = function(){
         var msg = [[${msg}]]
         console.log(msg)
-        if(msg) {
+        if(msg) { // truthy 데이터가 올 경우만 if문 실행
           const myModal = new bootstrap.Modal(document.querySelector('#myModal'),
                           { backdrop: true });
           document.querySelector(".modal-body").innerHTML
             = `<p>${msg}번 글이 등록되었습니다.</p>`
           myModal.show()
         }
-
       }
     </script>
   </th:block>

@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Log4j2
 @RequiredArgsConstructor
 public class GuestbookController {
-
   private final GuestbookService guestbookService;
 
   @GetMapping({"", "/", "/list"})
@@ -32,10 +31,18 @@ public class GuestbookController {
 
   @PostMapping("/register")
   public String registerPost(GuestbookDTO guestbookDTO, RedirectAttributes ra) {
+    //페이지에 대한 요청 정보(PageRequestDTO)를 통해서 최종 PageResultDTO 를 생성
     log.info("register post........");
     Long gno = guestbookService.register(guestbookDTO);
     ra.addFlashAttribute("msg", gno); //일회성 전송을 의미함
     //redirect = 컨트롤러로 재전송한다는 의미
     return "redirect:/guestbook/list";
   }
+  @GetMapping("/read")
+  public void read(Long gno,int page, Model model){
+    GuestbookDTO guestbookDTO = guestbookService.read(gno);
+    model.addAttribute("guestbookDTO",guestbookDTO);
+    model.addAttribute("page",page);
+  }
+
 }
