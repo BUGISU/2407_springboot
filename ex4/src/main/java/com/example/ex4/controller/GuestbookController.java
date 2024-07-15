@@ -1,3 +1,4 @@
+//src/main/java/com/example/ex4/controller/GuestbookController.java
 package com.example.ex4.controller;
 
 import com.example.ex4.dto.GuestbookDTO;
