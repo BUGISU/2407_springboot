@@ -1,9 +1,9 @@
-<!--src/main/resources/templates/guestbook/read.html-->
+<!--src/main/resources/templates/guestbook/modify.html-->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
   <th:block th:fragment="content">
-    <h1 class="mt-4">Guestbook Read Page</h1>
+    <h1 class="mt-4">Guestbook Modify Page</h1>
     <style>
       .form-group {margin-bottom: 30px;}
     </style>
@@ -16,12 +16,12 @@
       <div class="form-group">
         <label for="title">Title</label>
         <input type="text" name="title" id="title" class="form-control"
-               th:value="${guestbookDTO.title}" readonly>
+               th:value="${guestbookDTO.title}">
       </div>
       <div class="form-group">
         <label for="content">Content</label>
         <textarea type="text" name="content" id="content" class="form-control"
-                  th:text="${guestbookDTO.content}" readonly></textarea>
+                  th:text="${guestbookDTO.content}"></textarea>
       </div>
       <div class="form-group">
         <label for="writer">Writer</label>
@@ -39,12 +39,29 @@
                th:value="${#temporals.format(guestbookDTO.modDate, 'yyyy/MM/dd hh:mm')}">
       </div>
       <div class="form-group">
-        <a th:href="@{/guestbook/modify(gno=${guestbookDTO.gno},page=${page})}" class="btn btn-primary">Modify</a>
-        <a th:href="@{/guestbook/list(page=${page})}" class="btn btn-info">List</a>
+        <input type="hidden" name="page" th:value="${page}">
+        <button class="btn btn-primary btnModi">Modify</button>
+        <button class="btn btn-danger btnDele">Delete</button>
+        <button class="btn btn-info btnInfo">Cancel</button>
       </div>
     </form>
     <script th:inline="javascript">
-
+      btnModi =document.querySelector(".btnModi");
+      btnModi =document.querySelector(".btnDele");
+      btnModi =document.querySelector(".btnInfo");
+      frmSend =  document.querySelector("#frmSend"); //폼 전송
+      btnModi.onclick = e => {
+       <!--preventDefault()는 JavaScript에서 이벤트가 발생했을 때 기본 동작을 취소하는 메서드입니다.
+       이벤트는 보통 클릭, 제출, 키 누름 등과 같은 사용자 동작을 의미합니다.-->
+       e.preventDefault()
+       //유효성 검사 check
+      frmSend.submit();
+       }
+      btnDele.onclick = e=> {
+      e.preventDefault()
+      //주소값을 변경해줌
+      frmSend.setAttribute('action',/*[[@{/guestbook/remove}]]*/'remove')
+      }
     </script>
   </th:block>
 

@@ -18,14 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Log4j2
 @RequiredArgsConstructor
 public class GuestbookController {
+
   private final GuestbookService guestbookService;
 
   @GetMapping({"", "/", "/list"})
-/* Spring MVC에서 Controller에서 View로 데이터를 전달하는 데 사용되는 인터페이스입니다.
-  Controller 메서드에서 데이터를 추가하면, 이 데이터는 View에 전달되어 클라이언트에게 보여집니다.*/
   public String list(Model model, PageRequestDTO pageRequestDTO) {
-    model.addAttribute("pageResultDTO",
-        guestbookService.getList(pageRequestDTO));
+    // 페이지에 대한 요청 정보를 통해서 최종 PageResultDTO 생성
+    model.addAttribute("pageResultDTO",guestbookService.getList(pageRequestDTO));
     return "/guestbook/list";
   }
   @GetMapping("/register")
@@ -33,18 +32,16 @@ public class GuestbookController {
 
   @PostMapping("/register")
   public String registerPost(GuestbookDTO guestbookDTO, RedirectAttributes ra) {
-    //페이지에 대한 요청 정보(PageRequestDTO)를 통해서 최종 PageResultDTO 를 생성
     log.info("register post........");
     Long gno = guestbookService.register(guestbookDTO);
-    ra.addFlashAttribute("msg", gno); //일회성 전송을 의미함
-    //redirect = 컨트롤러로 재전송한다는 의미
+    ra.addFlashAttribute("msg", gno);
+    // redirect는 컨트롤러로 재전송한다는 의미
     return "redirect:/guestbook/list";
   }
-  @GetMapping("/read")
-  public void read(Long gno,int page, Model model){
+  @GetMapping({"/read","/modify"})
+  public void read(Long gno, int page, Model model) {
     GuestbookDTO guestbookDTO = guestbookService.read(gno);
-    model.addAttribute("guestbookDTO",guestbookDTO);
-    model.addAttribute("page",page);
+    model.addAttribute("guestbookDTO", guestbookDTO);
+    model.addAttribute("page", page);
   }
-
 }
