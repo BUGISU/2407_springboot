@@ -46,21 +46,18 @@
       </div>
     </form>
     <script th:inline="javascript">
-      btnModi =document.querySelector(".btnModi");
-      btnModi =document.querySelector(".btnDele");
-      btnModi =document.querySelector(".btnInfo");
-      frmSend =  document.querySelector("#frmSend"); //폼 전송
+      btnModi = document.querySelector(".btnModi")
+      btnDele = document.querySelector(".btnDele")
+      btnInfo = document.querySelector(".btnInfo")
+      frmSend = document.querySelector("#frmSend")
       btnModi.onclick = e => {
-       <!--preventDefault()는 JavaScript에서 이벤트가 발생했을 때 기본 동작을 취소하는 메서드입니다.
-       이벤트는 보통 클릭, 제출, 키 누름 등과 같은 사용자 동작을 의미합니다.-->
-       e.preventDefault()
-       //유효성 검사 check
-      frmSend.submit();
-       }
-      btnDele.onclick = e=> {
-      e.preventDefault()
-      //주소값을 변경해줌
-      frmSend.setAttribute('action',/*[[@{/guestbook/remove}]]*/'remove')
+        e.preventDefault() // 유효성검사 넣어줄 것!
+        frmSend.submit();
+      }
+      btnDele.onclick = e => {
+        e.preventDefault()
+        frmSend.setAttribute('action', /*[[@{/guestbook/remove}]]*/'remove')
+        //frmSend.submit();
       }
     </script>
   </th:block>
