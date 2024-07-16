@@ -43,8 +43,36 @@
         <a th:href="@{/guestbook/list(page=${page})}" class="btn btn-info">List</a>
       </div>
     </form>
-    <script th:inline="javascript">
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <script th:inline="javascript">
+      // document의 태그를 모두 읽고 난뒤 실행되는 함수
+      window.onload = function(){
+        var msg = [[${msg}]]
+        console.log(msg)
+        if(msg) { // truthy 데이터가 올 경우만 if문 실행
+          const myModal = new bootstrap.Modal(document.querySelector('#myModal'),
+                          { backdrop: true });
+          document.querySelector(".modal-body").innerHTML
+            = `<p>${msg}되었습니다.</p>`
+          myModal.show()
+        }
+      }
     </script>
   </th:block>
 

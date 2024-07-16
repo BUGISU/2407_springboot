@@ -5,9 +5,8 @@
   <th:block th:fragment="content">
     <h1 class="mt-4">Guestbook Register Page</h1>
     <style>
-      form>div {margin-bottom: 20px;}
+      .form-group {margin-bottom: 30px;}
     </style>
-    <!--form 태그의 전송 방식은 2개 , get, post 두개 있다 -> -->
     <form th:action="@{/guestbook/register}" th:method="post" id="frmSend">
       <div class="form-group">
         <label for="title">Title</label>
@@ -24,7 +23,9 @@
         <input type="text" name="writer" id="writer" class="form-control"
                placeholder="작성자를 입력하세요" value="user1">
       </div>
-      <button type="submit" id="btnSend" class="btn btn-primary">Submit</button>
+      <div class="form-group">
+        <button type="submit" id="btnSend" class="btn btn-primary">Submit</button>
+      </div>
     </form>
     <script th:inline="javascript">
       btnSend = document.querySelector("#btnSend");
@@ -36,6 +37,7 @@
         if(writer.value == "") {writer.focus();return false;}
         document.querySelector("#frmSend").submit();
       }
+
     </script>
   </th:block>
 

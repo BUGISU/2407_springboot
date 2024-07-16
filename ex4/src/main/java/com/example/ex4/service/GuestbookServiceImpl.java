@@ -29,6 +29,7 @@ public class GuestbookServiceImpl implements GuestbookService {
     guestbookRepository.save(guestbook);
     return guestbook.getGno();
   }
+
   @Override
   public PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO pageRequestDTO) {
     // 알고자하는 페이지(번호, 갯수, 정렬)
@@ -52,8 +53,7 @@ public class GuestbookServiceImpl implements GuestbookService {
   }
 
   @Override
-  public GuestbookDTO read(Long gno)
-  {
+  public GuestbookDTO read(Long gno) {
     //단수 : findById를 통해서 유일한 하나의 객체를 찾아보는 것
     //Optional의 특징 : null 값을 받아도 에러가 발생하지않고 형변환 안해도 안전하다
 
@@ -63,6 +63,25 @@ public class GuestbookServiceImpl implements GuestbookService {
       guestbookDTO = entityToDto(result.get()) ;
     }
     return guestbookDTO;*/
-    return result.isPresent() ? entityToDto(result.get()): null;
+    return result.isPresent() ? entityToDto(result.get()) : null;
+  }
+
+  @Override
+  public void modify(GuestbookDTO guestbookDTO) {
+    Optional<Guestbook> result
+        = guestbookRepository.findById(guestbookDTO.getGno());
+    if (result.isPresent()) {
+      Guestbook guestbook = result.get();
+      guestbook.changeTitle(guestbookDTO.getTitle());
+      guestbook.changeContent(guestbookDTO.getContent());
+      guestbookRepository.save(guestbook);
+    }
+  }
+  @Override
+  public void remove(GuestbookDTO guestbookDTO) {
+    Optional<Guestbook> result = guestbookRepository.findById(guestbookDTO.getGno());
+    if (result.isPresent()) {
+      guestbookRepository.deleteById(guestbookDTO.getGno());
+    }
   }
 }
