@@ -59,23 +59,21 @@
         </div>
       </div>
     </div>
-
     <script th:inline="javascript">
       // document의 태그를 모두 읽고 난뒤 실행되는 함수
       window.onload = function(){
-      //내용도 같은데 타입까지 같은 경우 ===
-      //일회성 msg의 내용이 비거나 history의 상태가 비어있지 않는 경우 멈춤
-      if(msg === '' || history.state) return
         var msg = [[${msg}]]
-        console.log(msg)
-        history.replaceState({}, null, null) //(state, unused, url)
-        if(msg) { // truthy 데이터가 올 경우만 if문 실행
+        // 일회성 msg의 내용이 비거나 history 상태가 비지 않는 경우 return
+        if(msg === '' || history.state) return
+        if(msg) {  // truthy 데이터가 올 경우만 if문 실행
           const myModal = new bootstrap.Modal(document.querySelector('#myModal'),
                           { backdrop: true });
           document.querySelector(".modal-body").innerHTML
             = `<p>${msg}되었습니다.</p>`
           myModal.show()
         }
+        // history 이용해서 모달창 보여준거에 대한 기록을 clear!
+        history.replaceState({}, null, null) //(state, unused, url)
       }
     </script>
   </th:block>
