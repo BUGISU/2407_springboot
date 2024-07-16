@@ -21,6 +21,8 @@ public class GuestbookController {
   private final GuestbookService guestbookService;
 
   @GetMapping({"", "/", "/list"})
+/* Spring MVC에서 Controller에서 View로 데이터를 전달하는 데 사용되는 인터페이스입니다.
+  Controller 메서드에서 데이터를 추가하면, 이 데이터는 View에 전달되어 클라이언트에게 보여집니다.*/
   public String list(Model model, PageRequestDTO pageRequestDTO) {
     model.addAttribute("pageResultDTO",
         guestbookService.getList(pageRequestDTO));
