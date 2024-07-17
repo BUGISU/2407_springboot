@@ -1,4 +1,3 @@
-<!--src/main/resources/templates/guestbook/list.html-->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
@@ -7,19 +6,21 @@
       <a class="btn btn-outline-primary" th:href="@{/guestbook/register}">Register</a>
     </h1>
     <form th:action="@{/guestbook/list}" id="frmSearch" method="get">
+      <input type="hidden" name="page" value="1"/>
       <div class="input-group">
-        <div class="input-group-prepend" style="margin-right:5px">
-          <select class="form-control selectType" id="selectType" name="type">
-            <option style="text-align:right">😊▼</option>
-            <option value="t">제목</option>
-            <option value="c">내용</option>
-            <option value="w">작성자</option>
-            <option value="tc">제목+내용</option>
-            <option value="tcw">제목+내용+작성자</option>
+        <div class="input-group-prepend" style="margin-right:10px;">
+          <select class="form-control" id="type" name="type">
+            <option th:selected="${pageRequestDTO.type == null}">선택하세요</option>
+            <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
+            <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
+            <option value="w" th:selected="${pageRequestDTO.type == 'w'}">작성자</option>
+            <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목+내용</option>
+            <option value="tcw" th:selected="${pageRequestDTO.type == 'tcw'}">제목+내용+작성자</option>
           </select>
         </div>
-        <input type="text" class="form-control keyword" id="keyword" name="keyword" style="border-radius:5px">
-        <div class="input-group-append" style="margin-left:5px">
+        <input type="text" class="form-control" name="keyword" style="border-radius:5px"
+               id="keyword" th:value="${pageRequestDTO.keyword}">
+        <div class="input-group-append" style="margin-left:10px;">
           <button class="btn btn-outline-primary btnSearch">Search</button>
         </div>
       </div>
@@ -35,10 +36,11 @@
       </thead>
       <tbody>
       <!--/*
-     th:onclick="|location.href='@{/guestbook/read(gno=${guestbookDTO.gno},page=${pageResultDTO.page})}'|"
-     */-->
+      th:onclick="|location.href='@{/guestbook/read(gno=${guestbookDTO.gno},page=${pageResultDTO.page})}'|"
+      */-->
       <tr th:each="guestbookDTO : ${pageResultDTO.dtoList}" style="cursor:pointer;"
-          th:onclick="|goRead(${guestbookDTO.gno},${pageResultDTO.page})|"
+          th:onclick="|goRead(${guestbookDTO.gno},${pageResultDTO.page},
+          ${pageRequestDTO.type},${pageRequestDTO.keyword})|"
           onmouseover="this.style.background='#d6e6ff'"
           onmouseout="this.style.background='white'">
         <th scope="row">[[${guestbookDTO.gno}]]</th>
@@ -56,7 +58,7 @@
       <li th:each="page : ${pageResultDTO.pageList}"
           th:class=" 'page-item ' + ${pageResultDTO.page == page?'active':''} ">
         <a class="page-link"
-           th:href="@{/guestbook/list(page=${page})}">[[${page}]]</a>
+           th:href="@{/guestbook/list(page=${page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
       </li>
       <li class="page-item " th:if="${pageResultDTO.next}">
         <a class="page-link"
@@ -84,7 +86,7 @@
       window.onload = function(){
         var msg = [[${msg}]]
         // 일회성 msg의 내용이 비거나 history 상태가 비지 않는 경우 return
-        if(msg === '' || history.state) return
+        //if(msg === '' || history.state) return
 
         if(msg) {  // truthy 데이터가 올 경우만 if문 실행
           const myModal = new bootstrap.Modal(document.querySelector('#myModal'),
@@ -95,27 +97,36 @@
         }
         // history 이용해서 모달창 보여준거에 대한 기록을 clear!
         history.replaceState({}, null, null) //(state, unused, url)
+
         frmSearch = document.querySelector("#frmSearch")
         btnSearch = document.querySelector(".btnSearch")
-        selectType = document.querySelector("#selectType")
+        type = document.querySelector("#type");
         keyword = document.querySelector("#keyword")
-        selectType.onchange = () => {
-        alert("hello")
-          if(selectType.options[0].selected){
-            keyword.disabled = true;
-          }
-          else {
-          keyword.disabled = false;
-          if()
+
+        btnSearch.onclick = e => {
+          e.preventDefault();
+          if(!keyword.value) {
+            keyword.focus();
+            return;
+           }
+          frmSearch.submit();
+        }
+        type.onchange = () => {
+          if(type.options[0].selected) {
+            location.href = /*[[@{/guestbook/list}]]*/'url'
+          } else {
+            keyword.disabled = false;
+            btnSearch.disabled = false;
           }
         }
-        keyword.disable = true;
+        const requestKeyword = /*[[${pageRequestDTO.keyword}]]*/'keyword'
+        keyword.disabled = requestKeyword?false:true;
+        btnSearch.disabled = requestKeyword?false:true;
       }
-      function goRead(gno, page){
+      function goRead(gno, page, type, keyword){
         url = /*[[@{/guestbook/read}]]*/'url'
-        location.href = url + `?gno=${gno}&page=${page}`
+        location.href = url + `?gno=${gno}&page=${page}&type=%{type}&keyword=${keyword}`
       }
-
     </script>
   </th:block>
 </th:block>
