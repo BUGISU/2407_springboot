@@ -64,7 +64,6 @@ public class GuestbookController {
   public String remove(GuestbookDTO guestbookDTO, PageRequestDTO pageRequestDTO
       , RedirectAttributes ra) {
     guestbookService.remove(guestbookDTO);
-
     if(guestbookService.getList(pageRequestDTO).getDtoList().size() ==0
         && pageRequestDTO.getPage() != 1){
       pageRequestDTO.setPage(pageRequestDTO.getPage()-1);

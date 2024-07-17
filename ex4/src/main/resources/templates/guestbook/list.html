@@ -6,6 +6,24 @@
     <h1 class="mt-4">Guestbook List Page
       <a class="btn btn-outline-primary" th:href="@{/guestbook/register}">Register</a>
     </h1>
+    <form th:action="@{/guestbook/list}" id="frmSearch" method="get">
+      <div class="input-group">
+        <div class="input-group-prepend" style="margin-right:5px">
+          <select class="form-control selectType" id="selectType" name="type">
+            <option style="text-align:right">😊▼</option>
+            <option value="t">제목</option>
+            <option value="c">내용</option>
+            <option value="w">작성자</option>
+            <option value="tc">제목+내용</option>
+            <option value="tcw">제목+내용+작성자</option>
+          </select>
+        </div>
+        <input type="text" class="form-control keyword" id="keyword" name="keyword" style="border-radius:5px">
+        <div class="input-group-append" style="margin-left:5px">
+          <button class="btn btn-outline-primary btnSearch">Search</button>
+        </div>
+      </div>
+    </form>
     <table class="table table-striped">
       <thead>
       <tr>
@@ -16,15 +34,17 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="guestbookDTO : ${pageResultDTO.dtoList}"
-          style="cursor:pointer;"
-          onmouseover="this.style.background = '#e8fafc';" onmouseout="this.style.background = 'white';"
-          th:onclick="|location.href='@{/guestbook/read(gno=${guestbookDTO.gno}
-          ,page=${pageResultDTO.page})}'|">
+      <!--/*
+     th:onclick="|location.href='@{/guestbook/read(gno=${guestbookDTO.gno},page=${pageResultDTO.page})}'|"
+     */-->
+      <tr th:each="guestbookDTO : ${pageResultDTO.dtoList}" style="cursor:pointer;"
+          th:onclick="|goRead(${guestbookDTO.gno},${pageResultDTO.page})|"
+          onmouseover="this.style.background='#d6e6ff'"
+          onmouseout="this.style.background='white'">
         <th scope="row">[[${guestbookDTO.gno}]]</th>
         <td>[[${guestbookDTO.title}]]</td>
         <td>[[${guestbookDTO.writer}]]</td>
-        <td>[[${#temporals.format(guestbookDTO.regDate, 'yyyyMMdd hh:mm')}]]</td>
+        <td>[[${#temporals.format(guestbookDTO.regDate, 'yyyy/MM/dd hh:mm')}]]</td>
       </tr>
       </tbody>
     </table>
@@ -63,15 +83,39 @@
       // document의 태그를 모두 읽고 난뒤 실행되는 함수
       window.onload = function(){
         var msg = [[${msg}]]
-        console.log(msg)
-        if(msg) { // truthy 데이터가 올 경우만 if문 실행
+        // 일회성 msg의 내용이 비거나 history 상태가 비지 않는 경우 return
+        if(msg === '' || history.state) return
+
+        if(msg) {  // truthy 데이터가 올 경우만 if문 실행
           const myModal = new bootstrap.Modal(document.querySelector('#myModal'),
                           { backdrop: true });
           document.querySelector(".modal-body").innerHTML
             = `<p>${msg}되었습니다.</p>`
           myModal.show()
         }
+        // history 이용해서 모달창 보여준거에 대한 기록을 clear!
+        history.replaceState({}, null, null) //(state, unused, url)
+        frmSearch = document.querySelector("#frmSearch")
+        btnSearch = document.querySelector(".btnSearch")
+        selectType = document.querySelector("#selectType")
+        keyword = document.querySelector("#keyword")
+        selectType.onchange = () => {
+        alert("hello")
+          if(selectType.options[0].selected){
+            keyword.disabled = true;
+          }
+          else {
+          keyword.disabled = false;
+          if()
+          }
+        }
+        keyword.disable = true;
       }
+      function goRead(gno, page){
+        url = /*[[@{/guestbook/read}]]*/'url'
+        location.href = url + `?gno=${gno}&page=${page}`
+      }
+
     </script>
   </th:block>
 </th:block>

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 public class PageRequestDTO {
   private int page; // 요청되는 page 번호
   private int size; // 페이지당 목록 갯수
+  private String type;
+  private String keyword;
 
   // 첫 페이지가 1페이지로 가기 때문
   public PageRequestDTO() {
