@@ -19,7 +19,7 @@
           </select>
         </div>
         <input type="text" class="form-control" name="keyword" style="border-radius:5px"
-               id="keyword" th:value="${pageRequestDTO.keyword}">
+               id="keyword" th:value="${pageRequestDTO.keyword?pageRequestDTO.keyword:''}">
         <div class="input-group-append" style="margin-left:10px;">
           <button class="btn btn-outline-primary btnSearch">Search</button>
         </div>
