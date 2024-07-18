@@ -1,3 +1,4 @@
+<!--src/main/resources/templates/guestbook/list.html-->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
@@ -6,7 +7,6 @@
       <a class="btn btn-outline-primary" th:href="@{/guestbook/register}">Register</a>
     </h1>
     <form th:action="@{/guestbook/list}" id="frmSearch" method="get">
-      <input type="hidden" name="page" value="1"/>
       <div class="input-group">
         <div class="input-group-prepend" style="margin-right:10px;">
           <select class="form-control" id="type" name="type">
@@ -39,8 +39,7 @@
       th:onclick="|location.href='@{/guestbook/read(gno=${guestbookDTO.gno},page=${pageResultDTO.page})}'|"
       */-->
       <tr th:each="guestbookDTO : ${pageResultDTO.dtoList}" style="cursor:pointer;"
-          th:onclick="|goRead(${guestbookDTO.gno},${pageResultDTO.page},
-          ${pageRequestDTO.type},${pageRequestDTO.keyword})|"
+          th:onclick="goRead([[${guestbookDTO.gno}]],[[${pageResultDTO.page}]],[[${pageRequestDTO.type}]], [[${pageRequestDTO.keyword}]])"
           onmouseover="this.style.background='#d6e6ff'"
           onmouseout="this.style.background='white'">
         <th scope="row">[[${guestbookDTO.gno}]]</th>
@@ -125,7 +124,7 @@
       }
       function goRead(gno, page, type, keyword){
         url = /*[[@{/guestbook/read}]]*/'url'
-        location.href = url + `?gno=${gno}&page=${page}&type=%{type}&keyword=${keyword}`
+        location.href = url + `?gno=${gno}&page=${page}&type=${type}&keyword=${keyword}`
       }
     </script>
   </th:block>
