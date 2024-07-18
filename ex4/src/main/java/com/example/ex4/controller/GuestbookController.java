@@ -21,6 +21,8 @@ public class GuestbookController {
 
   private final GuestbookService guestbookService;
 
+  //커맨드 객체 :: 입력양식 태그의 name 속성이 커맨드 객체의 멤버변수와 일치하면 값 전달 받음
+  //커맨드객체는 다음페이지에 객체명(첫글자 소문자)으로 Model 처럼 전달이 된다
   @GetMapping({"", "/", "/list"})
   public String list(Model model, PageRequestDTO pageRequestDTO) {
     // PageRequestDTO는 커맨드 객체이며, 다음페이지에 model로 전송안해도 넘어간다.
