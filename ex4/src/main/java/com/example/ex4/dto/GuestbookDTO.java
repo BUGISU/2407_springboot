@@ -1,4 +1,3 @@
-//src/main/java/com/example/ex4/dto/GuestbookDTO.java
 package com.example.ex4.dto;
 
 import lombok.AllArgsConstructor;

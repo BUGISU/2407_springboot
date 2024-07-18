@@ -1,4 +1,3 @@
-//src/main/java/com/example/ex4/dto/PageRequestDTO.java
 package com.example.ex4.dto;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +23,7 @@ public class PageRequestDTO {
 
   // Pageable은 페이지 처리를 위한 객체
   public Pageable getPageable(Sort sort) {
-    // page - 1 :: Pageable 객체는 페이지 번호가 0부터 시작
+    // Pageable 객체는 페이지 번호가 0부터 시작
     return PageRequest.of(page - 1, size, sort);
   }
 }

@@ -1,4 +1,3 @@
-//src/test/java/com/example/ex4/repository/GuestbookRepositoryTests.java
 package com.example.ex4.repository;
 
 import com.example.ex4.dto.GuestbookDTO;

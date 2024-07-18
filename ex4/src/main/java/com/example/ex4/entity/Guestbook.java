@@ -1,4 +1,3 @@
-//src/main/java/com/example/ex4/entity/Guestbook.java
 package com.example.ex4.entity;
 
 import jakarta.persistence.*;

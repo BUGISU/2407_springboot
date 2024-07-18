@@ -1,4 +1,3 @@
-//src/main/java/com/example/ex4/controller/GuestbookController.java
 package com.example.ex4.controller;
 
 import com.example.ex4.dto.GuestbookDTO;
@@ -21,8 +20,9 @@ public class GuestbookController {
 
   private final GuestbookService guestbookService;
 
-  //커맨드 객체 :: 입력양식 태그의 name 속성이 커맨드 객체의 멤버변수와 일치하면 값 전달 받음
-  //커맨드객체는 다음페이지에 객체명(첫글자 소문자)으로 Model 처럼 전달이 된다
+  // 커맨드객체::입력양식태그의 name속성이 커맨드객체의 멤버변수명과 일치하면 값 전달 받음
+  // 커맨드객체는 다음페이지에 객체명(첫글자 소문자)으로 Model처럼 전달이 된다.
+
   @GetMapping({"", "/", "/list"})
   public String list(Model model, PageRequestDTO pageRequestDTO) {
     // PageRequestDTO는 커맨드 객체이며, 다음페이지에 model로 전송안해도 넘어간다.
@@ -48,6 +48,7 @@ public class GuestbookController {
   @GetMapping({"/read", "/modify"})
   public void read(Long gno, PageRequestDTO pageRequestDTO, Model model) {
     GuestbookDTO guestbookDTO = guestbookService.read(gno);
+    typeKeywordInit(pageRequestDTO);
     model.addAttribute("guestbookDTO", guestbookDTO);
   }
 
@@ -55,6 +56,7 @@ public class GuestbookController {
   public String modify(GuestbookDTO guestbookDTO, PageRequestDTO pageRequestDTO,
                        RedirectAttributes ra) {
     guestbookService.modify(guestbookDTO);
+    typeKeywordInit(pageRequestDTO);
     ra.addFlashAttribute("msg", guestbookDTO.getGno() + "번이 수정");
     ra.addAttribute("page", pageRequestDTO.getPage());
     ra.addAttribute("type", pageRequestDTO.getType());
@@ -71,10 +73,15 @@ public class GuestbookController {
         pageRequestDTO.getPage() != 1) {
       pageRequestDTO.setPage(pageRequestDTO.getPage() - 1);
     }
+    typeKeywordInit(pageRequestDTO);
     ra.addFlashAttribute("msg", guestbookDTO.getGno() + "번이 삭제");
     ra.addAttribute("page", pageRequestDTO.getPage());
     ra.addAttribute("type", pageRequestDTO.getType());
     ra.addAttribute("keyword", pageRequestDTO.getKeyword());
     return "redirect:/guestbook/list";
+  }
+  private void typeKeywordInit(PageRequestDTO pageRequestDTO){
+    if (pageRequestDTO.getType().equals("null")) pageRequestDTO.setType("");
+    if (pageRequestDTO.getKeyword().equals("null")) pageRequestDTO.setKeyword("");
   }
 }
