@@ -20,4 +20,8 @@ public class Board extends BasicEntity {
 
   @ManyToOne( fetch = FetchType.LAZY) //속도를 좀 빠르게 만들어줌
   private Member writer;
+  public void changeTitle(String title) {this.title = title;}
+  public void changeContent(String content) {
+    this.content = content;
+  }
 }
