@@ -6,9 +6,14 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.swing.text.html.Option;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
@@ -52,5 +57,30 @@ class BoardRepositoryTests {
     Object result = boardRepository.getBoardWithWriter(100L);
     Object[] arr = (Object[]) result;
     System.out.println(Arrays.toString(arr));
+  }
+
+  @Test
+  public void testBoardWithReply() {
+    List<Object[]> result = boardRepository.getBoardWithReply(100L);
+    for (Object[] arr : result) {
+      System.out.println(Arrays.toString(arr));
+    }
+  }
+  @Test
+  public void testBoardWithReplyCount() {
+    Pageable pageable = PageRequest.of(0,10, Sort.by("bno").descending());
+    Page<Object[]> result =boardRepository.getBoardWithReplyCount(pageable);
+    result.get().forEach(row -> {
+      Object[] arr = (Object[]) row;
+      System.out.println(Arrays.toString(arr));
+    });
+  }
+  @Test
+  public void testRead3(){
+    Object result = boardRepository.getBoardByBno(20L);
+    Object[] arr =(Object[]) result;
+    for(Object obj : arr){
+      System.out.println(obj);
+    }
   }
 }
