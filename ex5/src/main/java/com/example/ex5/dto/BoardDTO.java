@@ -18,7 +18,7 @@ public class BoardDTO {
   private String writerEmail;
   private String writerName;
   private LocalDateTime regDate;
-  private LocalDateTime nodDate;
+  private LocalDateTime modDate;
   private int replyCount;
 
 }
