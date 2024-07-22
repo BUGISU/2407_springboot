@@ -15,7 +15,7 @@ public class Reply extends BasicEntity {
   private Long rno;
 
   private String text;
-
+  private String replyer;
   @ManyToOne(fetch = FetchType.LAZY)
   private Board board;
 
