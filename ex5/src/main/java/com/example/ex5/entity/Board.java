@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "writer") //항상 조인되어있는 관계를 느슨하게 만들어줌
+@ToString(exclude = "writer")
 public class Board extends BasicEntity {
 
   @Id
@@ -18,10 +18,10 @@ public class Board extends BasicEntity {
   private String title;
   private String content;
 
-  @ManyToOne( fetch = FetchType.LAZY) //속도를 좀 빠르게 만들어줌
+  @ManyToOne(fetch = FetchType.LAZY)
   private Member writer;
+
   public void changeTitle(String title) {this.title = title;}
-  public void changeContent(String content) {
-    this.content = content;
-  }
+  public void changeContent(String content) {this.content = content;}
+
 }

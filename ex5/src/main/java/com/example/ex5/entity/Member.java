@@ -13,8 +13,6 @@ import lombok.*;
 public class Member extends BasicEntity {
   @Id
   private String email;
-
   private String password;
   private String name;
-
 }

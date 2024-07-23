@@ -7,7 +7,6 @@ import com.example.ex5.entity.Board;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 
 import java.util.Optional;
 
@@ -15,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class BoardServiceImplTests {
+
   @Autowired
   private BoardService boardService;
 
@@ -33,7 +33,6 @@ class BoardServiceImplTests {
     PageRequestDTO pageRequestDTO = new PageRequestDTO();
     PageResultDTO<BoardDTO, Object[]> result = boardService.getList(pageRequestDTO);
     for (BoardDTO dto : result.getDtoList()) {
-      //getDtoList의 목록을 가지고옴
       System.out.println(dto);
     }
   }
@@ -48,7 +47,10 @@ class BoardServiceImplTests {
   @Test
   void modify() {
     BoardDTO boardDTO = BoardDTO.builder()
-        .bno(2L).title("제목 변경").content("내용 변경").build();
+        .bno(2L)
+        .title("제목 변경")
+        .content("내용 변경")
+        .build();
     boardService.modify(boardDTO);
   }
 

@@ -9,22 +9,24 @@ import java.util.function.IntConsumer;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class MemberRepositoryTests {
+
   @Autowired
   MemberRepository memberRepository;
 
   @Test
   public void insertMembers() {
-    IntStream.rangeClosed(1, 100).forEach(new IntConsumer() {
+    IntStream.rangeClosed(1,100).forEach(new IntConsumer() {
       @Override
       public void accept(int i) {
         Member member = Member.builder()
-            .email(String.format("user%d@a.a",i))
+            .email(String.format("user%d@a.a", i))
             .password("1")
-            .name("USER"+i)
+            .name("USER" + i)
             .build();
-
         memberRepository.save(member);
       }
     });

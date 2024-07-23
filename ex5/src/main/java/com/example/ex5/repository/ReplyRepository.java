@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
+
   @Modifying  // update, delete를 사용할 때 무조건 붙임.
   @Query("delete from Reply r where r.board.bno = :bno")
   void deleteByBno(Long bno);
-
 }

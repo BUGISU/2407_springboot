@@ -7,7 +7,7 @@ import com.example.ex5.entity.Board;
 import com.example.ex5.entity.Member;
 
 public interface BoardService {
-  public default Board dtdToEntity(BoardDTO boardDTO){
+  public default Board dtoToEntity(BoardDTO boardDTO) {
     Board board = Board.builder()
         .bno(boardDTO.getBno())
         .title(boardDTO.getTitle())
@@ -16,10 +16,10 @@ public interface BoardService {
         .build();
     return board;
   }
-  public default BoardDTO entityToDto(Board board , Member member, Long replyCount){
+
+  public default BoardDTO entityToDTO(Board board, Member member, Long replyCount) {
     BoardDTO boardDTO = BoardDTO.builder()
-        .bno(board.getBno())
-        .title(board.getTitle())
+        .bno(board.getBno()).title(board.getTitle())
         .content(board.getContent())
         .writerEmail(member.getEmail())
         .writerName(member.getName())
@@ -29,6 +29,7 @@ public interface BoardService {
         .build();
     return boardDTO;
   }
+
   Long register(BoardDTO boardDTO);
   PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
   BoardDTO get(Long bno);
