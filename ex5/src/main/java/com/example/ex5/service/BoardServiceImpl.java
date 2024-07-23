@@ -7,6 +7,8 @@ import com.example.ex5.entity.Board;
 import com.example.ex5.entity.Member;
 import com.example.ex5.repository.BoardRepository;
 import com.example.ex5.repository.ReplyRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -45,7 +47,23 @@ public class BoardServiceImpl implements BoardService {
     };
     return new PageResultDTO<>(result, fn);
   }
+/*  private BooleanBuilder getSearch(PageRequestDTO pageRequestDTO) {
+    String type = pageRequestDTO.getType();
+    String keyword = pageRequestDTO.getKeyword();
+    // 동적 검색을 하기 위한 객체 생성
+    BooleanBuilder booleanBuilder = new BooleanBuilder();
+    QBoard qGuestbook = QGuestbook.guestbook; // 검색 대상인 QGuestbook
+    BooleanExpression expression = qGuestbook.bno.gt(0L);//전체조건부여
+    booleanBuilder.and(expression); // 첫번째 조건을 적용
 
+    BooleanBuilder conditionBuilder = new BooleanBuilder(); // 세부 검색 조건 객체
+    if(type == null || type.trim().length() == 0) return booleanBuilder;
+    if(type.contains("t")) conditionBuilder.or(qGuestbook.title.contains(keyword));
+    if(type.contains("c")) conditionBuilder.or(qGuestbook.content.contains(keyword));
+    if(type.contains("w")) conditionBuilder.or(qGuestbook.writer.contains(keyword));
+    booleanBuilder.and(conditionBuilder);
+    return booleanBuilder;
+  }*/
   @Override
   public BoardDTO get(Long bno) {
     Object result = boardRepository.getBoardByBno(bno);
@@ -66,8 +84,8 @@ public class BoardServiceImpl implements BoardService {
 
   @Transactional
   @Override
-  public void removeWithReplies(BoardDTO boardDTO) {
-   replyRepository.deleteById(boardDTO.getBno());
-   boardRepository.deleteById(boardDTO.getBno());
+  public void removeWithReplies(Long bno) {
+   replyRepository.deleteByBno(bno);
+   boardRepository.deleteById(bno);
   }
 }
