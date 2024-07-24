@@ -84,12 +84,13 @@
             console.log(data)
             let str = "";
             for(let i=0;i<data.length;i++) {
-              str += `<div class="card-body form-control"
+              str += `<div class="card-body form-control mb-1" style="padding: 5px 20px"
               data-rno="${data[i].rno}" data-text="${data[i].text}"
               data-replyer="${data[i].replyer}" style="cursor:pointer;">
-              <b>${data[i].rno}</b>
-              <h5 class="card-text">${data[i].text}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">${data[i].replyer}</h6>
+              <p><b>${data[i].rno}</b></p>
+              <h5 class="card-text" style="display:inline-block; width:400px;">${data[i].text}</h5>
+              <h6 class="card-subtitle mb-2 text-muted"
+              style ="display: inline-block; width:100px; >${data[i].replyer}</h6>
               <p class="card-text">${formatDateTime(data[i].regDate)}</p>
               </div>`
             }
