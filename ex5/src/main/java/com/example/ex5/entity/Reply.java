@@ -25,5 +25,4 @@ public class Reply extends BasicEntity {
     this.text =text;
   }
 
-  public
 }
