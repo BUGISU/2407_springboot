@@ -4,7 +4,7 @@
   <th:block th:fragment="content">
     <h1 class="mt-4">Board Read Page</h1>
     <style>
-      .form-group {margin-bottom: 30px;}
+      .form-group {margin-bottom: 10px;}
     </style>
     <form th:action="@{/board/modify}" th:method="post" id="frmSend">
       <div class="form-group">
@@ -49,8 +49,10 @@
     </form>
     <div>
       <div class="mt-4">
-        <h5> <span class="btn btn-warning replyCount">Reply Count
-      [[${boardDTO.replyCount}]]</span></h5>
+        <h5>
+          <span class="btn btn-outline-secondary addReply">Add Reply</span>
+          <span style="font-size:9pt">댓글: [[${boardDTO.replyCount}]] 개</span>
+        </h5>
       </div>
       <div class="list-group replyList"></div>
     </div>
@@ -70,33 +72,38 @@
         </div>
       </div>
     </div>
-    <style>
-
-    </style>
     <script th:inline="javascript">
       // document의 태그를 모두 읽고 난뒤 실행되는 함수
       window.onload = function(){
-        loadJSONData();
-        function loadJSONData() {
+        loadReplyJSON();
+        var myModal = new bootstrap.Modal(document.querySelector('#myModal'),
+                          { backdrop: true });
+        function loadReplyJSON() {
           const bno = [[${boardDTO.bno}]]
           const url = /*[[@{/replies/board/}]]*/'url'
           const listGroup = document.querySelector(".replyList")
           fetch(url+bno, {method: 'GET',})
           .then(response => response.json())
           .then(data => {
-            console.log(data)
+            // console.log(data)
             let str = "";
             for(let i=0;i<data.length;i++) {
-              str += `<div class="card-body form-control mb-1" style="padding: 5px 20px"
+              str = str + `<div class="card-body form-control mb-1"
               onmouseover="this.style.background='#d6e6ff'"
               onmouseout="this.style.background='white'"
               data-rno="${data[i].rno}" data-text="${data[i].text}"
-              data-replyer="${data[i].replyer}" style="cursor:pointer;">
-              <h4>${data[i].rno}</h4>
-              <h5 class="card-text" style="display:inline-block;width:300px">${data[i].text}</h5>
-              <h6 class="card-subtitle text-muted"
-                style="display:inline-block;">${data[i].replyer}</h6>
-              <p class="card-text" style="display:inline-block;">${formatDateTime(data[i].regDate)}</p>
+              data-replyer="${data[i].replyer}"
+              style="padding: 5px 20px;cursor:pointer;">
+                <div style="display:inline-block;width:49%;">
+                  <h6 style="display:inline-block;width:70px">${data[i].rno}</h6>
+                  <h5 class="card-text" style="display:inline-block;">${data[i].text}</h5>
+                </div>
+                <div style="display:inline-block;width:48%;text-align: right;right-padding:20px;">
+                  <span class="card-subtitle text-muted">${data[i].replyer}</span>
+                  <span class="card-subtitle text-muted"
+                  style="display:inline-block;width:150px;color:rgb(148 163 184);"
+                  >${formatDateTime(data[i].regDate)}</span>
+                </div>
               </div>`
             }
             listGroup.innerHTML = str
@@ -111,6 +118,15 @@
         function len2(num) {
           return (num<10) ? "0"+num : num;
         }
+        document.querySelector('.addReply').onclick = function(){
+          document.querySelector('#exampleModalLabel').textContent = '댓글 추가'
+          document.querySelector(".modal-body").innerHTML =
+            `
+            <input type="text" class="form-control" name="replyText" placeholder="Reply...">
+            <input type="text" class="form-control" name="replyer" placeholder="Replyer...">
+            `
+          myModal.show()
+        }
 
         var msg = [[${msg}]]
 
@@ -120,8 +136,6 @@
         history.replaceState({}, null, null) //(state, unused, url)
 
         if(msg) {  // truthy 데이터가 올 경우만 if문 실행
-          const myModal = new bootstrap.Modal(document.querySelector('#myModal'),
-                          { backdrop: true });
           document.querySelector(".modal-body").innerHTML
             = `<p>${msg}되었습니다.</p>`
           myModal.show()
