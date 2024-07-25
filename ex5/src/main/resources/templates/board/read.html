@@ -51,7 +51,9 @@
       <div class="mt-4">
         <h5>
           <span class="btn btn-outline-secondary addReply">Add Reply</span>
-          <span style="font-size:9pt">댓글: [[${boardDTO.replyCount}]] 개</span>
+          <span style="font-size:9pt">댓글:
+            <span id="repCnt" th:text="${boardDTO.replyCount}"></span> 개
+          </span>
         </h5>
       </div>
       <div class="list-group replyList"></div>
@@ -75,11 +77,11 @@
     <script th:inline="javascript">
       // document의 태그를 모두 읽고 난뒤 실행되는 함수
       window.onload = function(){
+        var bno = [[${boardDTO.bno}]]
         loadReplyJSON();
         var myModal = new bootstrap.Modal(document.querySelector('#myModal'),
                           { backdrop: true });
         function loadReplyJSON() {
-          const bno = [[${boardDTO.bno}]]
           const url = /*[[@{/replies/board/}]]*/'url'
           const listGroup = document.querySelector(".replyList")
           fetch(url+bno, {method: 'GET',})
@@ -118,15 +120,44 @@
         function len2(num) {
           return (num<10) ? "0"+num : num;
         }
-        document.querySelector('.addReply').onclick = function(){
+        document.querySelector('.addReply').onclick = function() {
           document.querySelector('#exampleModalLabel').textContent = '댓글 추가'
           document.querySelector(".modal-body").innerHTML =
             `
             <input type="text" class="form-control" name="replyText" placeholder="Reply...">
-            <input type="text" class="form-control" name="replyer" placeholder="Replyer...">
+            <input type="text" class="form-control" name="replyer" value='user50@a.a'>
             `
+          document.querySelector(".modal-footer").innerHTML =
+            `
+              <button type="button" class="btn btn-primary save">댓글 등록</button>
+              <span class="btn btn-secondary" data-bs-dismiss="modal">Close</span>
+            `
+          document.querySelector(".modal-footer .save").onclick = function () {
+            let text = document.querySelector("input[name='replyText']")
+            let replyer = document.querySelector("input[name='replyer']")
+
+            if(!text.value) {text.setAttribute('placeholder', '댓글입력하세요');return;}
+            if(!replyer.value) {replyer.setAttribute('placeholder', '작성자입력하세요');return;}
+            let reply = {bno: bno, text: text.value, replyer: replyer.value}
+            const url = /*[[@{/replies/}]]*/'url';
+            fetch(url, {
+              method: 'POST',
+              headers: {'Content-type': 'application/json'},
+              body: JSON.stringify(reply)
+            })
+            .then(res => res.json())
+            .then(function(data){
+              document.querySelector(".modal-body").innerHTML=`${data}번 댓글 등록 완료.`
+              document.querySelector("#exampleModalLabel").innerHTML=`등록 알림`
+              document.querySelector(".modal-footer .save").style.display = 'none'
+              document.querySelector("#repCnt").textContent =
+                parseInt(document.querySelector("#repCnt").textContent) + 1
+              loadReplyJSON()
+            })
+          }
           myModal.show()
         }
+
 
         var msg = [[${msg}]]
 
@@ -141,6 +172,7 @@
           myModal.show()
         }
       }
+
     </script>
   </th:block>
 
