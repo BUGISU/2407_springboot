@@ -84,6 +84,25 @@ public class UploadController {
     return result;
   }
 
+  @PostMapping("/removeFile")
+  public ResponseEntity<Boolean> removeFile(String fileName) {
+    String searchFilename = null;
+    try {
+      searchFilename = URLDecoder.decode(fileName, "UTF-8");
+      File file = new File(uploadPath + File.separator + searchFilename);
+      boolean result1 = file.delete();
+      File thumbnail =
+          new File(file.getPath() + File.separator + "s_" + searchFilename);
+      boolean result2 = thumbnail.delete();
+      return new ResponseEntity<>(
+          (result1 && result2) ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   private String makeFolder() {
     String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     String folderPath = str.replace("/", File.separator);

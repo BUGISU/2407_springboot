@@ -48,9 +48,25 @@
     let str = ""
     const url = /*[[@{/display}]]*/'url'
     for(let i=0;i<arr.length;i++){
-      str += `<img src="${url}?fileName=${arr[i].thumbnailURL}">`
+      str += `<div>
+      <img src="${url}?fileName=${arr[i].thumbnailURL}">
+      <button class="removeBtn" data-name='${arr[i].imageURL}'>X</button>
+      </div>`
     }
     uploadResultDiv.innerHTML = str;
+    const removeBtns = document.querySelectorAll(".removeBtn");
+    for(let i=0; i<removeBtns.length; i++){
+     const fileName = this.dataset.name;
+     const targetDiv = this.closest('div')
+     const removeUrl = /*[[@{/removeFile?fileName=}]]*/'removeUrl'
+     fetch(removeUrl+fileName, {
+      method: 'POST',fileName:fileName
+     }). then(response => response.json())
+     .then(json => {
+     if( json  === true)targetDiv.remove()
+     }).
+     catch(err=> console.log("Error occurred: " , err))
+    }
   }
 </script>
 
