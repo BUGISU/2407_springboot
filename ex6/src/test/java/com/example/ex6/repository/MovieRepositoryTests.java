@@ -6,7 +6,6 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -86,18 +85,19 @@ class MovieRepositoryTests {
   }
 
   @Test
-  public void testSubQuery() {
+  public void testGetMaxQuery() {
     PageRequest pageRequest =
         PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "movie"));
-    Page<Object[]> result = movieRepository.getSubQuery(pageRequest);
+    Page<Object[]> result = movieRepository.getMaxQuery(pageRequest);
     for (Object[] objArr : result.getContent()) {
       System.out.println(Arrays.toString(objArr));
     }
   }
+
   @Test
-  public  void testGetMovieWithAll(){
+  public void testGetMovieWithAll() {
     List<Object[]> result = movieRepository.getMovieWithAll(100L);
-    for (Object[] arr :result){
+    for (Object[] arr : result) {
       System.out.println(Arrays.toString(arr));
     }
   }

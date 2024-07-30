@@ -3,9 +3,11 @@ package com.example.ex6.repository;
 import com.example.ex6.entity.Member;
 import com.example.ex6.entity.Movie;
 import com.example.ex6.entity.Review;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -16,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ReviewRepositoryTests {
   @Autowired
   ReviewRepository reviewRepository;
+  @Autowired
+  MemberRepository memberRepository;
 
   @Test
   public void insertReviews() {
@@ -31,8 +35,9 @@ class ReviewRepositoryTests {
       reviewRepository.save(review);
     });
   }
+
   @Test
-  public void testGetMovieReiews(){
+  public void testFindByMovie() {
     List<Review> result = reviewRepository.findByMovie(
         Movie.builder().mno(100L).build()
     );
@@ -43,5 +48,15 @@ class ReviewRepositoryTests {
       System.out.println(review.getMember().getEmail());
       System.out.println();
     });
+  }
+
+  @Test
+  @Transactional
+  @Commit
+  public void testDeleteByMember() {
+    Long mid = 1L;
+    Member member = Member.builder().mid(mid).build();
+    reviewRepository.deleteByMember(member);
+    memberRepository.deleteById(mid);
   }
 }
