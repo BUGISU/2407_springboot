@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 public interface MovieService {
   Long register(MovieDTO movieDTO);
-
   //
   default Map<String, Object> dtoToEntity(MovieDTO movieDTO){
     Map<String, Object> entityMap = new HashMap<>();
@@ -36,7 +35,35 @@ public interface MovieService {
             }
           }
       ).collect(Collectors.toList());
+      entityMap.put("movieImageList",movieImageList);
     }
     return entityMap;
   }
+  default MovieDTO entityToDto(Movie movie, List<MovieImage> movieImageList,
+                               Double avg , int reviewCnt){
+  MovieDTO movieDTO = MovieDTO.builder()
+      .mno(movie.getMno())
+      .title(movie.getTitle())
+      .regDate(movie.getRegDate())
+      .modDate(movie.getModDate())
+      .build();
+  List<MovieImageDTO> movieImageDTOList = movieImageList.stream().map(
+      new Function<MovieImage, MovieImageDTO>() {
+        @Override
+        public MovieImageDTO apply(MovieImage movieImage) {
+          MovieImageDTO movieImageDTO = MovieImageDTO.builder()
+              .imgName(movieImage.getImgName())
+              .path(movieImage.getPath())
+              .uuid(movieImage.getUuid())
+              .build();
+          return movieImageDTO;
+        }
+      }
+  ).collect(Collectors.toList());
+  movieDTO.setAvg(avg);
+  movieDTO.setReviewCnt(reviewCnt);
+  return movieDTO;
+  };
 }
+
+

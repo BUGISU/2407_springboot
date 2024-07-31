@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,4 +19,10 @@ public class MovieDTO {
 
   @Builder.Default //속성의 기본값으로 초기화
   private List<MovieImageDTO> imageDTOList = new ArrayList<>();
+
+  private double avg;
+  private int reviewCnt;
+
+  private LocalDateTime regDate;
+  private LocalDateTime modDate;
 }
