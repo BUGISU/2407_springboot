@@ -42,8 +42,8 @@ public class UploadController {
       String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
       log.info("fileName: " + fileName);
 
-      String folderPath = makeFolder();
-      String uuid = UUID.randomUUID().toString();
+      String folderPath = makeFolder(); //yyyy/MM/dd
+      String uuid = UUID.randomUUID().toString(); //unique 한 값
       String saveName = uploadPath + File.separator + folderPath + File.separator
           + uuid + "_" + fileName;
       Path savePath = Paths.get(saveName);
