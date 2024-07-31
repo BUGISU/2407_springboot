@@ -25,80 +25,78 @@
       <div class="uploadResult"> <!--file의 onchange 후에 보여질 섬네일 보여주는 영역-->
 
       </div>
-    </form>
-    <script th:inline="javascript">
-      function checkExtension(fileName, fileSize){
-        maxSize = 1024*1024*10;
-        if(fileSize >= maxSize) {alert("파일사이즈 초과");return false; }
-        // https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Regular_expressions
-        //const regex = new RegExp("(.*?)\.(exe|sh|zip|alz|tiff)$");
-        const regex = new RegExp("(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$",'i');//i대소문자구분X
-        if(!regex.test(fileName)) {alert("해당파일 업로드 금지!");return false; }
-        return true;
-      }
-      const fileInput = document.querySelector("#fileInput")
-      fileInput.onchange = function() {
-        const fileName = fileInput.value.split("\\").pop();
-        let label = document.querySelector(".custom-file-label")
-        label.innerHTML =
-          (fileInput.files.length-1) ==0 ? "" :
-          `${fileName} 외 ${fileInput.files.length-1}개`
-          let appended =false; //파일이 잘 추가되는지 확인
-          for(let i=0; i<fileInput.files.length; i++){
-            if(!checkExtension(fileInput.files[i].name, fileInput.files.size)){
-              label.innerHTML = ''; fileInput.value = '';
-              return false; break;
+      <script th:inline="javascript">
+        function checkExtension(fileName, fileSize){
+          maxSize = 1024*1024*10;
+          if(fileSize >= maxSize) {alert("파일사이즈 초과");return false; }
+          // https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Regular_expressions
+          //const regex = new RegExp("(.*?)\.(exe|sh|zip|alz|tiff)$");
+          const regex = new RegExp("(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$",'i');//i대소문자구분X
+          if(!regex.test(fileName)) {alert("해당파일 업로드 금지!");return false; }
+          return true;
+        }
+        const fileInput = document.querySelector("#fileInput")
+        fileInput.onchange = function() {
+          const fileName = fileInput.value.split("\\").pop();
+          let label = document.querySelector(".custom-file-label")
+          label.innerHTML =
+            (fileInput.files.length-1) ==0 ? "" :
+            `${fileName} 외 ${fileInput.files.length-1}개`
+            let appended =false; //파일이 잘 추가되는지 확인
+            for(let i=0; i<fileInput.files.length; i++){
+              if(!checkExtension(fileInput.files[i].name, fileInput.files.size)){
+                label.innerHTML = ''; fileInput.value = '';
+                return false; break;
+              }
+              formData.append("uploadFiles", fileInput.files[i])
+              append = true;
             }
-            formData.append("uploadFiles", fileInput.files[i])
-            append = true;
+            if(!appended) return;
+            for(const value of formData.values()) console.log(value)
+            const url = /*[[@{/uploadAjax}]]*/'url'
+            fetch(url, {
+              method: 'POST', body: formData, dataType: 'json'
+            }).then(res => res.json())
+            .then(json => {console.log(json); showResult(json);})
+            .catch(err => console.log('Error: ', err))
+        }
+        btnSend = document.querySelector("#btnSend");
+        btnSend.onclick = function(e) {
+          e.preventDefault();
+          title = document.getElementById("title")
+  <!--        writerEmail = document.querySelector("#writerEmail")-->
+          if(title.value == "") {title.focus();return false;}
+  <!--        if(writerEmail.value == "") {writerEmail.focus();return false;}-->
+          document.querySelector("#frmSend").submit();
+        }
+        function showResult(arr){
+          const uploadResultDiv = document.querySelector(".uploadResult")
+          let str = ""
+          const url = /*[[@{/display}]]*/'url'
+          for(let i=0;i<arr.length;i++){
+            str += `<li data-name = '${arr[i].fileName}' data-path='${arr[i].folderPath}'
+            data-uuid='${arr[i].uuid}' data-file='${arr[i].imageURL}'><div>
+            <button class="removeBtn" type="button"}'>X</button>
+            <img src="${url}?fileName=${arr[i].thumbnailURL}">
+            </div></li>`
           }
-          if(!appended) return;
-          for(const value of formData.values()) console.log(value)
-          const url = /*[[@{/uploadAjax}]]*/'url'
-          fetch(url, {
-            method: 'POST', body: formData, dataType: 'json'
-          }).then(res => res.json())
-          .then(json => {console.log(json); showResult(json);})
-          .catch(err => console.log('Error: ', err))
-      }
-      btnSend = document.querySelector("#btnSend");
-      btnSend.onclick = function(e) {
-        e.preventDefault();
-        title = document.getElementById("title")
-<!--        writerEmail = document.querySelector("#writerEmail")-->
-        if(title.value == "") {title.focus();return false;}
-<!--        if(writerEmail.value == "") {writerEmail.focus();return false;}-->
-        document.querySelector("#frmSend").submit();
-      }
-      function showResult(arr){
-        const uploadResultDiv = document.querySelector(".uploadResult")
-        let str = ""
-        const url = /*[[@{/display}]]*/'url'
-        for(let i=0;i<arr.length;i++){
-          str += `<li data-name = '${arr[i].fileName}' data-path='${arr[i].folderPath}'
-          data-uuid='${arr[i].uuid}' data-file='${arr[i].imageURL}'><div>
-          <button class="removeBtn" type="button"}'>X</button>
-          <img src="${url}?fileName=${arr[i].thumbnailURL}">
-          </div></li>`
+          uploadResultDiv.innerHTML = str;
+          const removeBtns = document.querySelectorAll(".removeBtn");
+          for(let i=0; i<removeBtns.length; i++){
+           const removeUrl = /*[[@{/removeFile?fileName=}]]*/'removeUrl'
+           const targetLi = targetLi.closest('li')
+           const fileName = targetLi.dataset.name;
+           fetch(removeUrl+fileName, {
+            method: 'POST',dataType:'json'
+           }). then(response => targetLi.json())
+           .then(json => {
+           if( json  === true)targetDiv.remove()
+           }).
+           catch(err=> console.log("Error occurred: " , err))
+          }
         }
-        uploadResultDiv.innerHTML = str;
-        const removeBtns = document.querySelectorAll(".removeBtn");
-        for(let i=0; i<removeBtns.length; i++){
-         const fileName = this.dataset.name;
-         const targetLi = this.closest('li')
-         const removeUrl = /*[[@{/removeFile?fileName=}]]*/'removeUrl'
-         fetch(removeUrl+fileName, {
-          method: 'POST',dataType:'json'
-         }). then(response => targetLi.json())
-         .then(json => {
-         if( json  === true)targetDiv.remove()
-         }).
-         catch(err=> console.log("Error occurred: " , err))
-        }
-      }
-    </script>
+      </script>
+    </form>
   </th:block>
-
 </th:block>
-
 </html>
