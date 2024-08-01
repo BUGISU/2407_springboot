@@ -2,47 +2,47 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
   <th:block th:fragment="content">
-    <h1 class="mt-4">Board Read Page</h1>
+    <h1 class="mt-4">Movie Read Page</h1>
     <style>
       .form-group {margin-bottom: 10px;}
     </style>
-    <form th:action="@{/board/modify}" th:method="post" id="frmSend">
+    <form th:action="@{/movie/modify}" th:method="post" id="frmSend">
       <div class="form-group">
         <label for="bno">Bno</label>
         <input type="text" name="bno" id="bno" class="form-control"
-               th:value="${boardDTO.bno}" readonly>
+               th:value="${movieDTO.bno}" readonly>
       </div>
       <div class="form-group">
         <label for="title">Title</label>
         <input type="text" name="title" id="title" class="form-control"
-               th:value="${boardDTO.title}" readonly>
+               th:value="${movieDTO.title}" readonly>
       </div>
       <div class="form-group">
         <label for="content">Content</label>
         <textarea type="text" name="content" id="content" class="form-control"
-                  th:text="${boardDTO.content}" readonly></textarea>
+                  th:text="${movieDTO.content}" readonly></textarea>
       </div>
       <div class="form-group">
         <label for="writerEmail">Writer Email</label>
         <input type="text" name="writerEmail" id="writerEmail" class="form-control"
-               th:value="${boardDTO.writerEmail}" readonly>
+               th:value="${movieDTO.writerEmail}" readonly>
       </div>
       <div class="form-group">
         <label for="regDate">RegDate</label>
         <input type="text" name="regDate" id="regDate" class="form-control" readonly
-               th:value="${#temporals.format(boardDTO.regDate, 'yyyy/MM/dd hh:mm')}">
+               th:value="${#temporals.format(movieDTO.regDate, 'yyyy/MM/dd hh:mm')}">
       </div>
       <div class="form-group">
         <label for="modDate">ModDate</label>
         <input type="text" name="modDate" id="modDate" class="form-control" readonly
-               th:value="${#temporals.format(boardDTO.modDate, 'yyyy/MM/dd hh:mm')}">
+               th:value="${#temporals.format(movieDTO.modDate, 'yyyy/MM/dd hh:mm')}">
       </div>
       <div class="form-group">
-        <a th:href="@{/board/modify(bno=${boardDTO.bno},
+        <a th:href="@{/movie/modify(bno=${movieDTO.bno},
                       page=${pageRequestDTO.page},type=${pageRequestDTO.type},
                       keyword=${pageRequestDTO.keyword})}"
            class="btn btn-primary">Modify</a>
-        <a th:href="@{/board/list(page=${pageRequestDTO.page},
+        <a th:href="@{/movie/list(page=${pageRequestDTO.page},
                       type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}"
            class="btn btn-info">List</a>
       </div>
@@ -52,7 +52,7 @@
         <h5>
           <span class="btn btn-outline-secondary addReply">Add Reply</span>
           <span style="font-size:9pt">댓글:
-            <span id="repCnt" th:text="${boardDTO.replyCount}"></span> 개
+            <span id="repCnt" th:text="${movieDTO.replyCount}"></span> 개
           </span>
         </h5>
       </div>
@@ -77,12 +77,12 @@
     <script th:inline="javascript">
       // document의 태그를 모두 읽고 난뒤 실행되는 함수
       window.onload = function(){
-        var bno = [[${boardDTO.bno}]]
+        var bno = [[${movieDTO.bno}]]
         loadReplyJSON();
         var myModal = new bootstrap.Modal(document.querySelector('#myModal'),
                           { backdrop: true });
         function loadReplyJSON() {
-          const url = /*[[@{/replies/board/}]]*/'url'
+          const url = /*[[@{/replies/movie/}]]*/'url'
           const listGroup = document.querySelector(".replyList")
           fetch(url+bno, {method: 'GET',})
           .then(response => response.json())

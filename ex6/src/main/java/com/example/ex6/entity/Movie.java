@@ -16,6 +16,5 @@ public class Movie extends BasicEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long mno;
-
   private String title;
 }
