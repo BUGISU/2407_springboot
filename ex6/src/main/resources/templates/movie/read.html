@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<style>
+  .form-group {margin-bottom: 10px;}
+  .uploadResult {width: 100%;background:gray;margin-top:10px;}
+  .uploadResult ul {
+    display: flex;flex-flow:row;justify-content:center;
+    align-items:center;vertical-align:top;overflow: auto;
+  }
+  .uploadResult ul li {list-style:none;padding:10px;margin-left:2em;}
+  .uploadResult ul li img {width: 100px;}
+</style>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
   <th:block th:fragment="content">
     <h1 class="mt-4">Movie Read Page</h1>
-    <style>
-      .form-group {margin-bottom: 10px;}
-      .uploadResult {width: 100%;background:gray;margin-top:10px;}
-      .uploadResult ul {
-        display: flex;flex-flow:row;justify-content:center;
-        align-items:center;vertical-align:top;overflow: auto;
-      }
-      .uploadResult ul li {list-style:none;padding:10px;margin-left:2em;}
-      .uploadResult ul li img {width: 100px;}
-    </style>
     <form th:action="@{/movie/modify}" th:method="post" id="frmSend">
       <div class="form-group">
         <label for="mno">Mno</label>
@@ -27,12 +27,12 @@
       <div class="form-group">
         <label for="reviewCnt">Review Count</label>
         <input type="text" name="reviewCnt" id="reviewCnt" class="form-control"
-               th:text="${movieDTO.reviewCnt}" readonly></input>
+               th:value="${movieDTO.reviewCnt}" readonly></input>
       </div>
       <div class="form-group">
         <label for="avg">Average</label>
         <input type="text" name="avg" id="avg" class="form-control"
-               th:text="${movieDTO.avg}" readonly></input>
+               th:value="${movieDTO.avg}" readonly></input>
       </div>
       <div class="form-group">
         <label for="regDate">RegDate</label>
@@ -46,11 +46,11 @@
       </div>
       <div class="uploadResult">
         <ul>
-          <li th:each="moiveImage : movieDTO.imageDTOList"
-              th:data-file="${movieImage.getThumbnailURL}" style="cursor:pointer;">
+          <li th:each="movieImageDTO : ${movieDTO.imageDTOList}"
+              th:data-file="${movieImageDTO.getThumbnailURL}" style="cursor:pointer;">
             <img
-                th:if="${movieImage.path != null }"
-                th:src="|@{/display(fileName=${movieImage.getThumbnailURL})}|">
+                th:if="${movieImageDTO.path != null}"
+                th:src="|@{/display(fileName=${movieImageDTO.getThumbnailURL})}|">
           </li>
         </ul>
       </div>
@@ -67,13 +67,13 @@
     <div>
       <div class="mt-4">
         <h5>
-          <span class="btn btn-outline-secondary addReply">Add Review</span>
+          <span class="btn btn-outline-secondary addReview">Add Review</span>
           <span style="font-size:9pt">Review :
             <span id="repCnt" th:text="${movieDTO.reviewCnt}"></span> 개
           </span>
         </h5>
       </div>
-      <div class="list-group reviewList"></div>
+      <div class="list-group reviewList" style="margin-bottom:50px;"></div>
     </div>
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -93,13 +93,14 @@
     </div>
     <script th:inline="javascript">
       // document의 태그를 모두 읽고 난뒤 실행되는 함수
+      /*
       window.onload = function(){
         var mno = [[${movieDTO.mno}]]
         loadReviewJSON();
         var myModal = new bootstrap.Modal(document.querySelector('#myModal'),
                           { backdrop: true });
         function loadReviewJSON() {
-          const url = /*[[@{/replies/movie/}]]*/'url'
+          const url = /*[[@{/reviews/movie/}]]*/'url'
           const listGroup = document.querySelector(".reviewList")
           fetch(url+mno, {method: 'GET',})
           .then(response => response.json())
@@ -151,7 +152,7 @@
                   if(!text.value) {text.setAttribute('placeholder', '댓글입력하세요');return;}
                   if(!reviewer.value) {reviewer.setAttribute('placeholder', '작성자입력하세요');return;}
                   let review = {rno: rno.value,mno: mno,text: text.value,reviewer: reviewer.value}
-                  const url = /*[[@{/replies/}]]*/'url';
+                  const url = /*[[@{/reviews/}]]*/'url';
                   fetch(url, {
                     method: 'PUT',
                     headers: {'Content-type': 'application/json'},
@@ -169,7 +170,7 @@
                 }
                 document.querySelector(".modal-footer .remove").onclick = function () {
                   let rno = document.querySelector("input[name='rno']")
-                  const url = /*[[@{/replies/}]]*/'url';
+                  const url = /*[[@{/reviews/}]]*/'url';
                   fetch(url + rno.value, {
                     method: 'DELETE',
                     headers: {'Content-type': 'application/json'},
@@ -219,7 +220,7 @@
             if(!text.value) {text.setAttribute('placeholder', '댓글입력하세요');return;}
             if(!reviewer.value) {reviewer.setAttribute('placeholder', '작성자입력하세요');return;}
             let review = {mno: mno, text: text.value, reviewer: reviewer.value}
-            const url = /*[[@{/replies/}]]*/'url';
+            const url = /*[[@{/reviews/}]]*/'url';
             fetch(url, {
               method: 'POST',
               headers: {'Content-type': 'application/json'},
@@ -252,6 +253,7 @@
           myModal.show()
         }
       }
+      */
     </script>
   </th:block>
 

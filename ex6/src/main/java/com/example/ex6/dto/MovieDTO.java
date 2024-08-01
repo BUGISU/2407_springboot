@@ -22,4 +22,5 @@ public class MovieDTO {
   private Long reviewCnt;
   private LocalDateTime regDate;
   private LocalDateTime modDate;
+
 }
