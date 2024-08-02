@@ -75,7 +75,7 @@
         <h5>
           <span class="btn btn-outline-secondary addReview">Add Review</span>
           <span style="font-size:9pt">Review :
-            <span id="repCnt" th:text="${movieDTO.reviewCnt}"></span> 개
+            <span id="revCnt" th:text="${movieDTO.reviewCnt}"></span> 개
           </span>
         </h5>
       </div>
@@ -186,9 +186,10 @@
                   .catch(err => console.log('myError', err))
                 }
                 document.querySelector(".modal-footer .remove").onclick = function () {
-                  let rno = document.querySelector("input[name='rno']")
+                  let reviewnum = document.querySelector(
+                    ".modal-body input[name='reviewnum']")
                   const url = /*[[@{/reviews/}]]*/'url';
-                  fetch(url + rno.value, {
+                  fetch(url + mno + "/" + reviewnum.value, {
                     method: 'DELETE',
                     headers: {'Content-type': 'application/json'},
                   })
@@ -198,13 +199,13 @@
                     document.querySelector(".modal-body").innerHTML=`${data}번 댓글 삭제 완료.`
                     document.querySelector(".modal-footer .modify").style.display = 'none'
                     document.querySelector(".modal-footer .remove").style.display = 'none'
-                    document.querySelector("#repCnt").textContent =
-                      parseInt(document.querySelector("#repCnt").textContent) - 1
+                    document.querySelector("#revCnt").textContent =
+                      parseInt(document.querySelector("#revCnt").textContent) - 1
                     loadReviewJSON()
                   })
                   .catch(err => console.log('myError', err))
                 }
-                document.querySelector('.star span').style.width =`${grade *20}%`;
+                document.querySelector('.star span').style.width = `${grade * 20}%`
                 myModal.show()
               }
             }
@@ -237,7 +238,7 @@
           document.querySelector(".modal-footer .save").onclick = function () {
             let text = document.querySelector("input[name='text']")
             let mid = document.querySelector("#modalMid")
-            let grade = parseFloat(document.querySelector(".star span").style.width)*0.01*5
+            let grade = parseFloat(document.querySelector(".star span").style.width)*0.01*5;
             let notice = document.querySelector('#notice')
 
             if(!text.value) {
@@ -257,14 +258,16 @@
               document.querySelector(".modal-body").innerHTML=`${data}번 리뷰 등록 완료.`
               document.querySelector("#exampleModalLabel").innerHTML=`등록 알림`
               document.querySelector(".modal-footer .save").style.display = 'none'
-              document.querySelector("#repCnt").textContent =
-                parseInt(document.querySelector("#repCnt").textContent) + 1
+              document.querySelector("#revCnt").textContent =
+                parseInt(document.querySelector("#revCnt").textContent) + 1
               loadReviewJSON()
             })
           }
           myModal.show()
         }
+
         var msg = [[${msg}]]
+
         // 일회성 msg의 내용이 비거나 history 상태가 비지 않는 경우 return
         if(msg === '' || history.state) return
         // history 이용해서 모달창 보여준거에 대한 기록을 clear!
@@ -276,6 +279,7 @@
           myModal.show()
         }
       }
+
     </script>
   </th:block>
 
