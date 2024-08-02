@@ -65,7 +65,6 @@ public class MovieServiceImpl implements MovieService {
     result.forEach(objects -> movieImages.add((MovieImage) objects[1]));
     Double avg = (Double) result.get(0)[2];
     Long reviewCnt = (Long) result.get(0)[3];
-
     return entityToDto(movie,movieImages,avg,reviewCnt);
   }
 }
