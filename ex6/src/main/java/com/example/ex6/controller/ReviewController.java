@@ -36,14 +36,13 @@ public class ReviewController {
   }
 
   @PutMapping({"/{mno}/{reviewnum}"})
-  public ResponseEntity<Long> modify(@PathVariable Long reviewnum,
-                                     @RequestBody ReviewDTO reviewDTO ) {
+  public ResponseEntity<Long> modify(@RequestBody ReviewDTO reviewDTO ) {
     log.info(reviewDTO);
     reviewService.modify(reviewDTO);
-    return new ResponseEntity<>(reviewnum, HttpStatus.OK);
+    return new ResponseEntity<>(reviewDTO.getReviewnum(), HttpStatus.OK);
   }
   @DeleteMapping({"/{mno}/{reviewnum}"})
-  public ResponseEntity<Long> delete(@PathVariable Long reviewnum ) {
+  public ResponseEntity<Long> delete(@PathVariable("reviewnum") Long reviewnum ) {
     log.info(">>"+reviewnum);
     reviewService.remove(reviewnum);
     return new ResponseEntity<>(reviewnum, HttpStatus.OK);
