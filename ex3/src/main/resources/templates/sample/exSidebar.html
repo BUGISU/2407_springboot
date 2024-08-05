@@ -1,9 +1,9 @@
-<!--src/main/resources/templates/sample/exSidebar.html-->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="~{layout/basic :: setContent(~{this :: content})}">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
   <th:block th:fragment="content">
-    <h1>exSidebar Page1</h1>
+    <h1>exSidebar Page</h1>
   </th:block>
+
 </th:block>
 </html>

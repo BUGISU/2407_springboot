@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.LongFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-//src/main/java/com/example/ex3/controller/SampleController.java
+
 @Controller
 @RequestMapping("/sample")
 @Log4j2
@@ -85,9 +85,8 @@ public class SampleController {
     return "/sample/ex3";  //redirect:/ 없어서 전송안됨. 물리적주소 이동
   }
 
-  @GetMapping({"/exLayout1", "/exLayout2","exTemplate","exSidebar"})
-  public void exLayout1(){
-    log.info("exLayout1.......");
+  @GetMapping({"/exLayout1", "/exLayout2", "/exTemplate", "/exSidebar"})
+  public void exLayout1() {
+    log.info("exLayout1..........");
   }
-
 }

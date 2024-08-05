@@ -19,7 +19,7 @@ class ReplyRepositoryTests {
 
   @Test
   public void insertReplies() {
-    /*IntStream.rangeClosed(1, 300).forEach(i -> {
+    IntStream.rangeClosed(1, 300).forEach(i -> {
       long bno = (long) (Math.random() * 100) + 1;
       long mno = (long) (Math.random() * 100) + 1;
       Board board = Board.builder().bno(bno).build();
@@ -29,12 +29,13 @@ class ReplyRepositoryTests {
           .board(board)
           .build();
       replyRepository.save(reply);
-    });*/
+    });
   }
+
   @Test
-  public  void testListByBoard(){
-    List<Reply> replyList
-        = replyRepository.getRepliesByBoardOrderByRno(Board.builder().bno(97L).build());
+  public void testListByBoard() {
+    List<Reply> replyList = replyRepository
+        .getRepliesByBoardOrderByRno(Board.builder().bno(97L).build());
     replyList.forEach(reply -> System.out.println(reply));
   }
 }

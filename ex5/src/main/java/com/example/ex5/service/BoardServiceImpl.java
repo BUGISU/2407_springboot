@@ -37,11 +37,11 @@ public class BoardServiceImpl implements BoardService {
   public PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
     log.info(pageRequestDTO);
     Function<Object[], BoardDTO> fn = (en -> entityToDTO((Board) en[0], (Member) en[1], (Long) en[2]));
-    //Querydsl(동적 검색) 없는 페이징 처리
-    //Page<Object[]> result = boardRepository.getBoardWithReplyCount(
-    //pageRequestDTO.getPageable(Sort.by("bno").descending()));
+//    Querydsl(동적 검색) 없는 페이징 처리
+//    Page<Object[]> result = boardRepository.getBoardWithReplyCount(
+//        pageRequestDTO.getPageable(Sort.by("bno").descending()));
 
-    //Querydsl(동적 검색)을 활용한 페이징 처리
+    // Querydsl(동적 검색)을 활용한 페이징 처리
     Page<Object[]> result = boardRepository.searchPage(
         pageRequestDTO.getType(),
         pageRequestDTO.getKeyword(),
