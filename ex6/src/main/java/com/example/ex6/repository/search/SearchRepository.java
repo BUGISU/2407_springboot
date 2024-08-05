@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import com.example.ex6.entity.Movie;
 
 public interface SearchRepository {
-//  Movie search1();
+  Movie search1();
 
   Page<Object[]> searchPage(String type, String keyword, Pageable pageable);
 

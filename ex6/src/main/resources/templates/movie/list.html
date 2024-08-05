@@ -85,7 +85,7 @@
       window.onload = function(){
         var msg = [[${msg}]]
         // 일회성 msg의 내용이 비거나 history 상태가 비지 않는 경우 return
-        if(msg === '' || history.state) return
+        //if(msg === '' || history.state) return
 
         if(msg) {  // truthy 데이터가 올 경우만 if문 실행
           const myModal = new bootstrap.Modal(document.querySelector('#myModal'),

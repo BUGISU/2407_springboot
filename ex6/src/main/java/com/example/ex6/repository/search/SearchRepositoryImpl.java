@@ -27,29 +27,29 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport
     super(Movie.class);
   }
 
-//  @Override
-//  public Movie search1() {
-//    log.info("search1.................");
-//    QMovie movie = QMovie.movie;
-//    QMovieImage movieImage = QMovieImage.movieImage;
-//    QReview review = QReview.review;
-//
-//    JPQLQuery<Movie> jpqlQuery = from(movie);
-//    jpqlQuery.leftJoin(movieImage).on(movieImage.movie.eq(movie));
-//    jpqlQuery.leftJoin(review).on(review.movie.eq(movie));
-//
-//    JPQLQuery<Tuple> tuple = jpqlQuery.select(movie, movieImage.movie, review.count());
-//    tuple.groupBy(movie);
-//
-//    log.info("==========================");
-//    log.info(tuple);
-//    log.info("==========================");
-//
-//    List<Tuple> result = tuple.fetch();
-//    log.info("result: " + result);
-//
-//    return null;
-//  }
+  @Override
+  public Movie search1() {
+    log.info("search1.................");
+    QMovie movie = QMovie.movie;
+    QMovieImage movieImage = QMovieImage.movieImage;
+    QReview review = QReview.review;
+
+    JPQLQuery<Movie> jpqlQuery = from(movie);
+    jpqlQuery.leftJoin(movieImage).on(movieImage.movie.eq(movie));
+    jpqlQuery.leftJoin(review).on(review.movie.eq(movie));
+
+    JPQLQuery<Tuple> tuple = jpqlQuery.select(movie, movieImage.movie, review.count());
+    tuple.groupBy(movie);
+
+    log.info("==========================");
+    log.info(tuple);
+    log.info("==========================");
+
+    List<Tuple> result = tuple.fetch();
+    log.info("result: " + result);
+
+    return null;
+  }
 
   @Override
   public Page<Object[]> searchPage(String type, String keyword, Pageable pageable) {
@@ -63,7 +63,6 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport
     JPQLQuery<Movie> jpqlQuery = from(movie);
     jpqlQuery.leftJoin(movieImage).on(movieImage.movie.eq(movie));
     jpqlQuery.leftJoin(review).on(review.movie.eq(movie));
-
 
     //3) Tuple생성 : 조인을 한 결과의 데이터를 tuple로 생성
     JPQLQuery<Tuple> tuple = jpqlQuery.select(movie, movieImage, review.grade.avg().coalesce(0.0),review.count());
@@ -84,7 +83,7 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport
           case "w":
             conditionBuilder.or(review.member.email.contains(keyword)); break;
           case "c":
-            conditionBuilder.or(review.text.contains(keyword)); break;
+            conditionBuilder.or(movieImage.imgName.contains(keyword)); break;
         }
       }
       booleanBuilder.and(conditionBuilder);
