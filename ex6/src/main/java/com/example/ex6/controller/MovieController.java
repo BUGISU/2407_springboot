@@ -45,17 +45,19 @@ public class MovieController {
   @GetMapping({"/read", "/modify"})
   public void getMovie(Long mno, PageRequestDTO pageRequestDTO, Model model) {
     MovieDTO movieDTO = movieService.getMovie(mno);
+    typeKeywordInit(pageRequestDTO);
     model.addAttribute("movieDTO", movieDTO);
   }
   @PostMapping("/modify")
-  public String modify(MovieDTO dto, RedirectAttributes ra, PageRequestDTO req){
+  public String modify(MovieDTO dto, RedirectAttributes ra, PageRequestDTO pageRequestDTO){
     log.info("modify post... dto: " + dto);
     movieService.modify(dto);
+    typeKeywordInit(pageRequestDTO);
     ra.addFlashAttribute("msg", dto.getMno() + " 수정");
     ra.addAttribute("mno", dto.getMno());
-    ra.addAttribute("page", req.getPage());
-    ra.addAttribute("type", req.getType());
-    ra.addAttribute("keyword", req.getKeyword());
+    ra.addAttribute("page", pageRequestDTO.getPage());
+    ra.addAttribute("type", pageRequestDTO.getType());
+    ra.addAttribute("keyword", pageRequestDTO.getKeyword());
     return "redirect:/movie/read";
   }
 
@@ -63,7 +65,7 @@ public class MovieController {
   private String uploadPath;
 
   @PostMapping("/remove")
-  public String remove(Long mno, RedirectAttributes ra, PageRequestDTO req){
+  public String remove(Long mno, RedirectAttributes ra, PageRequestDTO pageRequestDTO){
     log.info("remove post... mno: " + mno);
     List<String> result = movieService.removeWithReviewsAndMovieImages(mno);
     log.info("result>>"+result);
@@ -79,13 +81,18 @@ public class MovieController {
         log.info("remove file : "+e.getMessage());
       }
     });
-    if(movieService.getList(req).getDtoList().size() == 0 && req.getPage() != 1) {
-      req.setPage(req.getPage()-1);
+    if(movieService.getList(pageRequestDTO).getDtoList().size() == 0 && pageRequestDTO.getPage() != 1) {
+      pageRequestDTO.setPage(pageRequestDTO.getPage()-1);
     }
+    typeKeywordInit(pageRequestDTO);
     ra.addFlashAttribute("msg", mno + " 삭제");
-    ra.addAttribute("page", req.getPage());
-    ra.addAttribute("type", req.getType());
-    ra.addAttribute("keyword", req.getKeyword());
+    ra.addAttribute("page", pageRequestDTO.getPage());
+    ra.addAttribute("type", pageRequestDTO.getType());
+    ra.addAttribute("keyword", pageRequestDTO.getKeyword());
     return "redirect:/movie/list";
+  }
+  private void typeKeywordInit(PageRequestDTO pageRequestDTO){
+    if (pageRequestDTO.getType().equals("null")) pageRequestDTO.setType("");
+    if (pageRequestDTO.getKeyword().equals("null")) pageRequestDTO.setKeyword("");
   }
 }

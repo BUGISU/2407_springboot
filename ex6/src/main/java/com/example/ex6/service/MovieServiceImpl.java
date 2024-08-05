@@ -5,9 +5,12 @@ import com.example.ex6.dto.PageRequestDTO;
 import com.example.ex6.dto.PageResultDTO;
 import com.example.ex6.entity.Movie;
 import com.example.ex6.entity.MovieImage;
+import com.example.ex6.entity.QMovie;
 import com.example.ex6.repository.MovieImageRepository;
 import com.example.ex6.repository.MovieRepository;
 import com.example.ex6.repository.ReviewRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -49,7 +52,10 @@ public class MovieServiceImpl implements MovieService {
   public PageResultDTO<MovieDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
     Pageable pageable = pageRequestDTO.getPageable(Sort.by("mno").descending());
     // Page<Movie> result = movieRepository.findAll(pageable);
-    Page<Object[]> result = movieRepository.getListPageImg(pageable);
+//    Page<Object[]> result = movieRepository.getListPageImg(pageable);
+    Page<Object[]> result = movieRepository.searchPage(pageRequestDTO.getType(),
+        pageRequestDTO.getKeyword(),
+        pageable);
     Function<Object[], MovieDTO> fn = objects -> entityToDto(
         (Movie) objects[0],
         (List<MovieImage>) (Arrays.asList((MovieImage)objects[1])),
