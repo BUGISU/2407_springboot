@@ -20,6 +20,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 // 개발자가 원하는 대로 동작하는 Repository를 작성하기 위해
@@ -124,6 +125,11 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport
     log.info("COUNT: " + count);
 
     //13) 출력하고자 하는 Page객체를 위한 PageImpl객체로 생성
-    return new PageImpl<Object[]>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
+    return new PageImpl<Object[]>(result.stream().map(new Function<Tuple, Object[]>() {
+      @Override
+      public Object[] apply(Tuple t) {
+        return t.toArray();
+      }
+    }).collect(Collectors.toList()), pageable, count);
   }
 }

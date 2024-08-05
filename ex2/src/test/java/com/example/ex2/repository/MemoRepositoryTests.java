@@ -43,6 +43,7 @@ class MemoRepositoryTests {
   @Test
   public void testSelect() {
     Long mno = 100L;
+
     Optional<Memo> result = memoRepository.findById(mno);
     if (result.isPresent()) {
       Memo memo = result.get();
@@ -57,6 +58,8 @@ class MemoRepositoryTests {
 
     //주의(컬럼 mno,memoText 외에 더 많은 컬럼이 있는 경우 먼저 불러와야함!)
     Long mno = 100L;
+    // 단수의 데이터를 처리할 때 : findById를 통해서 유일한 하나의 객체를 찾아보는 것.
+    // Optional의 특징 : null 값을 받아도 에러가 발생하지 않고, 형변환 안해도 안전
     Optional<Memo> result = memoRepository.findById(mno);
     if (result.isPresent()) {
       Memo memo3 = Memo.builder()
@@ -76,7 +79,9 @@ class MemoRepositoryTests {
   public void testPageDefault() {
     // 페이지를 지정할수 있는 객체
     Pageable pageable = PageRequest.of(0, 10);
-
+    // 복수의 데이터를 처리할 때
+    // repository에서 복수개의 데이터를 받을 때 페이징 필요하면   Page<>를 활용
+    // repository에서 복수개의 데이터를 받을 때 페이징 불필요하면 List<>를 활용
     // Paging 처리 후 결과를 담기 위한 객체 Page 사용
     Page<Memo> result = memoRepository.findAll(pageable);
     System.out.println(result);
@@ -140,16 +145,23 @@ class MemoRepositoryTests {
   }
   @Test
   public void updateMemoText() {
-    //int i = memoRepository.updateMemoText(10L,"Update");
-    Memo memo = Memo.builder().mno(10L).memoText("Update2").build();
+    int i = memoRepository.updateMemoText(10L, "Update");
+    System.out.println("변경 횟수: " + i);
+  }
+  @Test
+  public void updateMemo() {
+    Memo memo = Memo.builder()
+        .mno(10L).memoText("Update2").build();
     int i = memoRepository.updateMemoText(memo);
-    System.out.println("변경횟수 : "+ i);
+    System.out.println("변경 횟수: " + i);
   }
 
   @Test
-  public  void getListWithQuery(){
+  public void testPageable() {
     Pageable pageable = PageRequest.of(0, 10);
-    Page<Memo>  result =  memoRepository.getListWithQuery(10L, pageable);
+
+    // Paging 처리 후 결과를 담기 위한 객체 Page 사용
+    Page<Memo> result = memoRepository.getListWithQuery(10L, pageable);
     result.get().forEach(memo -> System.out.println(memo));
   }
   @Test
@@ -165,12 +177,11 @@ class MemoRepositoryTests {
       System.out.println();
     });
   }
-
   @Test
-  public void getNativeResult(){
-    List<Memo> result = memoRepository.getNativeResult();
-    for(Memo m: result){
-     System.out.println(m);
-   }
+  public void testGetNativeResult() {
+    List<Memo> list = memoRepository.getNativeResult();
+    for (Memo m : list) {
+      System.out.println(m);
+    }
   }
 }
