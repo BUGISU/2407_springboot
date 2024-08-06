@@ -117,7 +117,7 @@
         const targetLi = btn.closest('li')
         const fileName = targetLi.dataset.file;
         const uuid = targetLi.dataset.uuid;
-        fetch(removeUrl+fileName+"&uuid="+uuid, {
+        /*fetch(removeUrl+fileName+"&uuid="+uuid, {
           method: 'POST', dataType: 'json', fileName: fileName
         })
         .then(response => response.json())
@@ -127,16 +127,16 @@
           document.querySelector("#custom-label").innerHTML = ''
           document.querySelector("#fileInput").value = '';
         })
-        .catch(err => console.log("Error occurred: ", err))
+        .catch(err => console.log("Error occurred: ", err))*/
       }
       function showResult(arr) {
         const uploadUL = document.querySelector(".uploadResult ul");
         let str = ""
         const url = /*[[@{/display}]]*/'url'
         for(let i=0;i<arr.length;i++){
-          str += `<li data-name='${arr[i].fileName}' data-path='${arr[i].folderPath}'
+          str += `<li class="new" data-name='${arr[i].fileName}' data-path='${arr[i].folderPath}'
           data-uuid='${arr[i].uuid}' data-file='${arr[i].imageURL}'><div>
-          <button class="removeBtn" type="button">X</button>
+          <button class="removeBtn" type="button">X new</button>
           <img src="${url}?fileName=${arr[i].thumbnailURL}">
           </div></li>`
         }
@@ -171,7 +171,7 @@
         if(title.value == "") {title.focus();return false;}
 
         let str = "";
-        const liArr = document.querySelectorAll(".uploadResult ul li");
+        const liArr = document.querySelectorAll(".uploadResult ul li .new");
         for(let i=0;i<liArr.length;i++){
           str += `
             <input type="hidden" name="imageDTOList[${i}].imgName" value="${liArr[i].dataset.name}">
@@ -198,7 +198,6 @@
       }
     </script>
   </th:block>
-
 </th:block>
 
 </html>
