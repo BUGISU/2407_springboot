@@ -6,7 +6,10 @@ import com.example.ex6.dto.PageRequestDTO;
 import com.example.ex6.dto.PageResultDTO;
 import com.example.ex6.entity.Movie;
 import com.example.ex6.entity.MovieImage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,16 +63,20 @@ public interface MovieService {
         .regDate(movie.getRegDate())
         .modDate(movie.getModDate())
         .build();
-    List<MovieImageDTO> movieImageDTOList = movieImageList.stream().map(
-        movieImage -> {
-          MovieImageDTO movieImageDTO = MovieImageDTO.builder()
-              .imgName(movieImage.getImgName())
-              .path(movieImage.getPath())
-              .uuid(movieImage.getUuid())
-              .build();
-          return movieImageDTO;
-        }
-    ).collect(Collectors.toList());
+    List<MovieImageDTO> movieImageDTOList = new ArrayList<>();
+    if(movieImageList.toArray().length > 0 && movieImageList.toArray()[0] != null) {
+      System.out.println(">>>" + movieImageList);
+      movieImageDTOList = movieImageList.stream().map(
+          movieImage -> {
+            MovieImageDTO movieImageDTO = MovieImageDTO.builder()
+                .imgName(movieImage.getImgName())
+                .path(movieImage.getPath())
+                .uuid(movieImage.getUuid())
+                .build();
+            return movieImageDTO;
+          }
+      ).collect(Collectors.toList());
+    }
     movieDTO.setImageDTOList(movieImageDTOList);
     movieDTO.setAvg(avg);
     movieDTO.setReviewCnt(reviewCnt);

@@ -39,12 +39,14 @@ public class MovieServiceImpl implements MovieService {
     List<MovieImage> movieImageList =
         (List<MovieImage>) entityMap.get("movieImageList");
     movieRepository.save(movie);
-    movieImageList.forEach(new Consumer<MovieImage>() {
-      @Override
-      public void accept(MovieImage movieImage) {
-        movieImageRepository.save(movieImage);
-      }
-    });
+    if(movieImageList != null) {
+      movieImageList.forEach(new Consumer<MovieImage>() {
+        @Override
+        public void accept(MovieImage movieImage) {
+          movieImageRepository.save(movieImage);
+        }
+      });
+    }
     return movie.getMno();
   }
 
