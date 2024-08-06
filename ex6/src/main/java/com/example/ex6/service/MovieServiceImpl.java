@@ -78,13 +78,39 @@ public class MovieServiceImpl implements MovieService {
 
     return entityToDto(movie, movieImages, avg, reviewCnt);
   }
+
+  @Transactional
   @Override
-  public void modify(MovieDTO dto) {
-    Optional<Movie> result = movieRepository.findById(dto.getMno());
+  public void modify(MovieDTO movieDTO) {
+    Optional<Movie> result = movieRepository.findById(movieDTO.getMno());
     if (result.isPresent()) {
-      Movie movie = result.get();
-      movie.changeTitle(dto.getTitle());
+      Map<String, Object> entityMap = dtoToEntity(movieDTO);
+      Movie movie = (Movie) entityMap.get("movie");
+      movie.changeTitle(movieDTO.getTitle());
       movieRepository.save(movie);
+
+      List<MovieImage> movieImageList =
+          (List<MovieImage>) entityMap.get("movieImageList");
+      if(movieImageList != null) {
+        List<MovieImage> oldMovieImageList =
+            movieImageRepository.findByMno(movie.getMno());
+        movieImageList.forEach(movieImage -> {
+          boolean result1 = false;
+          for (int i = 0; i < oldMovieImageList.size(); i++) {
+            result1 = oldMovieImageList.get(i).getUuid().equals(movieImage.getUuid());
+            if(result1) break;
+          }
+          if(!result1) movieImageRepository.save(movieImage);
+        });
+        oldMovieImageList.forEach(oldMovieImage -> {
+          boolean result1 = false;
+          for (int i = 0; i < movieImageList.size(); i++) {
+            result1 = movieImageList.get(i).getUuid().equals(oldMovieImage.getUuid());
+            if(result1) break;
+          }
+          if(!result1) movieImageRepository.deleteByUuid(oldMovieImage.getUuid());
+        });
+      }
     }
   }
 

@@ -23,7 +23,7 @@ public interface MovieService {
 
   MovieDTO getMovie(Long mno);
 
-  void modify(MovieDTO dto);
+  void modify(MovieDTO movieDTO);
 
   List<String> removeWithReviewsAndMovieImages(Long mno);
 
@@ -65,7 +65,6 @@ public interface MovieService {
         .build();
     List<MovieImageDTO> movieImageDTOList = new ArrayList<>();
     if(movieImageList.toArray().length > 0 && movieImageList.toArray()[0] != null) {
-      System.out.println(">>>" + movieImageList);
       movieImageDTOList = movieImageList.stream().map(
           movieImage -> {
             MovieImageDTO movieImageDTO = MovieImageDTO.builder()
