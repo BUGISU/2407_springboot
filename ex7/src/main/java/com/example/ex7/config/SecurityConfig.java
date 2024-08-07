@@ -3,6 +3,8 @@ package com.example.ex7.config;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +27,10 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -56,19 +62,40 @@ public class SecurityConfig {
                     "hasRole('ADMIN') or hasRole('MEMBER')")
             )
             .anyRequest().authenticated());
+
     // formLogin()를 정의해야만 해도 자동생성된 로그인페이지로 이동가능.
     httpSecurity.formLogin(new Customizer<FormLoginConfigurer<HttpSecurity>>() {
       @Override
       public void customize(FormLoginConfigurer<HttpSecurity> httpSecurityFormLoginConfigurer) {
         httpSecurityFormLoginConfigurer
-            .loginPage("/sample/login")
-            .loginProcessingUrl("/sample/login")
+//            .loginPage("/sample/login")
+//            .loginProcessingUrl("/sample/login")
+//            .defaultSuccessUrl("/")
             .successHandler(new AuthenticationSuccessHandler() {
               @Override
               public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                UserDetails principal = (UserDetails) authentication.getPrincipal();
+                Collection<GrantedAuthority> authors =
+                    (Collection<GrantedAuthority>) principal.getAuthorities();
+                List<String> result = authors.stream().map(new Function<GrantedAuthority, String>() {
+                  @Override
+                  public String apply(GrantedAuthority grantedAuthority) {
+                    return grantedAuthority.getAuthority();
+                  }
+                }).collect(Collectors.toList());
+                System.out.println(">>" + result.toString());
+                for (int i = 0; i < result.size(); i++) {
+                  if (result.get(i).equals("ROLE_ADMIN")) {
+                    response.sendRedirect(request.getContextPath() + "/sample/admin");
+                  } else if (result.get(i).equals("ROLE_MEMBER")) {
+                    response.sendRedirect(request.getContextPath() + "/sample/member");
+                  } else {
+                    response.sendRedirect(request.getContextPath() + "/sample/all");
+                  }
+                  break;
+                }
               }
-            })
-            .defaultSuccessUrl("/");
+            });
       }
     });
     // logout() 정의 안해도 로그아웃 페이지 사용 가능. 사용자 로그아웃 페이지 지정할 때사용
@@ -106,10 +133,12 @@ public class SecurityConfig {
     UserDetails admin = User.builder()
         .username("admin")
         .password(passwordEncoder().encode("1"))
-        .roles("ADMIN","MEMBER")
+        .roles("ADMIN", "MEMBER")
         .build();
     List<UserDetails> list = new ArrayList<>();
-    list.add(user1);list.add(member);list.add(admin);
+    list.add(user1);
+    list.add(member);
+    list.add(admin);
     return new InMemoryUserDetailsManager(list);
   }
 
