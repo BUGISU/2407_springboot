@@ -50,7 +50,9 @@ public class SecurityConfig {
   @Bean
   protected SecurityFilterChain config(HttpSecurity httpSecurity)
       throws Exception {
-
+    httpSecurity.csrf(httpSecurityCsrfConfigurer -> {
+      httpSecurityCsrfConfigurer.disable();
+    });
     // authorizeHttpRequests :: 선별적으로 접속을 제한하는 메서드
     // 모든 페이지가 인증을 받도록 되어 있는 상태
     // httpSecurity.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
@@ -117,7 +119,7 @@ public class SecurityConfig {
     return httpSecurity.build();
   }
 
-  // InMemory 방식으로 계정의 권한 관리
+/*  // InMemory 방식으로 계정의 권한 관리
   @Bean
   public UserDetailsService userDetailsService() {
     UserDetails user1 = User.builder()
@@ -140,6 +142,6 @@ public class SecurityConfig {
     list.add(member);
     list.add(admin);
     return new InMemoryUserDetailsManager(list);
-  }
+  }*/
 
 }
