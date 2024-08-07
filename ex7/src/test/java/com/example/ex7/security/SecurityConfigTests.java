@@ -14,10 +14,10 @@ class SecurityConfigTests {
   private PasswordEncoder passwordEncoder;
 
   @Test
-  public void testEncode(){
+  public void testEncode() {
     String pass = "1";
     String enPw = passwordEncoder.encode(pass);
-    System.out.println("enPw: "+enPw);
+    System.out.println("enPw: " + enPw);
 //    assertEquals(pass, passwordEncoder.encode(enPw));
     System.out.println(passwordEncoder.matches(pass, enPw));
   }

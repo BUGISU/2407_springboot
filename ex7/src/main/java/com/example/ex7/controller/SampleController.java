@@ -21,4 +21,8 @@ public class SampleController {
   public void exAdmin(){
     log.info("/admin");
   }
+  @GetMapping("/logout") //로그인 사용자중 관리자만 접근
+  public void exLogout(){
+    log.info("/logout");
+  }
 }
