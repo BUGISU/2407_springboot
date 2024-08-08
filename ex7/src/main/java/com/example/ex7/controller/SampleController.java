@@ -13,8 +13,8 @@ public class SampleController {
   @GetMapping("/all")
   public void exAll() {log.info("/all");} //모든 이 접근
 
-  @GetMapping("/member")
-  public void exMember() {log.info("/member");} // 로그인 사용자 접근
+  @GetMapping("/manager")
+  public void exManager() {log.info("/manager");} // 로그인 사용자 접근
 
   @GetMapping("/admin")
   public void exAdmin() {log.info("/admin");} // 로그인 사용자중 관리자만 접근
