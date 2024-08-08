@@ -50,18 +50,20 @@ public class SecurityConfig {
   @Bean
   protected SecurityFilterChain config(HttpSecurity httpSecurity)
       throws Exception {
+    // csrf 사용안하는 설정
     httpSecurity.csrf(httpSecurityCsrfConfigurer -> {
       httpSecurityCsrfConfigurer.disable();
     });
+
     // authorizeHttpRequests :: 선별적으로 접속을 제한하는 메서드
     // 모든 페이지가 인증을 받도록 되어 있는 상태
     // httpSecurity.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
     httpSecurity.authorizeHttpRequests(
         auth -> auth.requestMatchers(AUTH_WHITElIST).permitAll()
             .requestMatchers("/sample/admin/**").hasRole("ADMIN")
-            .requestMatchers("/sample/member/**").access(
+            .requestMatchers("/sample/manager/**").access(
                 new WebExpressionAuthorizationManager(
-                    "hasRole('ADMIN') or hasRole('MEMBER')")
+                    "hasRole('ADMIN') or hasRole('MANAGER')")
             )
             .anyRequest().authenticated());
 
@@ -89,8 +91,8 @@ public class SecurityConfig {
                 for (int i = 0; i < result.size(); i++) {
                   if (result.get(i).equals("ROLE_ADMIN")) {
                     response.sendRedirect(request.getContextPath() + "/sample/admin");
-                  } else if (result.get(i).equals("ROLE_MEMBER")) {
-                    response.sendRedirect(request.getContextPath() + "/sample/member");
+                  } else if (result.get(i).equals("ROLE_MANAGER")) {
+                    response.sendRedirect(request.getContextPath() + "/sample/manager");
                   } else {
                     response.sendRedirect(request.getContextPath() + "/sample/all");
                   }
@@ -107,11 +109,11 @@ public class SecurityConfig {
         httpSecurityLogoutConfigurer
             // logoutUrl() 설정할 경우 html action 주소 또한 같이 적용해야 함.
             // logoutUrl()으로 인해 기존 logout 주소 이동은 가능하나 기능은 사용 안됨.
-            .logoutUrl("/sample/logout")
+            .logoutUrl("/logout")
             .logoutSuccessUrl("/") // 로그아웃 후에 돌아갈 페이지 설정
-            .logoutSuccessHandler((request, response, authentication) -> {
+            //.logoutSuccessHandler((request, response, authentication) -> {
               // logout 후에 개별적으로 여러가지 상황에 대하여 적용 가능한 설정
-            })
+            //})
             .invalidateHttpSession(true); // 서버 세션을 무효화, false도 클라이언트측 무효화
       }
     });
@@ -119,8 +121,8 @@ public class SecurityConfig {
     return httpSecurity.build();
   }
 
-/*  // InMemory 방식으로 계정의 권한 관리
-  @Bean
+  // InMemory 방식으로 UserDetailsService(인증 관리 객체) 사용
+  /*@Bean
   public UserDetailsService userDetailsService() {
     UserDetails user1 = User.builder()
         .username("user1")
@@ -142,6 +144,7 @@ public class SecurityConfig {
     list.add(member);
     list.add(admin);
     return new InMemoryUserDetailsManager(list);
+
   }*/
 
 }
