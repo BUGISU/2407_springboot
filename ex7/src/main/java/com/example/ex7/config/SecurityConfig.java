@@ -112,7 +112,7 @@ public class SecurityConfig {
             .logoutUrl("/logout")
             .logoutSuccessUrl("/") // 로그아웃 후에 돌아갈 페이지 설정
             //.logoutSuccessHandler((request, response, authentication) -> {
-              // logout 후에 개별적으로 여러가지 상황에 대하여 적용 가능한 설정
+            // logout 후에 개별적으로 여러가지 상황에 대하여 적용 가능한 설정
             //})
             .invalidateHttpSession(true); // 서버 세션을 무효화, false도 클라이언트측 무효화
       }
@@ -129,19 +129,19 @@ public class SecurityConfig {
         .password("$2a$10$XGw3jOo9mQSoij4/so.6H.BtSRWpgPze6ZWMuc7ntyFFWqVNbcmBe")
         .roles("USER")
         .build();
-    UserDetails member = User.builder()
-        .username("member")
+    UserDetails manager = User.builder()
+        .username("manager")
         .password("$2a$10$AEHcuzENZx7OLeA.s8e.t.CvhE/a/GZf.ZKTPEBIKLv8g03zChnD2")
-        .roles("MEMBER")
+        .roles("MANAGER")
         .build();
     UserDetails admin = User.builder()
         .username("admin")
         .password(passwordEncoder().encode("1"))
-        .roles("ADMIN", "MEMBER")
+        .roles("ADMIN", "MANAGER")
         .build();
     List<UserDetails> list = new ArrayList<>();
     list.add(user1);
-    list.add(member);
+    list.add(manager);
     list.add(admin);
     return new InMemoryUserDetailsManager(list);
 
