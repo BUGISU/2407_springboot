@@ -122,11 +122,9 @@ public class SecurityConfig {
     httpSecurity.oauth2Login(new Customizer<OAuth2LoginConfigurer<HttpSecurity>>() {
       @Override
       public void customize(OAuth2LoginConfigurer<HttpSecurity> httpSecurityOAuth2LoginConfigurer) {
-        httpSecurityOAuth2LoginConfigurer.successHandler(new AuthenticationSuccessHandler() {
-          @Override
-          public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-            response.sendRedirect(request.getContextPath()+"/sample/all");
-          }
+        httpSecurityOAuth2LoginConfigurer.successHandler((request, response, authentication) -> {
+          //response.sendRedirect(request.getContextPath()+"/sample/all");
+
         });
       }
     });
