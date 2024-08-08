@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -117,7 +118,18 @@ public class SecurityConfig {
             .invalidateHttpSession(true); // 서버 세션을 무효화, false도 클라이언트측 무효화
       }
     });
-
+    //소셜 로그인하기 위해서 필요
+    httpSecurity.oauth2Login(new Customizer<OAuth2LoginConfigurer<HttpSecurity>>() {
+      @Override
+      public void customize(OAuth2LoginConfigurer<HttpSecurity> httpSecurityOAuth2LoginConfigurer) {
+        httpSecurityOAuth2LoginConfigurer.successHandler(new AuthenticationSuccessHandler() {
+          @Override
+          public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+            response.sendRedirect(request.getContextPath()+"/sample/all");
+          }
+        });
+      }
+    });
     return httpSecurity.build();
   }
 

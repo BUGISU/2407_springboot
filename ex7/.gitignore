@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+#여기 안에있는 파일을 git에 올라가지 않음
+#application-oauth.properties
