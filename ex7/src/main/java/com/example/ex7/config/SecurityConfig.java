@@ -118,16 +118,12 @@ public class SecurityConfig {
             .invalidateHttpSession(true); // 서버 세션을 무효화, false도 클라이언트측 무효화
       }
     });
-    //소셜 로그인하기 위해서 필요
-    httpSecurity.oauth2Login(new Customizer<OAuth2LoginConfigurer<HttpSecurity>>() {
+    httpSecurity.oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer.successHandler(new AuthenticationSuccessHandler() {
       @Override
-      public void customize(OAuth2LoginConfigurer<HttpSecurity> httpSecurityOAuth2LoginConfigurer) {
-        httpSecurityOAuth2LoginConfigurer.successHandler((request, response, authentication) -> {
-          //response.sendRedirect(request.getContextPath()+"/sample/all");
-
-        });
+      public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//        response.sendRedirect(request.getContextPath()+"/sample/all");
       }
-    });
+    }));
     return httpSecurity.build();
   }
 
