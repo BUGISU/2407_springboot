@@ -71,6 +71,7 @@ public class SecurityConfig {
     httpSecurity.authorizeHttpRequests(
         auth -> auth.requestMatchers(AUTH_WHITElIST).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/error/**")).permitAll()
             .requestMatchers("/sample/admin/**").hasRole("ADMIN")
             .requestMatchers("/sample/manager/**").access(
                 new WebExpressionAuthorizationManager(
