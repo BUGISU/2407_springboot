@@ -26,14 +26,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ClubOAuth2userDetailsService extends DefaultOAuth2UserService {
   private final ClubMemberRepository clubMemberRepository;
-  private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder; //
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     log.info("============= userRequest: " + userRequest);
     OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate =
         new DefaultOAuth2UserService();
-    OAuth2User oAuth2User = delegate.loadUser(userRequest); //서비스에서 가져온 유저정보
+    OAuth2User oAuth2User = delegate.loadUser(userRequest); //유저 정보를 세션 객체로 변환
     String registrationId = userRequest.getClientRegistration().getRegistrationId();
     SocialType socialType = getSocialType(registrationId.trim().toString());
     String userNameAttributeName = userRequest.getClientRegistration()
@@ -58,6 +58,7 @@ public class ClubOAuth2userDetailsService extends DefaultOAuth2UserService {
             .collect(Collectors.toList())
         , attributes
     );
+    clubMemberAuthDTO.setFromSocial(clubMember.isFromSocial());
     clubMemberAuthDTO.setName(clubMember.getName());
     log.info("clubMemberAuthDTO: " + clubMemberAuthDTO);
     return clubMemberAuthDTO;

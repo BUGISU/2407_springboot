@@ -1,5 +1,6 @@
 package com.example.ex7.config;
 
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -76,31 +77,7 @@ public class SecurityConfig {
 //            .loginPage("/sample/login")
 //            .loginProcessingUrl("/sample/login")
 //            .defaultSuccessUrl("/")
-            .successHandler(new AuthenticationSuccessHandler() {
-              @Override
-              public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                UserDetails principal = (UserDetails) authentication.getPrincipal();
-                Collection<GrantedAuthority> authors =
-                    (Collection<GrantedAuthority>) principal.getAuthorities();
-                List<String> result = authors.stream().map(new Function<GrantedAuthority, String>() {
-                  @Override
-                  public String apply(GrantedAuthority grantedAuthority) {
-                    return grantedAuthority.getAuthority();
-                  }
-                }).collect(Collectors.toList());
-                System.out.println(">>" + result.toString());
-                for (int i = 0; i < result.size(); i++) {
-                  if (result.get(i).equals("ROLE_ADMIN")) {
-                    response.sendRedirect(request.getContextPath() + "/sample/admin");
-                  } else if (result.get(i).equals("ROLE_MANAGER")) {
-                    response.sendRedirect(request.getContextPath() + "/sample/manager");
-                  } else {
-                    response.sendRedirect(request.getContextPath() + "/sample/all");
-                  }
-                  break;
-                }
-              }
-            });
+            .successHandler(getAuthenticationSuccessHandler());
       }
     });
     // logout() 정의 안해도 로그아웃 페이지 사용 가능. 사용자 로그아웃 페이지 지정할 때사용
@@ -113,18 +90,56 @@ public class SecurityConfig {
             .logoutUrl("/logout")
             .logoutSuccessUrl("/") // 로그아웃 후에 돌아갈 페이지 설정
             //.logoutSuccessHandler((request, response, authentication) -> {
-              // logout 후에 개별적으로 여러가지 상황에 대하여 적용 가능한 설정
+            // logout 후에 개별적으로 여러가지 상황에 대하여 적용 가능한 설정
             //})
             .invalidateHttpSession(true); // 서버 세션을 무효화, false도 클라이언트측 무효화
       }
     });
-    httpSecurity.oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer.successHandler(new AuthenticationSuccessHandler() {
+    httpSecurity.oauth2Login(new Customizer<OAuth2LoginConfigurer<HttpSecurity>>() {
       @Override
-      public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//        response.sendRedirect(request.getContextPath()+"/sample/all");
+      public void customize(OAuth2LoginConfigurer<HttpSecurity> httpSecurityOAuth2LoginConfigurer) {
+        httpSecurityOAuth2LoginConfigurer.successHandler(
+            new AuthenticationSuccessHandler() {
+              @Override
+              public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+
+              }
+            }
+        );
       }
-    }));
+    });
     return httpSecurity.build();
+  }
+  @Bean
+  public AuthenticationSuccessHandler getAuthenticationSuccessHandler() {
+    return new AuthenticationSuccessHandler() {
+      @Override
+      public void onAuthenticationSuccess(HttpServletRequest request,
+                                          HttpServletResponse response,
+                                          Authentication authentication)
+          throws IOException, ServletException {
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        Collection<GrantedAuthority> authors =
+            (Collection<GrantedAuthority>) principal.getAuthorities();
+        List<String> result = authors.stream().map(new Function<GrantedAuthority, String>() {
+          @Override
+          public String apply(GrantedAuthority grantedAuthority) {
+            return grantedAuthority.getAuthority();
+          }
+        }).collect(Collectors.toList());
+        System.out.println(">>" + result.toString());
+        for (int i = 0; i < result.size(); i++) {
+          if (result.get(i).equals("ROLE_ADMIN")) {
+            response.sendRedirect(request.getContextPath() + "/sample/admin");
+          } else if (result.get(i).equals("ROLE_MANAGER")) {
+            response.sendRedirect(request.getContextPath() + "/sample/manager");
+          } else {
+            response.sendRedirect(request.getContextPath() + "/sample/all");
+          }
+          break;
+        }
+      }
+    };
   }
 
   // InMemory 방식으로 UserDetailsService(인증 관리 객체) 사용
