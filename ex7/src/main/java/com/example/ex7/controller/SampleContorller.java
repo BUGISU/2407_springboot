@@ -2,6 +2,7 @@ package com.example.ex7.controller;
 
 import com.example.ex7.security.dto.ClubMemberAuthDTO;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/sample")
 public class SampleContorller {
 
+//  @PreAuthorize("permitAll()")
+
   @GetMapping("/all")
+  @PreAuthorize("hasRole('ADMIN')")
   public void exAll() {log.info("/all");} //모든 이 접근
 
   @GetMapping("/manager")
