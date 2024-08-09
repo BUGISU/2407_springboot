@@ -15,6 +15,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 //@RestControllerAdvice
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice {
+  // controller를 별도로 만들지 않아도 되며, SecurityConfig에 premitAll 만 처리
   // 404 exception
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)

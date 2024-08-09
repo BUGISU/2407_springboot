@@ -16,8 +16,9 @@ public class SampleContorller {
 //  @PreAuthorize("permitAll()")
 
   @GetMapping("/all")
-  @PreAuthorize("hasRole('ADMIN')")
-  public void exAll() {log.info("/all");} //모든 이 접근
+  @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+  public void exAll() {log.info("/all");
+  } //모든 이 접근
 
   @GetMapping("/manager")
   public void exManager(@AuthenticationPrincipal ClubMemberAuthDTO clubMemberAuthDTO) {

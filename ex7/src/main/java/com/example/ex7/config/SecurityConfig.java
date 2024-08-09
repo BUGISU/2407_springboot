@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 public class SecurityConfig {
 
   private static final String[] AUTH_WHITElIST = {
-      "/"/*, "/sample/all"*/
+      "/"
   };
 
   @Bean
