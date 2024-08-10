@@ -31,6 +31,7 @@ import java.util.UUID;
 @Log4j2
 @RequiredArgsConstructor
 public class UploadController {
+
   @Value("${com.example.upload.path}")
   private String uploadPath;
 
@@ -93,7 +94,7 @@ public class UploadController {
     log.info("remove fileName: " + fileName);
     String searchFilename = null;
     if (uuid != null) {
-      //movieImageRepository.deleteByUuid(uuid);
+      // movieImageRepository.deleteByUuid(uuid);
     }
     try {
       searchFilename = URLDecoder.decode(fileName, "UTF-8");
