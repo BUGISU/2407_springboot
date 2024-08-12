@@ -29,9 +29,23 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     log.info("request.getContextPath()" + request.getContextPath());
     log.info("REQUEST match: " + request.getContextPath(), request.getRequestURI());
 
-    if (antPathMatcher.match(request.getContextPath()
-        + pattern, request.getRequestURI())) {
-      
+    boolean check = false;
+    for (int i = 0; i < pattern.length; i++) {
+      log.info(">> "+ antPathMatcher.match(request.getContextPath()
+          + pattern[i], request.getRequestURI()));
+      if (antPathMatcher.match(request.getContextPath()
+          + pattern[i], request.getRequestURI())) {
+        check = true;
+        break;
+      }
+      if(check){
+        log.info("check ; " + check);
+
+      }
+      filterChain.doFilter(request,response);
+    }
+    if(check){
+
     }
     filterChain.doFilter(request, response);
   }
