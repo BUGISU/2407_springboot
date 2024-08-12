@@ -14,20 +14,20 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
   @Bean
   PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
-  /* SecurityFilterChain Bean 역할 :
-  세션 인증 기반 방식으로 대부분의 Spring Security에 대한 설정으로 다룰 수 있다. */
   @Bean
   protected SecurityFilterChain config(HttpSecurity httpSecurity)
       throws Exception {
-    // api 서버에서 csrf 사용 안함.
+    // API서버에서 csrf 사용 안함.
     httpSecurity.csrf(httpSecurityCsrfConfigurer -> {
       httpSecurityCsrfConfigurer.disable();
     });
+
     httpSecurity.authorizeHttpRequests(
         auth -> auth
             .requestMatchers(new AntPathRequestMatcher("/notes/**")).permitAll()
@@ -46,31 +46,5 @@ public class SecurityConfig {
 
     return httpSecurity.build();
   }
-
-  // InMemory 방식으로 UserDetailsService(인증 관리 객체) 사용
-  /*@Bean
-  public UserDetailsService userDetailsService() {
-    UserDetails user1 = User.builder()
-        .username("user1")
-        .password("$2a$10$XGw3jOo9mQSoij4/so.6H.BtSRWpgPze6ZWMuc7ntyFFWqVNbcmBe")
-        .roles("USER")
-        .build();
-    UserDetails manager = User.builder()
-        .username("manager")
-        .password("$2a$10$AEHcuzENZx7OLeA.s8e.t.CvhE/a/GZf.ZKTPEBIKLv8g03zChnD2")
-        .roles("MANAGER")
-        .build();
-    UserDetails admin = User.builder()
-        .username("admin")
-        .password(passwordEncoder().encode("1"))
-        .roles("ADMIN", "MANAGER")
-        .build();
-    List<UserDetails> list = new ArrayList<>();
-    list.add(user1);
-    list.add(manager);
-    list.add(admin);
-    return new InMemoryUserDetailsManager(list);
-
-  }*/
 
 }

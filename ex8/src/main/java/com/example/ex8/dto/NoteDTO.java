@@ -1,6 +1,5 @@
 package com.example.ex8.dto;
 
-import com.example.ex8.entity.Note;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +17,4 @@ public class NoteDTO {
   private String content;
   private Long writerCno;
   private LocalDateTime regDate, modDate;
-
 }

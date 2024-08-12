@@ -13,15 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Log4j2
-@RequestMapping("/notes")
+@RequestMapping("/notes/")
 @RequiredArgsConstructor
 public class NoteController {
   private final NoteService noteService;
 
-  @PostMapping(value="")
-  public ResponseEntity<Long> register(@RequestBody NoteDTO noteDTO){
+  @PostMapping(value = "")
+  public ResponseEntity<Long> register(@RequestBody NoteDTO noteDTO) {
     log.info("noteDTO: "+noteDTO);
     Long num = noteService.register(noteDTO);
-    return  new ResponseEntity<>(num, HttpStatus.OK);
+    return new ResponseEntity<>(num, HttpStatus.OK);
   }
+
 }
