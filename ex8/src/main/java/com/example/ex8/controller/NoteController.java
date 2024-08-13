@@ -23,7 +23,6 @@ public class NoteController {
     return new ResponseEntity<>(num, HttpStatus.OK);
   }
 
-
   @GetMapping(value = "/{num}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<NoteDTO> read(@PathVariable("num") Long num) {
     log.info("read... num: " + num);
