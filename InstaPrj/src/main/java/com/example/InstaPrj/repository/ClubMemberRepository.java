@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface ClubMemberRepository extends JpaRepository<ClubMember, String> {
+public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
   // attributePaths에 정의된 속성은 eager로 패치하고, 나머지는 lazy 패치
   @EntityGraph(attributePaths = {"roleSet"}, type = EntityGraph.EntityGraphType.LOAD)

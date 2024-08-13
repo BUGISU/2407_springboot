@@ -1,12 +1,15 @@
 package com.example.InstaPrj.repository;
 
+import com.example.InstaPrj.entity.Feeds;
+import com.example.InstaPrj.repository.search.SearchRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface FeedsRepository {
+public interface FeedsRepository extends JpaRepository<Feeds,Long>, SearchRepository {
 //  select m.mno, avg(coalesce(r.grade,0)), count(r.reviewnum)
 //  from movie m left outer join review r on m.mno = r.movie_mno
 //  group by m.mno;
@@ -33,27 +36,27 @@ public interface FeedsRepository {
     // Native Query = SQL
     @Query(value = "select f.fno, pt.pnum, pt.imgName, " +
             "avg(coalesce(r.grade, 0)), count(r.reviewnum) " +
-            "from db7.movie_image mi left outer join db7.movie m on m.mno=mi.movie_mno " +
-            "left outer join db7.review r on m.mno=r.movie_mno " +
-            "where mi.inum = " +
-            "(select max(inum) from db7.movie_image mi2 where mi2.movie_mno=m.mno) " +
-            "group by m.mno ", nativeQuery = true)
+            "from db7.movie_image pt left outer join db7.movie m on f.fno=pt.movie_mno " +
+            "left outer join db7.review r on f.fno=r.movie_mno " +
+            "where pt.pnum = " +
+            "(select max(pnum) from db7.movie_image pt2 where pt2.movie_mno=f.fno) " +
+            "group by f.fno ", nativeQuery = true)
     Page<Object[]> getListPageImgNative(Pageable pageable);
 
     // JPQL
-    @Query("select m, mi, avg(coalesce(r.grade, 0)), count(distinct r) from Movie m " +
-            "left outer join MovieImage mi on mi.movie = m " +
-            "left outer join Review     r  on r.movie  = m " +
-            "where inum = (select max(mi2.inum) from MovieImage mi2 where mi2.movie=m) " +
-            "group by m ")
+    @Query("select f, pt, avg(coalesce(r.grade, 0)), count(distinct r) from Feeds f " +
+            "left outer join Photos pt on pt.feeds = f " +
+            "left outer join Review     r  on r.feeds  = f " +
+            "where pnum = (select max(pt2.pnum) from Photos pt2 where pt2.feeds=f) " +
+            "group by f ")
     Page<Object[]> getListPageImgJPQL(Pageable pageable);
 
-    @Query("select movie, max(mi.inum) from MovieImage mi group by movie")
+    @Query("select f, max(pt.pnum) from Photos pt group by feeds")
     Page<Object[]> getMaxQuery(Pageable pageable);
 
     @Query("select m, mi, avg(coalesce(r.grade, 0)), count(r) " +
-            "from Movie m left outer join MovieImage mi on mi.movie=m " +
-            "left outer join Review r on r.movie = m " +
-            "where m.mno = :mno group by mi ")
-    List<Object[]> getMovieWithAll(Long mno); //특정 영화 조회
+            "from Feeds f left outer join MovieImage pt on pt.feeds=f " +
+            "left outer join Reviews r on r.feeds = f " +
+            "where f.fno = :fno group by pt ")
+    List<Object[]> getMovieWithAll(Long fno); //특정 영화 조회
 }

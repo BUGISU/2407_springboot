@@ -8,15 +8,15 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface PhotosRepository extends JpaRepository {
+public interface PhotosRepository extends JpaRepository<Photos, Long>  {
     @Modifying
     @Query("delete from Photos pt where pt.feeds.fno=:fno")
-    void deleteByMno(@Param("fno") long mno);
+    void deleteByFno(@Param("fno") long fno);
 
     @Modifying
     @Query("delete from Photos pt where pt.uuid=:uuid")
     void deleteByUuid(@Param("uuid")String uuid);
 
-    @Query("select pt from Photos mi where pt.feeds.fno=:fno")
+    @Query("select pt from Photos pt where pt.feeds.fno=:fno")
     List<Photos> findByFno(@Param("fno") Long fno);
 }
