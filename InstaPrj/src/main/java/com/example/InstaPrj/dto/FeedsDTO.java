@@ -13,11 +13,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDTO {
+public class FeedsDTO {
   private Long pmo; //pst 번호
   private String content; //게시글 내용
   @Builder.Default
-  private List<PostImageDTO> postImageDTOList = new ArrayList<>();
+  private List<PhotosDTO> postImageDTOList = new ArrayList<>();
   private LocalDateTime regDate;
   private LocalDateTime modDate;
 }

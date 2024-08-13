@@ -7,28 +7,30 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @ToString
-@Table(name = "m_member")
-public class Member extends BasicEntity{
+public class ClubMember extends BasicEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long mid;
-  private String nickname;
+  private Long cno;
+
+  @Column(nullable = false, unique = true)
   private String email;
+
   private String password;
+
+  private String name;
 
   private boolean fromSocial;
 
   @ElementCollection(fetch = FetchType.LAZY)
   @Builder.Default
-  private Set<MemberRole> roleSet = new HashSet<>();
+  private Set<ClubMemberRole> roleSet = new HashSet<>();
 
-  public void addMemberRole(MemberRole memberRole) {
-    roleSet.add(memberRole);
+  public void addMemberRole(ClubMemberRole clubMemberRole) {
+    roleSet.add(clubMemberRole);
   }
-
 }

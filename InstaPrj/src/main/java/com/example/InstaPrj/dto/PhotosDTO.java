@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostImageDTO {
+public class PhotosDTO {
   private String uuid;
   private String imgName;
   private String path;

@@ -1,9 +1,9 @@
 package com.example.InstaPrj.security.service;
 
-import com.example.InstaPrj.entity.Member;
-import com.example.InstaPrj.entity.MemberRole;
-import com.example.InstaPrj.repository.MemberRepository;
-import com.example.InstaPrj.security.dto.MemberAuthDTO;
+import com.example.InstaPrj.entity.ClubMember;
+import com.example.InstaPrj.entity.ClubMemberRole;
+import com.example.InstaPrj.repository.ClubMemberRepository;
+import com.example.InstaPrj.security.dto.ClubMemberAuthDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class OAuth2userDetailsService extends DefaultOAuth2UserService {
-  private final MemberRepository memberRepository;
+public class ClubOAuth2userDetailsService extends DefaultOAuth2UserService {
+  private final ClubMemberRepository clubMemberRepository;
   private final PasswordEncoder passwordEncoder; //
 
   @Override
@@ -45,34 +45,34 @@ public class OAuth2userDetailsService extends DefaultOAuth2UserService {
     if (socialType.name().equals("GOOGLE"))
       email = oAuth2User.getAttribute("email");
     log.info("Email: " + email);
-    Member member = saveSocialMember(email);
-    MemberAuthDTO memberAuthDTO = new MemberAuthDTO(
-        member.getEmail(),
-        member.getPassword(),
-        member.getMid(),
+    ClubMember clubMember = saveSocialMember(email);
+    ClubMemberAuthDTO clubMemberAuthDTO = new ClubMemberAuthDTO(
+        clubMember.getEmail(),
+        clubMember.getPassword(),
+        clubMember.getCno(),
         true,
-        member.getRoleSet().stream().map(
+        clubMember.getRoleSet().stream().map(
                 role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
             .collect(Collectors.toList())
         , attributes
     );
-    memberAuthDTO.setFromSocial(member.isFromSocial());
-    memberAuthDTO.setName(member.getNickname());
-    log.info("clubMemberAuthDTO: " + memberAuthDTO);
-    return memberAuthDTO;
+    clubMemberAuthDTO.setFromSocial(clubMember.isFromSocial());
+    clubMemberAuthDTO.setName(clubMember.getName());
+    log.info("clubMemberAuthDTO: " + clubMemberAuthDTO);
+    return clubMemberAuthDTO;
   }
 
-  private Member saveSocialMember(String email) {
-    Optional<Member> result = memberRepository.findByEmail(email);
+  private ClubMember saveSocialMember(String email) {
+    Optional<ClubMember> result = clubMemberRepository.findByEmail(email);
     if (result.isPresent()) return result.get();
 
-    Member clubMember = Member.builder()
+    ClubMember clubMember = ClubMember.builder()
         .email(email)
         .password(passwordEncoder.encode("1"))
         .fromSocial(true)
         .build();
-    clubMember.addMemberRole(MemberRole.USER.USER);
-    memberRepository.save(clubMember);
+    clubMember.addMemberRole(ClubMemberRole.USER);
+    clubMemberRepository.save(clubMember);
     return clubMember;
   }
 

@@ -15,26 +15,26 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-public class MemberAuthDTO extends User implements OAuth2User {
-  private Long mid;
+public class ClubMemberAuthDTO extends User implements OAuth2User {
+  private Long cno;
   private String email;
   private String name;
   private boolean fromSocial;
   private Map<String, Object> attr; //소셜로 부터 받은 정보를 저장하는 속성
 
-  public MemberAuthDTO(String username, String password,
-                       Long mid, boolean fromSocial,
-                       Collection<? extends GrantedAuthority> authorities) {
+  public ClubMemberAuthDTO(String username, String password,
+                           Long cno, boolean fromSocial,
+                           Collection<? extends GrantedAuthority> authorities) {
     super(username, password, authorities);
-    this.mid = mid;
+    this.cno = cno;
     this.email = username;  //★UserDetails에서 username은 email로 기준하기 때문.
     this.fromSocial = fromSocial;
   }
   // 소셜로부터 받을 때 별도의 생성자
-  public MemberAuthDTO(String username, String password,
-                       Long cno, boolean fromSocial,
-                       Collection<? extends GrantedAuthority> authorities,
-                       Map<String, Object> attr) {
+  public ClubMemberAuthDTO(String username, String password,
+                           Long cno, boolean fromSocial,
+                           Collection<? extends GrantedAuthority> authorities,
+                           Map<String, Object> attr) {
     this(username, password, cno, fromSocial, authorities);
     this.attr = attr;
   }

@@ -1,8 +1,8 @@
-package com.example.ex7.security.service;
+package com.example.ex8.security.service;
 
-import com.example.ex7.entity.ClubMember;
-import com.example.ex7.repository.ClubMemberRepository;
-import com.example.ex7.security.dto.ClubMemberAuthDTO;
+import com.example.ex8.entity.ClubMember;
+import com.example.ex8.repository.ClubMemberRepository;
+import com.example.ex8.security.dto.ClubMemberAuthDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

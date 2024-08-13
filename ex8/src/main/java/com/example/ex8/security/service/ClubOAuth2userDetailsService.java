@@ -1,12 +1,11 @@
-package com.example.ex7.security.service;
+package com.example.ex8.security.service;
 
-import com.example.ex7.entity.ClubMember;
-import com.example.ex7.entity.ClubMemberRole;
-import com.example.ex7.repository.ClubMemberRepository;
-import com.example.ex7.security.dto.ClubMemberAuthDTO;
+import com.example.ex8.entity.ClubMember;
+import com.example.ex8.entity.ClubMemberRole;
+import com.example.ex8.repository.ClubMemberRepository;
+import com.example.ex8.security.dto.ClubMemberAuthDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -16,7 +15,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;

@@ -1,8 +1,8 @@
-package com.example.ex7.security.service;
+package com.example.InstaPrj.security.service;
 
-import com.example.ex7.entity.ClubMember;
-import com.example.ex7.repository.ClubMemberRepository;
-import com.example.ex7.security.dto.ClubMemberAuthDTO;
+import com.example.InstaPrj.entity.ClubMember;
+import com.example.InstaPrj.repository.ClubMemberRepository;
+import com.example.InstaPrj.security.dto.ClubMemberAuthDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,7 +26,7 @@ public class ClubUserDetailsService implements UserDetailsService {
     log.info("ClubMemberUser.........", username);
     Optional<ClubMember> result = clubMemberRepository.findByEmail(username);
     if (!result.isPresent()) throw new UsernameNotFoundException("Check Email or Social");
-    ClubMember clubMember = result.get(); // DB로부터 검색한 엔티티
+    ClubMember clubMember = result.get(); //DB로 부터 검색한, Entity
     // 엔티티를 세션으로 담기위해 만든 ClubMemberAuthDTO
     ClubMemberAuthDTO clubMemberAuthDTO = new ClubMemberAuthDTO(
         clubMember.getEmail(), clubMember.getPassword(), clubMember.getCno(),

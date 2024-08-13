@@ -4,46 +4,25 @@ import com.example.ex7.security.handler.CustomAccessDeniedHandler;
 import com.example.ex7.security.handler.CustomAuthenticationFailureHandler;
 import com.example.ex7.security.handler.CustomLoginSuccessHandler;
 import com.example.ex7.security.handler.CustomLogoutSuccessHandler;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -75,7 +54,7 @@ public class SecurityConfig {
     httpSecurity.authorizeHttpRequests(
         auth -> auth
             .requestMatchers(AUTH_WHITElIST).permitAll()
-//            .requestMatchers("/sample/all").permitAll()
+            //.requestMatchers("/sample/all").permitAll()
             .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/error/**")).permitAll()
             .requestMatchers("/sample/admin/**").hasRole("ADMIN")
@@ -119,8 +98,8 @@ public class SecurityConfig {
       }
     });
     httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
-      httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
-          getAccessDeniedHandler());
+        httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
+            getAccessDeniedHandler());
     });
     httpSecurity.rememberMe(new Customizer<RememberMeConfigurer<HttpSecurity>>() {
       @Override

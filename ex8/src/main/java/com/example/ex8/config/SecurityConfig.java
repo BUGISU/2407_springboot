@@ -38,9 +38,11 @@ public class SecurityConfig {
   }
 
   @Bean
-  public ApiLoginFilter apiLoginFilter(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+  public ApiLoginFilter apiLoginFilter(
+      AuthenticationConfiguration authenticationConfiguration) throws Exception {
     ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", jwtUtil());
-    apiLoginFilter.setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
+    apiLoginFilter.setAuthenticationManager(
+        authenticationConfiguration.getAuthenticationManager());
     apiLoginFilter.setAuthenticationFailureHandler(new ApiLoginFailHandler());
     return apiLoginFilter;
   }
