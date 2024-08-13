@@ -1,4 +1,4 @@
-package com.example.ex6.entity;
+package com.example.InstaPrj.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,12 +12,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Movie extends BasicEntity{
+public class Post extends BasicEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long mno;
-  private String title;
-  public void changeTitle(String title) {
-    this.title = title;
+  private Long pno;
+  private String content;
+  public void changeContent(String title) {
+    this.content = content;
   }
 }
