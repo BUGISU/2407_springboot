@@ -8,14 +8,7 @@ import com.example.InstaPrj.entity.Photos;
 import com.example.InstaPrj.repository.FeedsRepository;
 import com.example.InstaPrj.repository.PhotosRepository;
 import com.example.InstaPrj.repository.ReviewsRepository;
-import com.example.ex6.dto.MovieDTO;
-import com.example.ex6.dto.PageRequestDTO;
-import com.example.ex6.dto.PageResultDTO;
-import com.example.ex6.entity.Movie;
-import com.example.ex6.entity.MovieImage;
-import com.example.ex6.repository.MovieImageRepository;
-import com.example.ex6.repository.MovieRepository;
-import com.example.ex6.repository.ReviewRepository;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -101,13 +94,13 @@ public class FeedsServiceImpl implements FeedsService {
       // movieImageList :: 수정창에서 이미지 수정할 게 있는 경우의 목록
       List<Photos> newMovieImageList =
           (List<Photos>) entityMap.get("movieImageList");
-      List<Photos> oldMovieImageList =
+      List<Photos> oldPhotosList =
           photosRepository.findByFno(feeds.getFno());
       if(newMovieImageList == null) {
         // 수정창에서 이미지 모두를 지웠을 때
         photosRepository.deleteByFno(feeds.getFno());
-        for (int i = 0; i < oldMovieImageList.size(); i++) {
-          Photos oldPhotos = oldMovieImageList.get(i);
+        for (int i = 0; i < oldPhotosList.size(); i++) {
+          Photos oldPhotos = oldPhotosList.get(i);
           String fileName = oldPhotos.getPath() + File.separator
               + oldPhotos.getUuid() + "_" + oldPhotos.getImgName();
           deleteFile(fileName);
@@ -115,20 +108,20 @@ public class FeedsServiceImpl implements FeedsService {
       } else { // newMovieImageList에 일부 변화 발생
         newMovieImageList.forEach(movieImage -> {
           boolean result1 = false;
-          for (int i = 0; i < oldMovieImageList.size(); i++) {
-            result1 = oldMovieImageList.get(i).getUuid().equals(movieImage.getUuid());
+          for (int i = 0; i < oldPhotosList.size(); i++) {
+            result1 = oldPhotosList.get(i).getUuid().equals(movieImage.getUuid());
             if(result1) break;
           }
           if(!result1) photosRepository.save(movieImage);
         });
-        oldMovieImageList.forEach(oldMovieImage -> {
+        oldPhotosList.forEach(oldMovieImage -> {
           boolean result1 = false;
           for (int i = 0; i < newMovieImageList.size(); i++) {
             result1 = newMovieImageList.get(i).getUuid().equals(oldMovieImage.getUuid());
             if(result1) break;
           }
           if(!result1) {
-            movieImageRepository.deleteByUuid(oldMovieImage.getUuid());
+            photosRepository.deleteByUuid(oldMovieImage.getUuid());
             String fileName = oldMovieImage.getPath() + File.separator
                 + oldMovieImage.getUuid() + "_" + oldMovieImage.getImgName();
             deleteFile(fileName);
@@ -153,24 +146,24 @@ public class FeedsServiceImpl implements FeedsService {
 
   @Transactional
   @Override
-  public List<String> removeWithReviewsAndMovieImages(Long mno) {
-    List<MovieImage> list = movieImageRepository.findByMno(mno);
+  public List<String> removeWithReviewsAndPhotos(Long fno) {
+    List<Photos> list = photosRepository.findByFno(fno);
     List<String> result = new ArrayList<>();
-    list.forEach(new Consumer<MovieImage>() {
+    list.forEach(new Consumer<Photos>() {
       @Override
-      public void accept(MovieImage t) {
+      public void accept(Photos t) {
         result.add(t.getPath() + File.separator + t.getUuid() + "_" + t.getImgName());
       }
     });
-    movieImageRepository.deleteByMno(mno);
-    reviewRepository.deleteByMno(mno);
-    movieRepository.deleteById(mno);
+    photosRepository.deleteByFno(fno);
+    reviewsRepository.deleteByFno(fno);
+    feedsRepository.deleteById(fno);
     return result;
   }
 
   @Override
   public void removeUuid(String uuid) {
     log.info("deleteImage...... uuid: " + uuid);
-    movieImageRepository.deleteByUuid(uuid);
+    photosRepository.deleteByUuid(uuid);
   }
 }
