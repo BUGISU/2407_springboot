@@ -55,7 +55,7 @@ public interface FeedsRepository extends JpaRepository<Feeds,Long>, SearchReposi
     Page<Object[]> getMaxQuery(Pageable pageable);
 
     @Query("select m, mi, avg(coalesce(r.grade, 0)), count(r) " +
-            "from Feeds f left outer join MovieImage pt on pt.feeds=f " +
+            "from Feeds f left outer join Photos pt on pt.feeds=f " +
             "left outer join Reviews r on r.feeds = f " +
             "where f.fno = :fno group by pt ")
     List<Object[]> getMovieWithAll(Long fno); //특정 영화 조회

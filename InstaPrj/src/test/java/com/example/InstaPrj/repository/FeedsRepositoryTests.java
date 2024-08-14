@@ -38,7 +38,7 @@ class FeedsRepositoryTests {
                 Photos photos = Photos.builder()
                         .uuid(UUID.randomUUID().toString())
                         .feeds(feeds)
-                        .imgName("test" + j + ".jpg")
+                        .imgName("Photos" + j + ".jpg")
                         .build();
                 photosRepository.save(photos);
             }

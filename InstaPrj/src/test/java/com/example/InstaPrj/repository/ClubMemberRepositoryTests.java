@@ -17,9 +17,9 @@ class ClubMemberRepositoryTests {
     public void insertMembers() {
         IntStream.rangeClosed(1, 100).forEach(i -> {
             ClubMember clubMember = ClubMember.builder()
-                    .email("r" + i + "@a.a")
+                    .email("user" + i + "@a.a")
                     .password("1")
-                    .name("reviewer" + i)
+                    .name("Member" + i)
                     .build();
             clubMemberRepository.save(clubMember);
         });

@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReviewsRepository extends JpaRepository<Reviews, Long> {
-    @EntityGraph(attributePaths = {"member"},
+    @EntityGraph(attributePaths = {"clubMember"},
             type = EntityGraph.EntityGraphType.FETCH)
     List<Reviews> findByFeeds(Feeds feeds);
 
@@ -21,8 +21,8 @@ public interface ReviewsRepository extends JpaRepository<Reviews, Long> {
     // 그래서 트랜잭션을 복수개 할 것을 한번에 처리하기 때문에
     // 복수의 트랜잭션을 한번에 처리하기 위해 @Modifying
     @Modifying
-    @Query("delete from Reviews r where r.feeds = :feeds")
-    void deleteByMember(ClubMember clubMember);
+    @Query("delete from Reviews r where r.clubMember = :clubMember")
+    void deleteByClubMember(ClubMember clubMember);
 
     @Modifying //update, deltet할 때 항상 표기
     @Query("delete from Reviews r where r.feeds.fno=:fno")

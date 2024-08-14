@@ -56,7 +56,7 @@ class ReviewsRepositoryTests {
     public void testDeleteByClubMemeber() {
         Long cno = 1L;
         ClubMember clubMember = ClubMember.builder().cno(cno).build();
-        reviewsRepository.deleteByMember(clubMember);
+        reviewsRepository.deleteByClubMember(clubMember);
         clubMemberRepository.deleteById(cno);
     }
 }

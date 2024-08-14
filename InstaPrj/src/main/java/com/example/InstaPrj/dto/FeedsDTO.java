@@ -14,10 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeedsDTO {
-  private Long pmo; //pst 번호
+  private Long fno; //pst 번호
+  private String title; //게시글 내용
   private String content; //게시글 내용
   @Builder.Default
-  private List<PhotosDTO> postImageDTOList = new ArrayList<>();
+  private List<PhotosDTO> photosDTOList = new ArrayList<>();
   private LocalDateTime regDate;
   private LocalDateTime modDate;
 }
