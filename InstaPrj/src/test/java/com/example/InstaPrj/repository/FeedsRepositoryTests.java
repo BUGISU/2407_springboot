@@ -28,9 +28,9 @@ class FeedsRepositoryTests {
     @Transactional
     @Commit
     @Test
-    public void insertMovies() {
+    public void insertFeeds() {
         IntStream.rangeClosed(1, 100).forEach(i -> {
-            Feeds feeds = Feeds.builder().title("Movie..." + i).build();
+            Feeds feeds = Feeds.builder().title("Feeds..." + i).build();
             feedsRepository.save(feeds);
             System.out.println("----------------------------");
             int cnt = (int) (Math.random() * 5) + 1;
@@ -48,7 +48,7 @@ class FeedsRepositoryTests {
     @Test
     public void testListPage() {
         PageRequest pageRequest =
-                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "mno"));
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "fno"));
         Page<Object[]> result = feedsRepository.getListPage(pageRequest);
         for (Object[] objArr : result.getContent()) {
             System.out.println(Arrays.toString(objArr));
@@ -57,7 +57,7 @@ class FeedsRepositoryTests {
     @Test
     public void testListPageImg() {
         PageRequest pageRequest =
-                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "mno"));
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "fno"));
         Page<Object[]> result = feedsRepository.getListPageImg(pageRequest);
         for (Object[] objArr : result.getContent()) {
             System.out.println(Arrays.toString(objArr));
@@ -66,7 +66,7 @@ class FeedsRepositoryTests {
     @Test
     public void testGetListPageImgNative() {
         PageRequest pageRequest =
-                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "movie_mno"));
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "feeds_fno"));
         Page<Object[]> result = feedsRepository.getListPageImgNative(pageRequest);
         for (Object[] objArr : result.getContent()) {
             System.out.println(Arrays.toString(objArr));
@@ -94,7 +94,7 @@ class FeedsRepositoryTests {
     }
 
     @Test
-    public void testGetMovieWithAll() {
+    public void testGetFeedsWithAll() {
         List<Object[]> result = feedsRepository.getMovieWithAll(100L);
         for (Object[] arr : result) {
             System.out.println(Arrays.toString(arr));

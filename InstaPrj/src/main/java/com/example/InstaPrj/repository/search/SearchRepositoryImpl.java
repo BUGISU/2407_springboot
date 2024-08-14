@@ -1,8 +1,9 @@
 package com.example.InstaPrj.repository.search;
-import com.example.ex6.entity.Movie;
-import com.example.ex6.entity.QMovie;
-import com.example.ex6.entity.QMovieImage;
-import com.example.ex6.entity.QReview;
+import com.example.InstaPrj.entity.Feeds;
+
+import com.example.InstaPrj.entity.QFeeds;
+import com.example.InstaPrj.entity.QPhotos;
+import com.example.InstaPrj.entity.QReviews;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
@@ -24,21 +25,21 @@ import java.util.stream.Collectors;
 public class SearchRepositoryImpl extends QuerydslRepositorySupport
     implements SearchRepository {
   public SearchRepositoryImpl() {
-    super(Movie.class);
+    super(Feeds.class);
   }
 
 //  @Override
 //  public Movie search1() {
 //    log.info("search1.................");
 //    QMovie movie = QMovie.movie;
-//    QMovieImage movieImage = QMovieImage.movieImage;
+//    QMovieImage photos = QMovieImage.photos;
 //    QReview review = QReview.review;
 //
 //    JPQLQuery<Movie> jpqlQuery = from(movie);
-//    jpqlQuery.leftJoin(movieImage).on(movieImage.movie.eq(movie));
+//    jpqlQuery.leftJoin(photos).on(photos.movie.eq(movie));
 //    jpqlQuery.leftJoin(review).on(review.movie.eq(movie));
 //
-//    JPQLQuery<Tuple> tuple = jpqlQuery.select(movie, movieImage.movie, review.count());
+//    JPQLQuery<Tuple> tuple = jpqlQuery.select(movie, photos.movie, review.count());
 //    tuple.groupBy(movie);
 //
 //    log.info("==========================");
@@ -55,21 +56,21 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport
   public Page<Object[]> searchPage(String type, String keyword, Pageable pageable) {
     log.info("searchPage...............");
     //1) q도메인을 확보
-    QMovie movie = QMovie.movie;
-    QMovieImage movieImage = QMovieImage.movieImage;
-    QReview review = QReview.review;
+    QFeeds feeds = QFeeds.feeds;
+    QPhotos photos = QPhotos.photos;
+    QReviews reviews = QReviews.reviews;
 
     //2) q도메인을 조인
-    JPQLQuery<Movie> jpqlQuery = from(movie);
-    jpqlQuery.leftJoin(movieImage).on(movieImage.movie.eq(movie));
-    jpqlQuery.leftJoin(review).on(review.movie.eq(movie));
+    JPQLQuery<Feeds> jpqlQuery = from(feeds);
+    jpqlQuery.leftJoin(photos).on(photos.feeds.eq(feeds));
+    jpqlQuery.leftJoin(reviews).on(reviews.feeds.eq(feeds));
 
     //3) Tuple생성 : 조인을 한 결과의 데이터를 tuple로 생성
-    JPQLQuery<Tuple> tuple = jpqlQuery.select(movie, movieImage, review.grade.avg().coalesce(0.0),review.count());
+    JPQLQuery<Tuple> tuple = jpqlQuery.select(feeds, photos, reviews.grade.avg().coalesce(0.0),reviews.count());
 
     //4) 조건절 생성
     BooleanBuilder booleanBuilder = new BooleanBuilder();
-    BooleanExpression expression = movie.mno.gt(0L);
+    BooleanExpression expression = feeds.fno.gt(0L);
     booleanBuilder.and(expression);
 
     //5) 검색조건 파악
@@ -79,11 +80,11 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport
       for (String t : typeArr) {
         switch (t) {
           case "t":
-            conditionBuilder.or(movie.title.contains(keyword)); break;
+            conditionBuilder.or(feeds.title.contains(keyword)); break;
           case "w":
-            conditionBuilder.or(review.member.email.contains(keyword)); break;
+            conditionBuilder.or(reviews.clubMember.email.contains(keyword)); break;
           case "c":
-            conditionBuilder.or(review.text.contains(keyword)); break;
+            conditionBuilder.or(reviews.text.contains(keyword)); break;
         }
       }
       booleanBuilder.and(conditionBuilder);
@@ -97,12 +98,12 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport
     sort.stream().forEach(order -> {
       Order direction = order.isAscending() ? Order.ASC : Order.DESC;
       String prop = order.getProperty();
-      PathBuilder orderByExpression = new PathBuilder(Movie.class, "movie");
+      PathBuilder orderByExpression = new PathBuilder(Feeds.class, "movie");
       tuple.orderBy(new OrderSpecifier<Comparable>(direction, orderByExpression.get(prop)));
     });
 
     //8) 데이터를 출력하기 위한 그룹을 생성
-    tuple.groupBy(movie);
+    tuple.groupBy(feeds);
 
     //9) 원하는 데이터를 들고오기 위해서 시작위치즉 offset을 지정
     tuple.offset(pageable.getOffset());

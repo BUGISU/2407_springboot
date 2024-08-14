@@ -30,14 +30,14 @@ class ReviewsRepositoryTests {
                     .clubMember(ClubMember.builder().cno(cno).build())
                     .feeds(Feeds.builder().fno(fno).build())
                     .grade((int) (Math.random() * 5) + 1)
-                    .text("이 영화는.....")
+                    .text("이 피드는.....")
                     .build();
             reviewsRepository.save(review);
         });
     }
 
     @Test
-    public void testFindByMovie() {
+    public void testFindByFeeds() {
         List<Reviews> result = reviewsRepository.findByFeeds(
                 Feeds.builder().fno(100L).build()
         );
@@ -53,7 +53,7 @@ class ReviewsRepositoryTests {
     @Test
     @Transactional
     @Commit
-    public void testDeleteByMember() {
+    public void testDeleteByClubMemeber() {
         Long cno = 1L;
         ClubMember clubMember = ClubMember.builder().cno(cno).build();
         reviewsRepository.deleteByMember(clubMember);
