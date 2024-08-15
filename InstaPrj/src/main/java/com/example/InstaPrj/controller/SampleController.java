@@ -1,4 +1,4 @@
-package com.example.ex7.controller;
+package com.example.InstaPrj.controller;
 
 import com.example.InstaPrj.security.dto.ClubMemberAuthDTO;
 

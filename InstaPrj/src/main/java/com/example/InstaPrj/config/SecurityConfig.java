@@ -53,11 +53,11 @@ public class SecurityConfig {
     httpSecurity.authorizeHttpRequests(
         auth -> auth
             .requestMatchers(AUTH_WHITElIST).permitAll()
-//            .requestMatchers("/sample/all").permitAll()
+            .requestMatchers("/main/all").permitAll()
             .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/error/**")).permitAll()
-            .requestMatchers("/feeds/admin/**").hasRole("ADMIN")
-            .requestMatchers("/feeds/manager/**").access(
+            .requestMatchers("/main/admin/**").hasRole("ADMIN")
+            .requestMatchers("/main/manager/**").access(
                 new WebExpressionAuthorizationManager(
                     "hasRole('ADMIN') or hasRole('MANAGER')")
             )
