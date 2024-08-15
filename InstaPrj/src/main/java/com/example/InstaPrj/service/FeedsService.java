@@ -21,9 +21,9 @@ public interface FeedsService {
 
   Feeds getFeeds(Long fno);
 
-  void modify(Feeds feedsDTO);
+  void modify(FeedsDTO feedsDTO);
 
-  List<String> removeWithReviewsAndPhotos(Long mno);
+  List<String> removeWithReviewsAndPhotos(Long pno);
 
   void removeUuid(String uuid);
 

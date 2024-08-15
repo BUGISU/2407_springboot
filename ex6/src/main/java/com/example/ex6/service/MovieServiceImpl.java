@@ -5,7 +5,6 @@ import com.example.ex6.dto.PageRequestDTO;
 import com.example.ex6.dto.PageResultDTO;
 import com.example.ex6.entity.Movie;
 import com.example.ex6.entity.MovieImage;
-import com.example.ex6.entity.QMovie;
 import com.example.ex6.repository.MovieImageRepository;
 import com.example.ex6.repository.MovieRepository;
 import com.example.ex6.repository.ReviewRepository;

@@ -51,7 +51,7 @@ public class FeedsServiceImpl implements FeedsService {
   }
 
   @Override
-  public PageResultDTO<FeedsDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
+  public PageResultDTO<Feeds, Object[]> getList(PageRequestDTO pageRequestDTO) {
     Pageable pageable = pageRequestDTO.getPageable(Sort.by("fno").descending());
     // Page<Movie> result = movieRepository.findAll(pageable);
 //    Page<Object[]> result = movieRepository.getListPageImg(pageable);
