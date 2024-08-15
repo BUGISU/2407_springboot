@@ -1,4 +1,4 @@
-package com.example.ex7.dto;
+package com.example.InstaPrj.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
