@@ -82,7 +82,6 @@
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
 
-
 		<!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
 		<!-- The major version was updated from 2.x.x -> 3.x.x,
      and jakarta was used instead of javax.-->
@@ -119,8 +118,6 @@
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 			<version>3.1.2.RELEASE</version>
 		</dependency>
-
-
 	</dependencies>
 
 	<build>
