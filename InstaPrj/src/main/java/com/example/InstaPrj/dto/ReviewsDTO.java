@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewsDTO {
-  private Long reviewnum;
-  private Long mno; // Movie
+  private Long reviewsnum;
+  private Long fno; // Movie
   private Long mid; // Member
   private String nickname;
   private String email;

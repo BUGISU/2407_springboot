@@ -7,18 +7,18 @@ import com.example.InstaPrj.entity.Reviews;
 import java.util.List;
 
 public interface ReviewsService {
-  List<ReviewsDTO> getListOfMovie(Long mno);
-  
-  Long register(ReviewsDTO reviewDTO);
+  List<ReviewsDTO> getListOfFeeds(Long fno);
 
-  void modify(ReviewsDTO reviewDTO);
+  Long register(ReviewsDTO reviewsDTO);
 
-  void remove(Long reviewnum);
+  void modify(ReviewsDTO reviewsDTO);
+
+  void remove(Long revieswnum);
 
   public default Reviews dtoToEntity(ReviewsDTO reviewDTO) {
     Reviews review = Reviews.builder()
-        .reviewnum(reviewDTO.getReviewnum())
-        .feeds(Feeds.builder().fno(reviewDTO.getMno()).build())
+        .reviewsnum(reviewDTO.getReviewsnum())
+        .feeds(Feeds.builder().fno(reviewDTO.getFno()).build())
         .clubMember(ClubMember.builder().cno(reviewDTO.getMid()).build())
         .grade(reviewDTO.getGrade())
         .text(reviewDTO.getText())
@@ -28,8 +28,8 @@ public interface ReviewsService {
 
   default ReviewsDTO entityToDto(Reviews reviews) {
     ReviewsDTO reviewDTO = ReviewsDTO.builder()
-        .reviewnum(reviews.getReviewnum())
-        .mno(reviews.getFeeds().getFno())
+        .reviewsnum(reviews.getReviewsnum())
+        .fno(reviews.getFeeds().getFno())
         .mid(reviews.getClubMember().getCno())
         .nickname(reviews.getClubMember().getName())
         .email(reviews.getClubMember().getEmail())

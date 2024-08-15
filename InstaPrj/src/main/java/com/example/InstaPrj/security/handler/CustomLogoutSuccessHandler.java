@@ -10,8 +10,9 @@ import java.io.IOException;
 
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
   @Override
-  public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-    if(authentication != null || authentication.getDetails()!=null){
+  public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+                              Authentication authentication) throws IOException, ServletException {
+    if (authentication != null || authentication.getDetails() != null) {
       request.getSession().invalidate();
     }
     response.setStatus(HttpServletResponse.SC_OK);

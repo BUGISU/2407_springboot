@@ -42,7 +42,7 @@ class ReviewsRepositoryTests {
                 Feeds.builder().fno(100L).build()
         );
         result.forEach(review -> {
-            System.out.println(review.getReviewnum());
+            System.out.println(review.getReviewsnum());
             System.out.println(review.getGrade());
             System.out.println(review.getText());
             System.out.println(review.getClubMember().getEmail());

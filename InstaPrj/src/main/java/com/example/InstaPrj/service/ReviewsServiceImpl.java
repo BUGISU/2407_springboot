@@ -28,20 +28,20 @@ public class ReviewsServiceImpl implements ReviewsService {
 
   @Override
   public Long register(ReviewsDTO reviewsDTO) {
-    log.info("reviewDTO >> ",reviewsDTO);
-    Reviews review = dtoToEntity(reviewsDTO);
-    reviewsRepository.save(review);
-    return review.getReviewnum();
+    log.info("reviewsDTO >> ",reviewsDTO);
+    Reviews reviews = dtoToEntity(reviewsDTO);
+    reviewsRepository.save(reviews);
+    return reviews.getReviewsnum();
   }
 
   @Override
-  public void modify(ReviewsDTO reviewDTO) {
-    Optional<Reviews> result = reviewsRepository.findById(reviewDTO.getReviewnum());
+  public void modify(ReviewsDTO reviewsDTO) {
+    Optional<Reviews> result = reviewsRepository.findById(reviewsDTO.getReviewsnum());
     if (result.isPresent()) {
-      Reviews review = result.get();
-      review.changeGrade(reviewDTO.getGrade());
-      review.changeText(reviewDTO.getText());
-      reviewsRepository.save(review);
+      Reviews reviews = result.get();
+      reviews.changeGrade(reviewsDTO.getGrade());
+      reviews.changeText(reviewsDTO.getText());
+      reviewsRepository.save(reviews);
     }
   }
 

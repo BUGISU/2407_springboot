@@ -12,6 +12,7 @@ import com.example.InstaPrj.repository.ReviewsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ import java.util.function.Function;
 @Log4j2
 @RequiredArgsConstructor
 public class FeedsServiceImpl implements FeedsService {
+
   private final FeedsRepository feedsRepository;
   private final PhotosRepository photosRepository;
   private final ReviewsRepository reviewsRepository;
@@ -51,7 +53,7 @@ public class FeedsServiceImpl implements FeedsService {
   }
 
   @Override
-  public PageResultDTO<Feeds, Object[]> getList(PageRequestDTO pageRequestDTO) {
+  public PageResultDTO<FeedsDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
     Pageable pageable = pageRequestDTO.getPageable(Sort.by("fno").descending());
     // Page<Movie> result = movieRepository.findAll(pageable);
 //    Page<Object[]> result = movieRepository.getListPageImg(pageable);
@@ -69,14 +71,14 @@ public class FeedsServiceImpl implements FeedsService {
 
   @Override
   public FeedsDTO getFeeds(Long fno) {
-    List<Object[]> result = feedsRepository.getMovieWithAll(fno);
+    List<Object[]> result = feedsRepository.getFeedsWithAll(fno);
     Feeds feeds = (Feeds) result.get(0)[0];
     List<Photos> photos = new ArrayList<>();
     result.forEach(objects -> photos.add((Photos) objects[1]));
     Double avg = (Double) result.get(0)[2];
-    Long reviewCnt = (Long) result.get(0)[3];
+    Long reviewsCnt = (Long) result.get(0)[3];
 
-    return entityToDto(feeds, photos, avg, reviewCnt);
+    return entityToDto(feeds, photos, avg, reviewsCnt);
   }
 
   @Value("${com.example.upload.path}")
@@ -92,11 +94,11 @@ public class FeedsServiceImpl implements FeedsService {
       feeds.changeTitle(feedsDTO.getTitle());
       feedsRepository.save(feeds);
       // movieImageList :: 수정창에서 이미지 수정할 게 있는 경우의 목록
-      List<Photos> newMovieImageList =
-          (List<Photos>) entityMap.get("movieImageList");
+      List<Photos> newPhotosList =
+          (List<Photos>) entityMap.get("photosList");
       List<Photos> oldPhotosList =
           photosRepository.findByFno(feeds.getFno());
-      if(newMovieImageList == null) {
+      if(newPhotosList == null) {
         // 수정창에서 이미지 모두를 지웠을 때
         photosRepository.deleteByFno(feeds.getFno());
         for (int i = 0; i < oldPhotosList.size(); i++) {
@@ -106,18 +108,18 @@ public class FeedsServiceImpl implements FeedsService {
           deleteFile(fileName);
         }
       } else { // newMovieImageList에 일부 변화 발생
-        newMovieImageList.forEach(movieImage -> {
+        newPhotosList.forEach(photos -> {
           boolean result1 = false;
           for (int i = 0; i < oldPhotosList.size(); i++) {
-            result1 = oldPhotosList.get(i).getUuid().equals(movieImage.getUuid());
+            result1 = oldPhotosList.get(i).getUuid().equals(photos.getUuid());
             if(result1) break;
           }
-          if(!result1) photosRepository.save(movieImage);
+          if(!result1) photosRepository.save(photos);
         });
         oldPhotosList.forEach(oldMovieImage -> {
           boolean result1 = false;
-          for (int i = 0; i < newMovieImageList.size(); i++) {
-            result1 = newMovieImageList.get(i).getUuid().equals(oldMovieImage.getUuid());
+          for (int i = 0; i < newPhotosList.size(); i++) {
+            result1 = newPhotosList.get(i).getUuid().equals(oldMovieImage.getUuid());
             if(result1) break;
           }
           if(!result1) {

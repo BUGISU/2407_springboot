@@ -24,14 +24,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ClubOAuth2userDetailsService extends DefaultOAuth2UserService {
   private final ClubMemberRepository clubMemberRepository;
-  private final PasswordEncoder passwordEncoder; //
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     log.info("============= userRequest: " + userRequest);
+    // OAuth2UserService는 social로부터 정보를 받기 위한 객체 생성
     OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate =
         new DefaultOAuth2UserService();
-    OAuth2User oAuth2User = delegate.loadUser(userRequest); //유저 정보를 세션 객체로 변환
+    //delegate.loadUser()는 userRequest(소셜에서 온 유저정보)를 세션 객체(OAuth2User)로 변환
+    OAuth2User oAuth2User = delegate.loadUser(userRequest);
+
     String registrationId = userRequest.getClientRegistration().getRegistrationId();
     SocialType socialType = getSocialType(registrationId.trim().toString());
     String userNameAttributeName = userRequest.getClientRegistration()
@@ -66,6 +69,7 @@ public class ClubOAuth2userDetailsService extends DefaultOAuth2UserService {
     Optional<ClubMember> result = clubMemberRepository.findByEmail(email);
     if (result.isPresent()) return result.get();
 
+    // 소셜에서 넘어온 정보가 DB에 없을 때 저장하는 부분
     ClubMember clubMember = ClubMember.builder()
         .email(email)
         .password(passwordEncoder.encode("1"))

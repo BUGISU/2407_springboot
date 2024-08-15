@@ -5,6 +5,7 @@ import com.example.InstaPrj.entity.Photos;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 class FeedsRepositoryTests {
     @Autowired
     FeedsRepository feedsRepository;
@@ -76,7 +78,7 @@ class FeedsRepositoryTests {
     @Test
     public void testGetListPageImgJPQL() {
         PageRequest pageRequest =
-                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "mno"));
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "fno"));
         Page<Object[]> result = feedsRepository.getListPageImgJPQL(pageRequest);
         for (Object[] objArr : result.getContent()) {
             System.out.println(Arrays.toString(objArr));
@@ -86,7 +88,7 @@ class FeedsRepositoryTests {
     @Test
     public void testGetMaxQuery() {
         PageRequest pageRequest =
-                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "movie"));
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "feeds"));
         Page<Object[]> result = feedsRepository.getMaxQuery(pageRequest);
         for (Object[] objArr : result.getContent()) {
             System.out.println(Arrays.toString(objArr));
@@ -95,7 +97,7 @@ class FeedsRepositoryTests {
 
     @Test
     public void testGetFeedsWithAll() {
-        List<Object[]> result = feedsRepository.getMovieWithAll(100L);
+        List<Object[]> result = feedsRepository.getFeedsWithAll(100L);
         for (Object[] arr : result) {
             System.out.println(Arrays.toString(arr));
         }
@@ -108,7 +110,7 @@ class FeedsRepositoryTests {
 
     @Test
     public void testSearchPage() {
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("mno").descending().and(Sort.by("title").ascending()));
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("fno").descending().and(Sort.by("title").ascending()));
         Page<Object[]> result = feedsRepository.searchPage("t", "1", pageable);
     }
 }

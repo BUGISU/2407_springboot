@@ -1,7 +1,6 @@
 package com.example.InstaPrj.controller;
-
-import com.example.ex6.dto.ReviewDTO;
-import com.example.ex6.service.ReviewService;
+import com.example.InstaPrj.dto.ReviewsDTO;
+import com.example.InstaPrj.service.ReviewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -16,36 +15,36 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/reviews")
 public class ReviewsController {
-  private final ReviewService reviewService;
+  private final ReviewsService reviewsService;
 
-  @GetMapping(value = "/{mno}/all", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<ReviewDTO>> getList(@PathVariable("mno") Long mno) {
-    log.info("mno: " + mno);
-    List<ReviewDTO> reviewDTOList = reviewService.getListOfMovie(mno);
-    return new ResponseEntity<>(reviewDTOList, HttpStatus.OK);
+  @GetMapping(value = "/{fno}/all", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<ReviewsDTO>> getList(@PathVariable("fno") Long fno) {
+    log.info("fno: " + fno);
+    List<ReviewsDTO> reviewsDTOList = reviewsService.getListOfFeeds(fno);
+    return new ResponseEntity<>(reviewsDTOList, HttpStatus.OK);
   }
 
-  @PostMapping("/{mno}")
+  @PostMapping("/{fno}")
   // @RequestBody : form이나, json 데이터를 전송받을 때
   // @RequestParam : 변수로 데이터를 전송받을 때
-  public ResponseEntity<Long> register(@RequestBody ReviewDTO reviewDTO) {
-    log.info(">>" + reviewDTO);
-    Long reviewnum = reviewService.register(reviewDTO);
-    return new ResponseEntity<>(reviewnum, HttpStatus.OK);
+  public ResponseEntity<Long> register(@RequestBody ReviewsDTO reviewsDTO) {
+    log.info(">>" + reviewsDTO);
+    Long revieswnum = reviewsService.register(reviewsDTO);
+    return new ResponseEntity<>(revieswnum, HttpStatus.OK);
   }
 
-  @PutMapping("/{mno}/{reviewnum}")
-  public ResponseEntity<Long> modify(@RequestBody ReviewDTO reviewDTO) {
-    log.info(">>" + reviewDTO);
-    reviewService.modify(reviewDTO);
-    return new ResponseEntity<>(reviewDTO.getReviewnum(), HttpStatus.OK);
+  @PutMapping("/{fno}/{reviewsnum}")
+  public ResponseEntity<Long> modify(@RequestBody ReviewsDTO reviewsDTO) {
+    log.info(">>" + reviewsDTO);
+    reviewsService.modify(reviewsDTO);
+    return new ResponseEntity<>(reviewsDTO.getReviewsnum(), HttpStatus.OK);
   }
 
-  @DeleteMapping("/{mno}/{reviewnum}")
-  public ResponseEntity<Long> delete(@PathVariable Long reviewnum) {
-    log.info(">>" + reviewnum);
-    reviewService.remove(reviewnum);
-    return new ResponseEntity<>(reviewnum, HttpStatus.OK);
+  @DeleteMapping("/{fno}/{reviewsnum}")
+  public ResponseEntity<Long> delete(@PathVariable Long revieswnum) {
+    log.info(">>" + revieswnum);
+    reviewsService.remove(revieswnum);
+    return new ResponseEntity<>(revieswnum, HttpStatus.OK);
   }
 
 }

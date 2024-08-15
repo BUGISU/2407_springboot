@@ -12,7 +12,7 @@ import lombok.*;
 public class Reviews extends BasicEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long reviewnum;
+  private Long reviewsnum;
   @ManyToOne(fetch = FetchType.LAZY)
   private Feeds feeds;
   @ManyToOne(fetch = FetchType.LAZY)

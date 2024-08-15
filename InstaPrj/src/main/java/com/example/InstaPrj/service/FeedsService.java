@@ -15,11 +15,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public interface FeedsService {
-  Long register(Feeds feedsDTO);
+  Long register(FeedsDTO feedsDTO);
 
-  PageResultDTO<Feeds, Object[]> getList(PageRequestDTO pageRequestDTO);
+  PageResultDTO<FeedsDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
 
-  Feeds getFeeds(Long fno);
+  FeedsDTO getFeeds(Long fno);
 
   void modify(FeedsDTO feedsDTO);
 
@@ -32,9 +32,9 @@ public interface FeedsService {
     Feeds feeds = Feeds.builder().fno(feedsDTO.getFno())
         .title(feedsDTO.getContent()).build();
     entityMap.put("feeds", feeds);
-    List<PhotosDTO> imageDTOList = feedsDTO.getPhotosDTOList();
-    if (imageDTOList != null && imageDTOList.size() > 0) {
-      List<Photos> movieImageList = imageDTOList.stream().map(
+    List<PhotosDTO> photosDTOList = feedsDTO.getPhotosDTOList();
+    if (photosDTOList != null && photosDTOList.size() > 0) {
+      List<Photos> movieImageList = photosDTOList.stream().map(
           new Function<PhotosDTO, Photos>() {
             @Override
             public Photos apply(PhotosDTO movieImageDTO) {
@@ -54,7 +54,7 @@ public interface FeedsService {
   }
 
   default FeedsDTO entityToDto(Feeds feeds, List<Photos> movieImageList
-      , Double avg, Long reviewCnt) {
+      , Double avg, Long reviewsCnt) {
     FeedsDTO feedsDTO = FeedsDTO.builder()
         .fno(feeds.getFno())
         .title(feeds.getTitle())

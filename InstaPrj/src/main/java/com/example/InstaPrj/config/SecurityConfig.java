@@ -56,8 +56,8 @@ public class SecurityConfig {
 //            .requestMatchers("/sample/all").permitAll()
             .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/error/**")).permitAll()
-            .requestMatchers("/sample/admin/**").hasRole("ADMIN")
-            .requestMatchers("/sample/manager/**").access(
+            .requestMatchers("/feeds/admin/**").hasRole("ADMIN")
+            .requestMatchers("/feeds/manager/**").access(
                 new WebExpressionAuthorizationManager(
                     "hasRole('ADMIN') or hasRole('MANAGER')")
             )
