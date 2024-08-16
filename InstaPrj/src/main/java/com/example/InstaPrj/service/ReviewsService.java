@@ -15,12 +15,12 @@ public interface ReviewsService {
 
   void remove(Long revieswnum);
 
-  public default Reviews dtoToEntity(ReviewsDTO reviewDTO) {
+  public default Reviews dtoToEntity(ReviewsDTO reviewsDTO) {
     Reviews review = Reviews.builder()
-        .reviewsnum(reviewDTO.getReviewsnum())
-        .feeds(Feeds.builder().fno(reviewDTO.getFno()).build())
-        .clubMember(ClubMember.builder().cno(reviewDTO.getMid()).build())
-        .text(reviewDTO.getText())
+        .reviewsnum(reviewsDTO.getReviewsnum())
+        .feeds(Feeds.builder().fno(reviewsDTO.getFno()).build())
+        .clubMember(ClubMember.builder().cno(reviewsDTO.getMid()).build())
+        .text(reviewsDTO.getText())
         .build();
     return review;
   }

@@ -77,6 +77,7 @@ public interface FeedsService {
       ).collect(Collectors.toList());
     }
     feedsDTO.setPhotosDTOList(photosDTOList);
+    feedsDTO.setReviewsCnt(reviewsCnt);
     return feedsDTO;
   }
 }

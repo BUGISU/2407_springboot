@@ -133,13 +133,13 @@
               onmouseover="this.style.background='#d6e6ff'"
               onmouseout="this.style.background='white'"
               data-mid="${data[i].mid}" data-text="${data[i].text}"
-              data-grade="${data[i].grade}" data-nickname="${data[i].nickname}"
+              data-nickname="${data[i].nickname}"
               data-email="${data[i].email}" data-reviewsnum="${data[i].reviewsnum}"
               style="padding: 5px 20px;cursor:pointer;">
                 <div style="display:inline-block;width:68%;">
                   <h6 style="display:inline-block;width:70px">${data[i].reviewsnum}</h6>
                   <h5 class="card-text" style="display:inline-block;">${data[i].text}
-                  [★ ${data[i].grade}]</h5>
+
                 </div>
                 <div style="display:inline-block;width:30%;text-align: right;right-padding:12px;">
                   <span class="card-subtitle text-muted" style="font-size:10px">${data[i].nickname} /
@@ -158,13 +158,13 @@
                 let reviewsnum = cardBody[i].dataset.reviewsnum;
                 let text = cardBody[i].dataset.text;
                 let mid = cardBody[i].dataset.mid;
-                let grade = cardBody[i].dataset.grade;
+
                 let nickname = cardBody[i].dataset.nickname;
                 document.querySelector('#exampleModalLabel').textContent='No '+reviewsnum
                 document.querySelector(".modal-body").innerHTML =
                   `<input type="hidden" name="reviewsnum" value="${reviewsnum}" readonly>
                    <input type="hidden" name="mid" value="${mid}" readonly>
-                   <label id="notice">Grade</label><span class="star">★★★★★<span>★★★★★</span>
+
                    <input type="range" oninput="drawStar(this)" value="1" step="2" min="0" max="10">
                    </span><br>
                    <input type="text" class="form-control" name="text" value="${text}">
@@ -178,14 +178,14 @@
                   let reviewsnum = document.querySelector(".modal-body input[name='reviewsnum']")
                   let text = document.querySelector(".modal-body input[name='text']")
                   let mid = document.querySelector(".modal-body input[name='mid']")
-                  let grade = parseFloat(document.querySelector(".star span").style.width)*0.01*5;
+
                   let notice = document.querySelector('#notice')
 
                   if(!text.value) {
                     text.setAttribute('placeholder','댓글입력하세요');text.focus();return;}
-                  if(!grade) {notice.textContent='Select Grade!'; return;}
+
                   let reviews = {fno: fno, text: text.value, mid: mid.value
-                                  , grade: grade, reviewsnum: reviewsnum.value}
+                                 , reviewsnum: reviewsnum.value}
                   const url = /*[[@{/reviews/}]]*/'url';
                   fetch(url+fno+"/"+reviewsnum.value, {
                     method: 'PUT',
@@ -222,7 +222,7 @@
                   })
                   .catch(err => console.log('myError', err))
                 }
-                document.querySelector('.star span').style.width = `${grade * 20}%`
+
                 myModal.show()
               }
             }
@@ -261,15 +261,14 @@
           document.querySelector(".modal-footer .save").onclick = function () {
             let mid = document.querySelector(".modal-body input[name='mid']")
             let text = document.querySelector(".modal-body input[name='text']")
-            let grade = parseFloat(document.querySelector(".star span").style.width)*0.01*5;
             let notice = document.querySelector('#notice')
 
             if(!text.value) {
               text.setAttribute('placeholder','댓글입력하세요');text.focus();return;}
             if(!mid.value) {
               mid.setAttribute('placeholder','회원번호를 입력하세요');mid.focus();return;}
-            if(!grade) {notice.textContent='Select Grade!'; return;}
-            let reviews = {fno: fno, text: text.value, mid: mid.value, grade: grade}
+
+            let reviews = {fno: fno, text: text.value, mid: mid.value}
             const url = /*[[@{/reviews/}]]*/'url';
             fetch(url+fno, {
               method: 'POST',

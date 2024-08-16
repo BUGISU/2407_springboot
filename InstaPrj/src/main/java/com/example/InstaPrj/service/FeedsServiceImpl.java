@@ -1,5 +1,6 @@
 package com.example.InstaPrj.service;
 
+import com.example.InstaPrj.controller.FeedsController;
 import com.example.InstaPrj.dto.FeedsDTO;
 import com.example.InstaPrj.dto.PageRequestDTO;
 import com.example.InstaPrj.dto.PageResultDTO;
@@ -12,6 +13,8 @@ import com.example.InstaPrj.repository.ReviewsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -33,6 +36,7 @@ public class FeedsServiceImpl implements FeedsService {
   private final FeedsRepository feedsRepository;
   private final PhotosRepository photosRepository;
   private final ReviewsRepository reviewsRepository;
+  private static final Logger logger = LoggerFactory.getLogger(FeedsServiceImpl.class);
 
   @Override
   public Long register(FeedsDTO feedsDTO) {
@@ -70,6 +74,7 @@ public class FeedsServiceImpl implements FeedsService {
 
   @Override
   public FeedsDTO getFeeds(Long fno) {
+    logger.info("getFeeds called with fno: {}", fno);
     List<Object[]> result = feedsRepository.getFeedsWithAll(fno);
     Feeds feeds = (Feeds) result.get(0)[0];
     List<Photos> photos = new ArrayList<>();

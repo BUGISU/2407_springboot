@@ -35,7 +35,7 @@ public interface FeedsRepository extends JpaRepository<Feeds,Long>, SearchReposi
     Page<Object[]> getListPageMaxImg(Pageable pageable);
 
     // Native Query = SQL
-    @Query(value = "select f.fno, pt.pnum, pt.imgName, " +
+    @Query(value = "select f.fno, pt.pnum, pt.img_name, " +
             "count(r.reviewsnum) " +
             "from db7.photos pt left outer join db7.feeds f on f.fno=pt.feeds_fno " +
             "left outer join db7.reviews r on f.fno=r.feeds_fno " +
@@ -56,10 +56,8 @@ public interface FeedsRepository extends JpaRepository<Feeds,Long>, SearchReposi
     Page<Object[]> getMaxQuery(Pageable pageable);
 
     @Query("select f, pt, count(r) " +
-        "from Feeds f " +
-        "left join Photos pt on pt.feeds = f " +
-        "left join Reviews r on r.feeds = f " +
-        "where f.fno = :fno " +
-        "group by f, pt")
-    List<Object[]> getFeedsWithAll(@Param("fno") Long fno); //특정 영화 조회
+            "from Feeds f left outer join Photos pt on pt.feeds=f " +
+            "left outer join Reviews r on r.feeds = f " +
+            "where f.fno = :fno group by pt ")
+    List<Object[]> getFeedsWithAll(Long fno); //특정 영화 조회
 }
