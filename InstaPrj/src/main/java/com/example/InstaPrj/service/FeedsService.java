@@ -30,45 +30,48 @@ public interface FeedsService {
   default Map<String, Object> dtoToEntity(FeedsDTO feedsDTO) {
     Map<String, Object> entityMap = new HashMap<>();
     Feeds feeds = Feeds.builder().fno(feedsDTO.getFno())
-        .title(feedsDTO.getContent()).build();
+        .title(feedsDTO.getTitle())
+        .content(feedsDTO.getContent()).build();
     entityMap.put("feeds", feeds);
     List<PhotosDTO> photosDTOList = feedsDTO.getPhotosDTOList();
     if (photosDTOList != null && photosDTOList.size() > 0) {
-      List<Photos> movieImageList = photosDTOList.stream().map(
+      List<Photos> photosList = photosDTOList.stream().map(
           new Function<PhotosDTO, Photos>() {
             @Override
-            public Photos apply(PhotosDTO movieImageDTO) {
+            public Photos apply(PhotosDTO photosDTO) {
               Photos photos = Photos.builder()
-                  .path(movieImageDTO.getPath())
-                  .imgName(movieImageDTO.getImgName())
-                  .uuid(movieImageDTO.getUuid())
+                  .path(photosDTO.getPath())
+                  .imgName(photosDTO.getImgName())
+                  .uuid(photosDTO.getUuid())
                   .feeds(feeds)
                   .build();
               return photos;
             }
           }
       ).collect(Collectors.toList());
-      entityMap.put("movieImageList", movieImageList);
+      entityMap.put("photosList", photosList);
     }
     return entityMap;
   }
 
-  default FeedsDTO entityToDto(Feeds feeds, List<Photos> movieImageList
+  default FeedsDTO entityToDto(Feeds feeds, List<Photos> photosList
       , Double avg, Long reviewsCnt) {
     FeedsDTO feedsDTO = FeedsDTO.builder()
         .fno(feeds.getFno())
         .title(feeds.getTitle())
+        .content(feeds.getContent())
+        .reviewsCnt(reviewsCnt.intValue())
         .regDate(feeds.getRegDate())
         .modDate(feeds.getModDate())
         .build();
     List<PhotosDTO> photosDTOList = new ArrayList<>();
-    if(movieImageList.toArray().length > 0 && movieImageList.toArray()[0] != null) {
+    if(photosList.toArray().length > 0 && photosList.toArray()[0] != null) {
       photosDTOList = photosDTOList.stream().map(
-          movieImage -> {
+          photos -> {
             PhotosDTO photosDTO = PhotosDTO.builder()
-                .imgName(movieImage.getImgName())
-                .path(movieImage.getPath())
-                .uuid(movieImage.getUuid())
+                .imgName(photos.getImgName())
+                .path(photos.getPath())
+                .uuid(photos.getUuid())
                 .build();
             return photosDTO;
           }

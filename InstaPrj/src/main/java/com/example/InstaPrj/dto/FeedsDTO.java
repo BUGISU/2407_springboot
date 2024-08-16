@@ -19,6 +19,7 @@ public class FeedsDTO {
   private String content; //게시글 내용
   @Builder.Default
   private List<PhotosDTO> photosDTOList = new ArrayList<>();
+  private int reviewsCnt;
   private LocalDateTime regDate;
   private LocalDateTime modDate;
 }

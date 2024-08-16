@@ -32,7 +32,9 @@ class FeedsRepositoryTests {
     @Test
     public void insertFeeds() {
         IntStream.rangeClosed(1, 100).forEach(i -> {
-            Feeds feeds = Feeds.builder().title("Feeds..." + i).build();
+            Feeds feeds = Feeds.builder().title("Feeds..." + i)
+                .content("Content..." + i)
+                .build();
             feedsRepository.save(feeds);
             System.out.println("----------------------------");
             int cnt = (int) (Math.random() * 5) + 1;

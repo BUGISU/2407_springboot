@@ -38,11 +38,11 @@ public class FeedsServiceImpl implements FeedsService {
   public Long register(FeedsDTO feedsDTO) {
     Map<String, Object> entityMap = dtoToEntity(feedsDTO);
     Feeds feeds = (Feeds) entityMap.get("feeds");
-    List<Photos> movieImageList =
+    List<Photos> photosList =
         (List<Photos>) entityMap.get("photoList");
     feedsRepository.save(feeds);
-    if(movieImageList != null) {
-      movieImageList.forEach(new Consumer<Photos>() {
+    if(photosList != null) {
+      photosList.forEach(new Consumer<Photos>() {
         @Override
         public void accept(Photos photos) {
           photosRepository.save(photos);
@@ -93,7 +93,7 @@ public class FeedsServiceImpl implements FeedsService {
       Feeds feeds = (Feeds) entityMap.get("feeds");
       feeds.changeTitle(feedsDTO.getTitle());
       feedsRepository.save(feeds);
-      // movieImageList :: 수정창에서 이미지 수정할 게 있는 경우의 목록
+      // photosList :: 수정창에서 이미지 수정할 게 있는 경우의 목록
       List<Photos> newPhotosList =
           (List<Photos>) entityMap.get("photosList");
       List<Photos> oldPhotosList =

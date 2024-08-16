@@ -14,7 +14,11 @@ public class Feeds extends BasicEntity{
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long fno;
   private String title;
+  private String content;
+
   public void changeTitle(String title) {
     this.title = title;
   }
+  public void changeContent(String content) {this.content = content;}
+
 }

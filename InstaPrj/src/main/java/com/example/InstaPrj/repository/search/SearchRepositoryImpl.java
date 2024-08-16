@@ -28,30 +28,6 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport
     super(Feeds.class);
   }
 
-//  @Override
-//  public Movie search1() {
-//    log.info("search1.................");
-//    QMovie movie = QMovie.movie;
-//    QMovieImage photos = QMovieImage.photos;
-//    QReview review = QReview.review;
-//
-//    JPQLQuery<Movie> jpqlQuery = from(movie);
-//    jpqlQuery.leftJoin(photos).on(photos.movie.eq(movie));
-//    jpqlQuery.leftJoin(review).on(review.movie.eq(movie));
-//
-//    JPQLQuery<Tuple> tuple = jpqlQuery.select(movie, photos.movie, review.count());
-//    tuple.groupBy(movie);
-//
-//    log.info("==========================");
-//    log.info(tuple);
-//    log.info("==========================");
-//
-//    List<Tuple> result = tuple.fetch();
-//    log.info("result: " + result);
-//
-//    return null;
-//  }
-
   @Override
   public Page<Object[]> searchPage(String type, String keyword, Pageable pageable) {
     log.info("searchPage...............");
@@ -98,7 +74,7 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport
     sort.stream().forEach(order -> {
       Order direction = order.isAscending() ? Order.ASC : Order.DESC;
       String prop = order.getProperty();
-      PathBuilder orderByExpression = new PathBuilder(Feeds.class, "movie");
+      PathBuilder orderByExpression = new PathBuilder(Feeds.class, "feeds");
       tuple.orderBy(new OrderSpecifier<Comparable>(direction, orderByExpression.get(prop)));
     });
 

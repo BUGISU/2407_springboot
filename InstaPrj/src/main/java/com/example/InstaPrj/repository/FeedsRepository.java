@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface FeedsRepository extends JpaRepository<Feeds,Long>, SearchRepository {
-//  select m.mno, avg(coalesce(r.grade,0)), count(r.reviewnum)
-//  from movie m left outer join review r on m.mno = r.movie_mno
-//  group by m.mno;
+//  select m.fno, avg(coalesce(r.grade,0)), count(r.reviewnum)
+//  from movie m left outer join review r on m.fno = r.movie_fno
+//  group by m.fno;
 
     // 영화에 대한 리뷰의 평점과 댓글 갯수를 출력
     @Query("select f, avg(coalesce(r.grade, 0)), count(distinct r) " +

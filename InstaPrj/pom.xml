@@ -134,8 +134,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-<!--
-			&lt;!&ndash; querydsl setting :: com.mysema.maven &ndash;&gt;
+			<!-- querydsl setting :: com.mysema.maven -->
 			<plugin>
 				<groupId>com.mysema.maven</groupId>
 				<artifactId>apt-maven-plugin</artifactId>
@@ -152,7 +151,6 @@
 					</execution>
 				</executions>
 			</plugin>
--->
 		</plugins>
 	</build>
 

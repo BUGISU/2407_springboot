@@ -1,63 +1,103 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
-  <th:block th:fragment="content">
-    <h1 class="mt-4">Board List Page
-      <a class="btn btn-outline-primary" th:href="@{/board/register}">Register</a>
-    </h1>
-    <form th:action="@{/board/list}" id="frmSearch" method="get">
-      <div class="input-group">
-        <div class="input-group-prepend" style="margin-right:10px;">
-          <select class="form-control" id="type" name="type">
-            <option th:selected="${pageRequestDTO.type == null}">선택하세요</option>
-            <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
-            <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
-            <option value="w" th:selected="${pageRequestDTO.type == 'w'}">작성자</option>
-            <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목+내용</option>
-            <option value="tcw" th:selected="${pageRequestDTO.type == 'tcw'}">제목+내용+작성자</option>
-          </select>
+<html lang="ko"  xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="setContent(content)">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Shop Homepage - Start Bootstrap Template</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="@{/assets/favicon.ico}" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+  </head>
+  <body>
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+      <a class="navbar-brand" href="#!">Start Bootstrap
+      </a>
+      <a class="btn btn-outline-primary px-lg-5" th:href="@{/feeds/register}">Register</a>
+      <!--    검색창      -->
+      <form th:action="@{/feeds/list}" id="frmSearch" method="get">
+        <div class="input-group">
+          <div class="input-group-prepend" style="margin-right:10px;">
+            <select class="form-control" id="type" name="type">
+              <option th:selected="${pageRequestDTO.type == null}">선택하세요</option>
+              <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
+              <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
+              <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목+내용</option>
+            </select>
+          </div>
+          <input type="text" class="form-control" name="keyword" style="border-radius:5px"
+                 id="keyword" th:value="${pageRequestDTO.keyword}">
+          <div class="input-group-append" style="margin-left:10px;">
+            <button class="btn btn-outline-primary btnSearch">Search</button>
+          </div>
         </div>
-        <input type="text" class="form-control" name="keyword" style="border-radius:5px"
-               id="keyword" th:value="${pageRequestDTO.keyword}">
-        <div class="input-group-append" style="margin-left:10px;">
-          <button class="btn btn-outline-primary btnSearch">Search</button>
+      </form>
+    </div>
+  </nav>
+  <!-- Header-->
+  <header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+      <div class="text-center text-white">
+        <h1 class="display-4 fw-bolder">InstaGram Project</h1>
+        <p class="lead fw-normal text-white-50 mb-0">create by. Enney 2024-08-16</p>
+      </div>
+    </div>
+  </header>
+  <!-- Section-->
+  <section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        <!--1 번-->
+        <div class="col mb-5"  th:each="feedsDTO : ${pageResultDTO.dtoList}"
+             style="cursor:pointer;"
+            >
+          <div class="card h-100">
+            <!-- Product image-->
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- Product details-->
+            <div class="card-body p-4">
+              <div class="text-center">
+                <!-- Product name-->
+                <h5 class="fw-bolder" th:text="${feedsDTO != null} ? ${feedsDTO.title} : '제목이 없습니다'"></h5>
+                <!-- Product price-->
+
+                <p th:text="${feedsDTO != null} ? ${feedsDTO.content} : '내용이 없습니다'"></p>
+              </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+              <div class="text-center">
+                <a class="btn btn-outline-dark mt-auto"
+                   th:onclick="goRead([[${feedsDTO.fno}]],[[${pageResultDTO.page}]],
+                      [[${pageRequestDTO.type}]], [[${pageRequestDTO.keyword}]])"
+                   th:href="@{/feeds/read}">View options</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </form>
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th scope="col">Bno</th>
-        <th scope="col">Title</th>
-        <th scope="col">Writer</th>
-        <th scope="col">RegDate</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="boardDTO : ${pageResultDTO.dtoList}" style="cursor:pointer;"
-          th:onclick="goRead([[${boardDTO.bno}]],[[${pageResultDTO.page}]],[[${pageRequestDTO.type}]], [[${pageRequestDTO.keyword}]])"
-          onmouseover="this.style.background='#d6e6ff'"
-          onmouseout="this.style.background='white'">
-        <th scope="row">[[${boardDTO.bno}]]</th>
-        <td>[[${boardDTO.title}]] ___ [<b th:text="${boardDTO.replyCount}"></b>]</td>
-        <td>[[${boardDTO.writerName}]]<small>([[${boardDTO.writerEmail}]])</small></td>
-        <td>[[${#temporals.format(boardDTO.regDate, 'yyyy/MM/dd hh:mm')}]]</td>
-      </tr>
-      </tbody>
-    </table>
+    </div>
+    <!-- 하단에 페이지 바 디자인 구현-->
     <ul class="pagination h-100 justify-content-center align-items-center">
       <li class="page-item " th:if="${pageResultDTO.prev}">
         <a class="page-link" tabindex="-1"
-           th:href="@{/board/list(page=${pageResultDTO.start-1})}">Prev</a>
+           th:href="@{/feeds/list(page=${pageResultDTO.start-1})}">Prev</a>
       </li>
       <li th:each="page : ${pageResultDTO.pageList}"
           th:class=" 'page-item ' + ${pageResultDTO.page == page?'active':''} ">
         <a class="page-link"
-           th:href="@{/board/list(page=${page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
+           th:href="@{/feeds/list(page=${page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
       </li>
       <li class="page-item " th:if="${pageResultDTO.next}">
         <a class="page-link"
-           th:href="@{/board/list(page=${pageResultDTO.end+1})}">Next</a>
+           th:href="@{/feeds/list(page=${pageResultDTO.end+1})}">Next</a>
       </li>
     </ul>
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -76,53 +116,69 @@
         </div>
       </div>
     </div>
-    <script th:inline="javascript">
-      // document의 태그를 모두 읽고 난뒤 실행되는 함수
-      window.onload = function(){
-        var msg = [[${msg}]]
-        // 일회성 msg의 내용이 비거나 history 상태가 비지 않는 경우 return
-        //if(msg === '' || history.state) return
+  </section>
+  <script th:inline="javascript">
+    // document의 태그를 모두 읽고 난뒤 실행되는 함수
+    window.onload = function(){
+      var msg = [[${msg}]]
+      // 일회성 msg의 내용이 비거나 history 상태가 비지 않는 경우 return
+      //if(msg === '' || history.state) return
 
-        if(msg) {  // truthy 데이터가 올 경우만 if문 실행
-          const myModal = new bootstrap.Modal(document.querySelector('#myModal'),
-                          { backdrop: true });
-          document.querySelector(".modal-body").innerHTML
-            = `<p>${msg}되었습니다.</p>`
-          myModal.show()
-        }
-        // history 이용해서 모달창 보여준거에 대한 기록을 clear!
-        history.replaceState({}, null, null) //(state, unused, url)
-
-        frmSearch = document.querySelector("#frmSearch")
-        btnSearch = document.querySelector(".btnSearch")
-        type = document.querySelector("#type");
-        keyword = document.querySelector("#keyword")
-
-        btnSearch.onclick = e => {
-          e.preventDefault();
-          if(!keyword.value) {
-            keyword.focus();
-            return;
-          }
-          frmSearch.submit();
-        }
-        type.onchange = () => {
-          if(type.options[0].selected) {
-            location.href = /*[[@{/board/list}]]*/'url'
-          } else {
-            keyword.disabled = false;
-            btnSearch.disabled = false;
-          }
-        }
-        const requestKeyword = /*[[${pageRequestDTO.keyword}]]*/'keyword'
-        keyword.disabled = requestKeyword?false:true;
-        btnSearch.disabled = requestKeyword?false:true;
+      if(msg) {  // truthy 데이터가 올 경우만 if문 실행
+        const myModal = new bootstrap.Modal(document.querySelector('#myModal'),
+                        { backdrop: true });
+        document.querySelector(".modal-body").innerHTML
+          = `<p>${msg}되었습니다.</p>`
+        myModal.show()
       }
-      function goRead(bno, page, type, keyword){
-        url = /*[[@{/board/read}]]*/'url'
-        location.href = url + `?bno=${bno}&page=${page}&type=${type}&keyword=${keyword}`
+      // history 이용해서 모달창 보여준거에 대한 기록을 clear!
+      history.replaceState({}, null, null) //(state, unused, url)
+
+      frmSearch = document.querySelector("#frmSearch")
+      btnSearch = document.querySelector(".btnSearch")
+      type = document.querySelector("#type");
+      keyword = document.querySelector("#keyword")
+
+      btnSearch.onclick = e => {
+        e.preventDefault();
+        if(!keyword.value) {
+          keyword.focus();
+          return;
+        }
+        frmSearch.submit();
       }
-    </script>
+      type.onchange = () => {
+        if(type.options[0].selected) {
+          location.href = /*[[@{/feeds/list}]]*/'url'
+        } else {
+          keyword.disabled = false;
+          btnSearch.disabled = false;
+        }
+      }
+      const requestKeyword = /*[[${pageRequestDTO.keyword}]]*/'keyword'
+      keyword.disabled = requestKeyword?false:true;
+      btnSearch.disabled = requestKeyword?false:true;
+    }
+    function goRead(fno, page, type, keyword){
+    console.log(">>> "+fno);
+    console.log(">>> "+page);
+    console.log(">>> "+type);
+    console.log(">>> "+keyword);
+
+  url = /*[[@{/feeds/read}]]*/'url'
+        location.href = url + `?fno=${fno}&page=${page}&type=${type}&keyword=${keyword}`
+      }
+  </script>
+  <!-- Footer-->
+  <footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+  </footer>
+  <!-- Bootstrap core JS-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Core theme JS-->
+  <script th:src="@{/js/scripts.js}"></script>
+  </body>
+
   </th:block>
 </th:block>
 </html>
