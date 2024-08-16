@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URLDecoder;
@@ -24,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedsController {
   private final FeedsService feedsService;
+  private static final Logger logger = LoggerFactory.getLogger(FeedsController.class);
 
   @GetMapping("/register")
   public void register() {
@@ -44,6 +47,7 @@ public class FeedsController {
 
   @GetMapping({"/read", "/modify"})
   public void getFeeds(Long fno, PageRequestDTO pageRequestDTO, Model model) {
+    logger.info("getFeeds called with fno: {}", fno);
     FeedsDTO feedsDTO = feedsService.getFeeds(fno);
     typeKeywordInit(pageRequestDTO);
     model.addAttribute("feedsDTO", feedsDTO);

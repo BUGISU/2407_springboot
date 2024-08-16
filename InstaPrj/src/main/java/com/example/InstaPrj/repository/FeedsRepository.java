@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -15,27 +16,27 @@ public interface FeedsRepository extends JpaRepository<Feeds,Long>, SearchReposi
 //  group by m.fno;
 
     // 영화에 대한 리뷰의 평점과 댓글 갯수를 출력
-    @Query("select f, avg(coalesce(r.grade, 0)), count(distinct r) " +
+    @Query("select f, count(distinct r) " +
             "from Feeds f left outer join Reviews r on r.feeds=f group by f ")
     Page<Object[]> getListPage(Pageable pageable);
 
     // 아래와 같은 경우 mi를 찾기 위해서 review 카운트 만큼 반복횟수도 늘어나는 문제점
     // mi의 inum이 가장 낮은 이미지 번호가 출력된다.
     // 영화와 영화이미지,리뷰의 평점과 댓글 갯수 출력
-    @Query("select f, pt, avg(coalesce(r.grade, 0)), count(distinct r) from Feeds f " +
+    @Query("select f, pt, count(distinct r) from Feeds f " +
             "left outer join Photos pt on pt.feeds = f " +
             "left outer join Reviews   r  on r.feeds  = f group by f ")
     Page<Object[]> getListPageImg(Pageable pageable);
 
     // spring 3.x에서는 실행 안됨.
-    @Query("select f,max(pt),avg(coalesce(r.grade, 0)),count(distinct r) from Feeds f " +
+    @Query("select f,max(pt),count(distinct r) from Feeds f " +
             "left outer join Photos pt on pt.feeds = f " +
             "left outer join Reviews   r  on r.feeds  = f group by f ")
     Page<Object[]> getListPageMaxImg(Pageable pageable);
 
     // Native Query = SQL
     @Query(value = "select f.fno, pt.pnum, pt.imgName, " +
-            "avg(coalesce(r.grade, 0)), count(r.reviewsnum) " +
+            "count(r.reviewsnum) " +
             "from db7.photos pt left outer join db7.feeds f on f.fno=pt.feeds_fno " +
             "left outer join db7.reviews r on f.fno=r.feeds_fno " +
             "where pt.pnum = " +
@@ -44,7 +45,7 @@ public interface FeedsRepository extends JpaRepository<Feeds,Long>, SearchReposi
     Page<Object[]> getListPageImgNative(Pageable pageable);
 
     // JPQL
-    @Query("select f, pt, avg(coalesce(r.grade, 0)), count(distinct r) from Feeds f " +
+    @Query("select f, pt,count(distinct r) from Feeds f " +
             "left outer join Photos pt on pt.feeds = f " +
             "left outer join Reviews     r  on r.feeds  = f " +
             "where pnum = (select max(pt2.pnum) from Photos pt2 where pt2.feeds=f) " +
@@ -54,9 +55,11 @@ public interface FeedsRepository extends JpaRepository<Feeds,Long>, SearchReposi
     @Query("select feeds, max(pt.pnum) from Photos pt group by feeds")
     Page<Object[]> getMaxQuery(Pageable pageable);
 
-    @Query("select f, pt, avg(coalesce(r.grade, 0)), count(r) " +
-            "from Feeds f left outer join Photos pt on pt.feeds=f " +
-            "left outer join Reviews r on r.feeds = f " +
-            "where f.fno = :fno group by pt ")
-    List<Object[]> getFeedsWithAll(Long fno); //특정 영화 조회
+    @Query("select f, pt, count(r) " +
+        "from Feeds f " +
+        "left join Photos pt on pt.feeds = f " +
+        "left join Reviews r on r.feeds = f " +
+        "where f.fno = :fno " +
+        "group by f, pt")
+    List<Object[]> getFeedsWithAll(@Param("fno") Long fno); //특정 영화 조회
 }

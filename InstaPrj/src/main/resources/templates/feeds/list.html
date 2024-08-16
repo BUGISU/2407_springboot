@@ -64,10 +64,10 @@
             <!-- Product details-->
             <div class="card-body p-4">
               <div class="text-center">
+                <p th:text="${feedsDTO != null} ? ${feedsDTO.fno} : '피드번호가 없습니다'"></p>
                 <!-- Product name-->
                 <h5 class="fw-bolder" th:text="${feedsDTO != null} ? ${feedsDTO.title} : '제목이 없습니다'"></h5>
                 <!-- Product price-->
-
                 <p th:text="${feedsDTO != null} ? ${feedsDTO.content} : '내용이 없습니다'"></p>
               </div>
             </div>
@@ -159,15 +159,17 @@
       keyword.disabled = requestKeyword?false:true;
       btnSearch.disabled = requestKeyword?false:true;
     }
-    function goRead(fno, page, type, keyword){
-    console.log(">>> "+fno);
-    console.log(">>> "+page);
-    console.log(">>> "+type);
-    console.log(">>> "+keyword);
+  function goRead(fno, page, type, keyword) {
+     console.log(">>>fno:", fno);
+    console.log(">>>page:", page);
+    console.log(">>>type:", type);
+    console.log(">>>keyword:", keyword);
 
-  url = /*[[@{/feeds/read}]]*/'url'
-        location.href = url + `?fno=${fno}&page=${page}&type=${type}&keyword=${keyword}`
-      }
+    const baseUrl = '/feeds/read';
+    const url = `${baseUrl}?fno=${fno}&page=${page}&type=${encodeURIComponent(type)}&keyword=${encodeURIComponent(keyword)}`;
+
+    location.href = url;
+}
   </script>
   <!-- Footer-->
   <footer class="py-5 bg-dark">

@@ -17,7 +17,6 @@ public class ReviewsDTO {
   private Long mid; // Member
   private String nickname;
   private String email;
-  private int grade;
   private String text;
   private LocalDateTime regDate, modDate;
 }

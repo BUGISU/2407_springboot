@@ -39,7 +39,6 @@ public class ReviewsServiceImpl implements ReviewsService {
     Optional<Reviews> result = reviewsRepository.findById(reviewsDTO.getReviewsnum());
     if (result.isPresent()) {
       Reviews reviews = result.get();
-      reviews.changeGrade(reviewsDTO.getGrade());
       reviews.changeText(reviewsDTO.getText());
       reviewsRepository.save(reviews);
     }

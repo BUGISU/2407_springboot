@@ -29,7 +29,6 @@ class ReviewsRepositoryTests {
             Reviews review = Reviews.builder()
                     .clubMember(ClubMember.builder().cno(cno).build())
                     .feeds(Feeds.builder().fno(fno).build())
-                    .grade((int) (Math.random() * 5) + 1)
                     .text("이 피드는.....")
                     .build();
             reviewsRepository.save(review);
@@ -43,7 +42,6 @@ class ReviewsRepositoryTests {
         );
         result.forEach(review -> {
             System.out.println(review.getReviewsnum());
-            System.out.println(review.getGrade());
             System.out.println(review.getText());
             System.out.println(review.getClubMember().getEmail());
             System.out.println();

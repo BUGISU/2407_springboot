@@ -16,7 +16,7 @@
   .star span {width: 0;position: absolute; left: 0;color: red;
     overflow: hidden;pointer-events: none;}
 </style>
-<!--<th:block th:replace="~{/feeds/list :: setContent(~{this::content})}">
+<th:block th:replace="~{/feeds/list :: setContent(~{this::content})}">
   <th:block th:fragment="content">
     <h1 class="mt-4">Content View</h1>
     <form th:action="@{/feeds/modify}" th:method="post" id="frmSend">
@@ -64,9 +64,9 @@
                       type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}"
            class="btn btn-info">List</a>
       </div>
-    </form>-->
+    </form>
     <!--리뷰 등록 관련-->
-  <!--  <div>
+    <div>
       <div class="mt-4">
         <h5>
           <span class="btn btn-outline-secondary addReview">Add Review</span>
@@ -76,8 +76,8 @@
         </h5>
       </div>
       <div class="list-group reviewsList" style="margin-bottom:50px;"></div>
-    </div>-->
-    <!--<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -88,12 +88,12 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            &lt;!&ndash; <button type="button" class="btn btn-primary">Save changes</button> &ndash;&gt;
+            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
           </div>
         </div>
       </div>
-    </div>-->
-   <!-- <script th:inline="javascript">
+    </div>
+    <script th:inline="javascript">
       // 별점 처리
       function drawStar(target) {
         document.querySelector('.star span').style.width = `${target.value * 10}%`;
@@ -302,7 +302,7 @@
           myModal.show()
         }
       }
-    </script>-->
+    </script>
   </th:block>
 
 </th:block>

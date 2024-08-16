@@ -55,12 +55,11 @@ public interface FeedsService {
   }
 
   default FeedsDTO entityToDto(Feeds feeds, List<Photos> photosList
-      , Double avg, Long reviewsCnt) {
+      , Long reviewsCnt) {
     FeedsDTO feedsDTO = FeedsDTO.builder()
         .fno(feeds.getFno())
         .title(feeds.getTitle())
         .content(feeds.getContent())
-        .reviewsCnt(reviewsCnt.intValue())
         .regDate(feeds.getRegDate())
         .modDate(feeds.getModDate())
         .build();

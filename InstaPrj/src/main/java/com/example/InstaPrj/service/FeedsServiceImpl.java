@@ -63,8 +63,7 @@ public class FeedsServiceImpl implements FeedsService {
     Function<Object[], FeedsDTO> fn = objects -> entityToDto(
         (Feeds) objects[0],
         (List<Photos>) (Arrays.asList((Photos)objects[1])),
-        (Double) objects[2],
-        (Long) objects[3]
+        (Long) objects[2]
     );
     return new PageResultDTO<>(result, fn);
   }
@@ -75,10 +74,8 @@ public class FeedsServiceImpl implements FeedsService {
     Feeds feeds = (Feeds) result.get(0)[0];
     List<Photos> photos = new ArrayList<>();
     result.forEach(objects -> photos.add((Photos) objects[1]));
-    Double avg = (Double) result.get(0)[2];
-    Long reviewsCnt = (Long) result.get(0)[3];
-
-    return entityToDto(feeds, photos, avg, reviewsCnt);
+    Long reviewsCnt = (Long) result.get(0)[2];
+    return entityToDto(feeds, photos, reviewsCnt);
   }
 
   @Value("${com.example.upload.path}")

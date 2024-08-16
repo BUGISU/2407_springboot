@@ -42,7 +42,7 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport
     jpqlQuery.leftJoin(reviews).on(reviews.feeds.eq(feeds));
 
     //3) Tuple생성 : 조인을 한 결과의 데이터를 tuple로 생성
-    JPQLQuery<Tuple> tuple = jpqlQuery.select(feeds, photos, reviews.grade.avg().coalesce(0.0),reviews.count());
+    JPQLQuery<Tuple> tuple = jpqlQuery.select(feeds, photos,reviews.count());
 
     //4) 조건절 생성
     BooleanBuilder booleanBuilder = new BooleanBuilder();
