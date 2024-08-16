@@ -11,7 +11,10 @@
 </head>
 <body>
 <div class="container">
-  <h1>Index.html</h1>
+  <script th:inline="javascript">
+    location.replace('http://localhost:8080/InstaPrj/feeds')
+    <h2>replace</h2>
+  </script>
   <form class="form-signin" method="post" action="/InstaPrj/login">
     <h2 class="form-signin-heading">Please sign in</h2>
     <p>

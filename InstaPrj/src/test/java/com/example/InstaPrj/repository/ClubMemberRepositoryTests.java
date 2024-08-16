@@ -18,20 +18,7 @@ class ClubMemberRepositoryTests {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
- /*   @Test
-    public void insertMembers() {
-        IntStream.rangeClosed(1, 100).forEach(i -> {
-            ClubMember clubMember = ClubMember.builder()
-                    .email("user" + i + "@a.a")
-                    .password("1")
-                    .name("Member" + i)
-                    .build();
-            clubMember.addMemberRole(ClubMemberRole.USER);
-            if(i>80) clubMember.addMemberRole(ClubMemberRole.MANAGER);
-            if(i>90) clubMember.addMemberRole(ClubMemberRole.ADMIN);
-            clubMemberRepository.save(clubMember);
-        });
-    }*/
+
     @Test
     public void insertMembers() {
         IntStream.rangeClosed(1, 100).forEach(i -> {

@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @Log4j2
-@RequestMapping("/main")
+@RequestMapping("/feeds")
 @RequiredArgsConstructor
 public class FeedsController {
   private final FeedsService feedsService;
