@@ -16,8 +16,6 @@
   .star span {width: 0;position: absolute; left: 0;color: red;
     overflow: hidden;pointer-events: none;}
 </style>
-<th:block th:replace="~{/feeds/list :: setContent(~{this::content})}">
-  <th:block th:fragment="content">
     <h1 class="mt-4">Content View</h1>
     <form th:action="@{/feeds/modify}" th:method="post" id="frmSend">
       <div class="form-group">
@@ -302,8 +300,4 @@
         }
       }
     </script>
-  </th:block>
-
-</th:block>
-
 </html>

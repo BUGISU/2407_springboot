@@ -3,7 +3,6 @@ package com.example.InstaPrj.controller;
 import com.example.InstaPrj.dto.FeedsDTO;
 import com.example.InstaPrj.dto.PageRequestDTO;
 import com.example.InstaPrj.service.FeedsService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
