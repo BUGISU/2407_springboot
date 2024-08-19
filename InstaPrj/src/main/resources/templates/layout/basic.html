@@ -19,10 +19,8 @@
 <header class="bg-dark py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">InstaGram Project</h1>
-          <h1 class="mt-4">Movie List Page
-            <a class="btn btn-outline-primary" th:href="@{/movie/register}">Register</a>
-          </h1>
+          <h1 class="display-4 fw-bolder">Feed List</h1>
+          <a class="btn btn-outline-primary" th:href="@{/feeds/register}">Register</a>
           <form th:action="@{/movie/list}" id="frmSearch" method="get">
             <div class="input-group">
               <div class="input-group-prepend" style="margin-right:10px;">
