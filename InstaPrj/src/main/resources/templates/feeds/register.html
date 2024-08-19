@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<!--<th:block th:replace="~{/feeds/list :: setContent(~{this::content})}">-->
-<!--  <th:block th:fragment="content">-->
+<th:block th:replace="~{/feeds/list :: setContent(~{this::content})}">
+  <th:block th:fragment="content">
     <h1 class="mt-4">Feed Register Page</h1>
     <style>
       .form-group {margin-bottom: 30px;}
@@ -137,9 +137,7 @@
         document.querySelector(".box").innerHTML = str;
         document.querySelector("#frmSend").submit();
       }
-
     </script>
-<!--  </th:block>-->
-<!--</th:block>-->
-
+  </th:block>
+</th:block>
 </html>
