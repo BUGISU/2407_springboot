@@ -19,10 +19,10 @@
 <header class="bg-dark py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
-          <h1 class="display-4 fw-bolder">Feed List</h1>
-          <a class="btn btn-outline-primary" th:href="@{/feeds/register}">Register</a>
+          <h1 class="display-4 fw-bolder">InstaGram Feed List</h1>
+          <a class="btn btn-outline-primary m-4 " th:href="@{/feeds/register}">Register</a>
           <form th:action="@{/movie/list}" id="frmSearch" method="get">
-            <div class="input-group">
+            <div class="input-group m-4 ">
               <div class="input-group-prepend" style="margin-right:10px;">
                 <select class="form-control" id="type" name="type">
                   <option th:selected="${pageRequestDTO.type == null}">선택하세요</option>
