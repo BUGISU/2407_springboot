@@ -2,7 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
   <th:block th:fragment="content">
-    <h1 class="mt-4">Movie Modify Page</h1>
+    <div class="m-5">
+    <h1 class="mt-4">Feeds Modify Page</h1>
     <style>
       .form-group {margin-bottom: 30px;}
       .uploadResult {width: 100%;background:gray;margin-top:10px;}
@@ -54,7 +55,7 @@
     </form>
     <div class="uploadResult">
       <ul>
-        <li th:each="PhotosDTO : ${feedsDTO.imageDTOList}"
+        <li th:each="PhotosDTO : ${feedsDTO.photosDTOList}"
             th:data-path='${PhotosDTO.path}'
             th:data-uuid='${PhotosDTO.uuid}'
             th:data-file='${PhotosDTO.getImageURL}'
@@ -171,9 +172,9 @@
         const liArr = document.querySelectorAll(".uploadResult ul li");
         for(let i=0;i<liArr.length;i++){
           str += `
-            <input type="hidden" name="imageDTOList[${i}].imgName" value="${liArr[i].dataset.name}">
-            <input type="hidden" name="imageDTOList[${i}].path" value="${liArr[i].dataset.path}">
-            <input type="hidden" name="imageDTOList[${i}].uuid" value="${liArr[i].dataset.uuid}">
+            <input type="hidden" name="photosDTOList[${i}].imgName" value="${liArr[i].dataset.name}">
+            <input type="hidden" name="photosDTOList[${i}].path" value="${liArr[i].dataset.path}">
+            <input type="hidden" name="photosDTOList[${i}].uuid" value="${liArr[i].dataset.uuid}">
           `
         }
         document.querySelector(".box").innerHTML = str;
@@ -194,6 +195,7 @@
         window.history.back();
       }
     </script>
+    </div>
   </th:block>
 </th:block>
 </html>
