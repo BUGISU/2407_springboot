@@ -99,14 +99,14 @@
 
       // window.onload : document의 태그를 모두 읽고 난뒤 실행되는 함수
       window.onload = function(){
-        var fno = [[${movieDTO.fno}]]
+        var fno = [[${feedsDTO.fno}]]
         loadReviewJSON();
         const uploadResultUlLis = document.querySelectorAll(".uploadResult ul li");
         for(let i=0;i<uploadResultUlLis.length;i++){
           uploadResultUlLis[i].onclick = function () {
             const url = /*[[@{/display}]]*/'url'
             const file = this.dataset.file;
-            document.querySelector("#exampleModalLabel").textContent = 'Movie Poster'
+            document.querySelector("#exampleModalLabel").textContent = 'Feeds Poster'
             document.querySelector(".modal-body").innerHTML =
               `<img style="width:100%" src="${url}?fileName=${file}&size=1">`
             document.querySelector(".modal-footer").innerHTML =

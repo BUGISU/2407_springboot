@@ -56,15 +56,25 @@
       <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
         <!--1 번-->
         <div class="col mb-5"  th:each="feedsDTO : ${pageResultDTO.dtoList}"
-             style="cursor:pointer;"
-            >
+             th:onclick="goRead([[${feedsDTO.fno}]],[[${pageResultDTO.page}]],[[${pageRequestDTO.type}]], [[${pageRequestDTO.keyword}]])"
+             style="cursor:pointer;">
           <div class="card h-100">
             <!-- Product image-->
-            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- 피드 이미지가 있을 때만 표시되는 이미지 -->
+            <img th:if="${feedsDTO.photosDTOList.size() > 0 && feedsDTO.photosDTOList[0].path != null}"
+                 th:src="|@{/display(fileName=${feedsDTO.photosDTOList[0].getThumbnailURL()})}|"
+                 class="card-img-top"
+                 alt="Feed Image" />
+
+            <!-- 기본 이미지: 피드 이미지가 없거나 유효하지 않을 때 표시 -->
+            <img th:unless="${feedsDTO.photosDTOList.size() > 0 && feedsDTO.photosDTOList[0].path != null}"
+                 src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                 class="card-img-top"
+                 alt="Default Image" />
+
             <!-- Product details-->
             <div class="card-body p-4">
               <div class="text-center">
-                <p th:text="${feedsDTO != null} ? ${feedsDTO.fno} : '피드번호가 없습니다'"></p>
                 <!-- Product name-->
                 <h5 class="fw-bolder" th:text="${feedsDTO != null} ? ${feedsDTO.title} : '제목이 없습니다'"></h5>
                 <!-- Product price-->
@@ -76,8 +86,7 @@
               <div class="text-center">
                 <a class="btn btn-outline-dark mt-auto"
                    th:onclick="goRead([[${feedsDTO.fno}]],[[${pageResultDTO.page}]],
-                      [[${pageRequestDTO.type}]], [[${pageRequestDTO.keyword}]])"
-                   th:href="@{/feeds/read}">View options</a>
+                      [[${pageRequestDTO.type}]], [[${pageRequestDTO.keyword}]])">View options</a>
               </div>
             </div>
           </div>
