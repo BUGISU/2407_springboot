@@ -95,11 +95,6 @@
         </div>
       </div>
       <script th:inline="javascript">
-        // 별점 처리
-        function drawStar(target) {
-          document.querySelector('.star span').style.width = `${target.value * 10}%`;
-        }
-
         // window.onload : document의 태그를 모두 읽고 난뒤 실행되는 함수
         window.onload = function(){
           var fno = [[${feedsDTO.fno}]]
