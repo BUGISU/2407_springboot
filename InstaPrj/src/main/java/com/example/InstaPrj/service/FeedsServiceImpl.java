@@ -70,6 +70,7 @@ public class FeedsServiceImpl implements FeedsService {
         (List<Photos>) (Arrays.asList((Photos)objects[1])),
         (Long) objects[2]
     );
+    log.info(">>fn :: " + fn);
     return new PageResultDTO<>(result, fn);
   }
 
@@ -81,7 +82,7 @@ public class FeedsServiceImpl implements FeedsService {
     List<Photos> photos = new ArrayList<>();
     result.forEach(objects -> photos.add((Photos) objects[1]));
     Long reviewsCnt = (Long) result.get(0)[2];
-
+    log.info(">>photos size :: " + photos.size());
     return entityToDto(feeds, photos, reviewsCnt);
   }
 

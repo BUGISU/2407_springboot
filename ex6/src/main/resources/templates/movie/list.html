@@ -39,8 +39,11 @@
           th:onclick="goRead([[${movieDTO.mno}]],[[${pageResultDTO.page}]],[[${pageRequestDTO.type}]], [[${pageRequestDTO.keyword}]])"
           onmouseover="this.style.background='#d6e6ff'"
           onmouseout="this.style.background='white'">
+
         <th scope="row">[[${movieDTO.mno}]]</th>
-        <td><img
+        <td>
+          <p th:text="'Size: ' + ${movieDTO.imageDTOList.size()}"></p>
+          <img
             th:if="${movieDTO.imageDTOList.size()>0 && movieDTO.imageDTOList[0].path != null}"
             th:src="|@{/display(fileName=${movieDTO.imageDTOList[0].getThumbnailURL()})}|">[[${movieDTO.title}]]</td>
         <td><b th:text="${movieDTO.reviewCnt}"></b></td>
