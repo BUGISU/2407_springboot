@@ -81,7 +81,7 @@ public class FeedsServiceImpl implements FeedsService {
     List<Photos> photos = new ArrayList<>();
     result.forEach(objects -> photos.add((Photos) objects[1]));
     Long reviewsCnt = (Long) result.get(0)[2];
-    
+
     return entityToDto(feeds, photos, reviewsCnt);
   }
 
