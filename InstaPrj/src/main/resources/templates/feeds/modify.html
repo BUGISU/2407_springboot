@@ -55,19 +55,19 @@
     </form>
     <div class="uploadResult">
       <ul>
-        <li th:each="PhotosDTO : ${feedsDTO.photosDTOList}"
-            th:data-path='${PhotosDTO.path}'
-            th:data-uuid='${PhotosDTO.uuid}'
-            th:data-file='${PhotosDTO.getImageURL}'
-            th:data-name='${PhotosDTO.imgName}'
+        <li th:each="photosDTO : ${feedsDTO.photosDTOList}"
+            th:data-path='${photosDTO.path}'
+            th:data-uuid='${photosDTO.uuid}'
+            th:data-file='${photosDTO.getImageURL}'
+            th:data-name='${photosDTO.imgName}'
             style="cursor:pointer;">
           <div>
             <button type="button"
                     th:onclick="deleteFileDb(this)">X
             </button>
             <img
-                th:if="${PhotosDTO.path != null}"
-                th:src="|@{/display(fileName=${PhotosDTO.getThumbnailURL})}|">
+                th:if="${photosDTO.path != null}"
+                th:src="|@{/display(fileName=${photosDTO.getThumbnailURL})}|">
           </div>
         </li>
       </ul>

@@ -45,6 +45,7 @@ public class FeedsServiceImpl implements FeedsService {
     List<Photos> photosList =
         (List<Photos>) entityMap.get("photosList");
     feedsRepository.save(feeds);
+    log.info(">>> photosList: " + photosList);
     if(photosList != null) {
       photosList.forEach(new Consumer<Photos>() {
         @Override
@@ -80,6 +81,7 @@ public class FeedsServiceImpl implements FeedsService {
     List<Photos> photos = new ArrayList<>();
     result.forEach(objects -> photos.add((Photos) objects[1]));
     Long reviewsCnt = (Long) result.get(0)[2];
+    
     return entityToDto(feeds, photos, reviewsCnt);
   }
 

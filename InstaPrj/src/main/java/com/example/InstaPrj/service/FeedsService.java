@@ -6,6 +6,7 @@ import com.example.InstaPrj.dto.PageResultDTO;
 import com.example.InstaPrj.dto.PhotosDTO;
 import com.example.InstaPrj.entity.Feeds;
 import com.example.InstaPrj.entity.Photos;
+import lombok.extern.flogger.Flogger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public interface FeedsService {
 
   void removeUuid(String uuid);
 
+
   default Map<String, Object> dtoToEntity(FeedsDTO feedsDTO) {
     Map<String, Object> entityMap = new HashMap<>();
     Feeds feeds = Feeds.builder().fno(feedsDTO.getFno())
@@ -47,6 +49,7 @@ public interface FeedsService {
                   .build();
               return photos;
             }
+
           }
       ).collect(Collectors.toList());
       entityMap.put("photosList", photosList);

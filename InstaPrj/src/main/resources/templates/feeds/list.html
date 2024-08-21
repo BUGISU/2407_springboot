@@ -35,16 +35,6 @@
       </div>
     </header>
   <body>
-  <!-- 데이터 확인을 위한 HTML 출력 -->
-  <div th:if="${feedsDTO.photosDTOList == null}">
-    <p>photosDTOList is null</p>
-  </div>
-  <div th:if="${feedsDTO.photosDTOList != null}">
-    <p>photosDTOList size: <span th:text="${feedsDTO.photosDTOList.size()}"></span></p>
-    <div th:if="${feedsDTO.photosDTOList.size() > 0}">
-      <p>First photo path: <span th:text="${feedsDTO.photosDTOList[0].path}"></span></p>
-    </div>
-  </div>
   <!-- Section-->
   <section>
     <div class="container px-4 px-lg-5 mt-5">
@@ -55,6 +45,14 @@
              style="cursor:pointer;">
           <div class="card h-100">
             <!-- Product image-->
+            <div>
+              <!-- 조건 확인 -->
+              <p th:text="'Size: ' + ${feedsDTO.photosDTOList.size()}"></p>
+              <p th:if="${!feedsDTO.photosDTOList.isEmpty()}"
+                 th:text="'Path: ' + ${feedsDTO.photosDTOList[0].path}"></p>
+              <p th:if="${!feedsDTO.photosDTOList.isEmpty()}"
+                 th:text="'Thumbnail URL: ' + ${feedsDTO.photosDTOList[0].getThumbnailURL()}"></p>
+            </div>
             <!-- 피드 이미지가 있을 때만 표시되는 이미지 -->
             <img th:if="${feedsDTO.photosDTOList.size() > 0 && feedsDTO.photosDTOList[0].path != null}"
                  th:src="|@{/display(fileName=${feedsDTO.photosDTOList[0].getThumbnailURL()})}|"
@@ -162,6 +160,7 @@
             }
             // history 이용해서 모달창 보여준거에 대한 기록을 clear!
             history.replaceState({}, null, null) //(state, unused, url)
+
           }
           function goRead(fno, page, type, keyword){
             // 디버깅: 매개변수 값 출력
