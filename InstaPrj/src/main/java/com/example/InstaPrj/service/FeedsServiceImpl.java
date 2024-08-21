@@ -43,7 +43,7 @@ public class FeedsServiceImpl implements FeedsService {
     Map<String, Object> entityMap = dtoToEntity(feedsDTO);
     Feeds feeds = (Feeds) entityMap.get("feeds");
     List<Photos> photosList =
-        (List<Photos>) entityMap.get("photoList");
+        (List<Photos>) entityMap.get("photosList");
     feedsRepository.save(feeds);
     if(photosList != null) {
       photosList.forEach(new Consumer<Photos>() {

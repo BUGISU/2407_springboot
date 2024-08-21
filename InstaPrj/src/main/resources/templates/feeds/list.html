@@ -3,6 +3,7 @@
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
   <th:block th:fragment="content" >
     <!-- Header-->
+
     <header class="bg-dark py-5">
       <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
@@ -34,6 +35,16 @@
       </div>
     </header>
   <body>
+  <!-- 데이터 확인을 위한 HTML 출력 -->
+  <div th:if="${feedsDTO.photosDTOList == null}">
+    <p>photosDTOList is null</p>
+  </div>
+  <div th:if="${feedsDTO.photosDTOList != null}">
+    <p>photosDTOList size: <span th:text="${feedsDTO.photosDTOList.size()}"></span></p>
+    <div th:if="${feedsDTO.photosDTOList.size() > 0}">
+      <p>First photo path: <span th:text="${feedsDTO.photosDTOList[0].path}"></span></p>
+    </div>
+  </div>
   <!-- Section-->
   <section>
     <div class="container px-4 px-lg-5 mt-5">
