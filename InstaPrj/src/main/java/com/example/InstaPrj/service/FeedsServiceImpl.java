@@ -70,7 +70,6 @@ public class FeedsServiceImpl implements FeedsService {
         (List<Photos>) (Arrays.asList((Photos)objects[1])),
         (Long) objects[2]
     );
-    log.info(">>fn :: " + fn);
     return new PageResultDTO<>(result, fn);
   }
 
@@ -172,5 +171,9 @@ public class FeedsServiceImpl implements FeedsService {
   public void removeUuid(String uuid) {
     log.info("deleteImage...... uuid: " + uuid);
     photosRepository.deleteByUuid(uuid);
+  }
+
+  public void show(){
+
   }
 }

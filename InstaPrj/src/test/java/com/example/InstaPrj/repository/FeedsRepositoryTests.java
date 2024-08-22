@@ -99,7 +99,7 @@ class FeedsRepositoryTests {
 
     @Test
     public void testGetFeedsWithAll() {
-        List<Object[]> result = feedsRepository.getFeedsWithAll(100L);
+        List<Object[]> result = feedsRepository.getFeedsWithAll(101L);
         for (Object[] arr : result) {
             System.out.println(Arrays.toString(arr));
         }
