@@ -49,7 +49,6 @@ public interface FeedsService {
                   .build();
               return photos;
             }
-
           }
       ).collect(Collectors.toList());
       entityMap.put("photosList", photosList);
@@ -68,7 +67,7 @@ public interface FeedsService {
         .build();
     List<PhotosDTO> photosDTOList = new ArrayList<>();
     if(photosList.toArray().length > 0 && photosList.toArray()[0] != null) {
-      photosDTOList = photosDTOList.stream().map(
+      photosDTOList = photosList.stream().map(
           photos -> {
             PhotosDTO photosDTO = PhotosDTO.builder()
                 .imgName(photos.getImgName())

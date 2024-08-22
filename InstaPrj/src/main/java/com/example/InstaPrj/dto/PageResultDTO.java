@@ -40,7 +40,7 @@ public class PageResultDTO<DTO, EN> {
     pageList = //페이지 번호 목록
         IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
 
-    log.info("dtoList :"+dtoList.toString());
+    log.info(">> dtoList :"+dtoList.toString());
 
   }
 }
