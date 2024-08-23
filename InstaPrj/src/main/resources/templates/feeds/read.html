@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <style>
   .form-group {margin-bottom: 30px;}
 .uploadResult {width: 100%;margin-top:10px;}
@@ -75,6 +76,7 @@
       <div>
         <div class="mt-4">
           <h5>
+            <span sec:authentication="name"></span>
             <span class="btn btn-outline-secondary addReview">Add Review</span>
             <span style="font-size:9pt">Review :
             <span id="revCnt" th:text="${feedsDTO.reviewsCnt}"></span> 개
