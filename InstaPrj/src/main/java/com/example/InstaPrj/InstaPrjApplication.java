@@ -13,5 +13,4 @@ public class InstaPrjApplication {
 		SpringApplication.run(InstaPrjApplication.class, args);
 		System.out.println("http://localhost:8080/InstaPrj");
 	}
-
 }
