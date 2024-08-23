@@ -6,7 +6,7 @@
       <h1 class="mt-4 text-primary fw-bold fs-2">Feed Register Page</h1>
       <style>
         .form-group {margin-bottom: 30px;}
-        .uploadResult {width: 100%;background:gray;margin-top:10px;}
+        .uploadResult {width: 100%;margin-top:10px;}
         .uploadResult ul {
           display: flex;flex-flow:row;justify-content:center;
           align-items:center;vertical-align:top;overflow: auto;
@@ -20,7 +20,11 @@
           <input type="text" name="title" id="title" class="form-control"
                  placeholder="타이틀을 입력하세요">
         </div>
-        <div>
+        <div class="form-group">
+          <label for="content" class="mt-4 fw-bold fs-4">Content</label>
+          <input class="form-control" placeholder="내용을 입력하세요" name="content" id="content" style="height: 100px">
+        </div>
+        <div class="form-group">
           <label for="fileInput"  class="fw-bold fs-4">Select Image Files</label>
           <div class="form-group input-group mb-3">
             <input type="file" id="fileInput" class="custom-file-input form-control files" multiple>
@@ -120,6 +124,8 @@
           e.preventDefault();
           const title = document.getElementById("title")
           if(title.value == "") {title.focus();return false;}
+          const content = document.getElementById("content")
+          if(content.value == "") {content.focus();return false;}
           /*if(fileInput.files.length == 0) {
             document.querySelector("#custom-label").innerHTML =
               "파일을 선택하세요!"

@@ -1,48 +1,53 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <style>
-  .form-group {margin-bottom: 10px;}
-  .uploadResult {width: 100%;background:gray;margin-top:10px;}
-  .uploadResult ul {
-    display: flex;flex-flow:row;justify-content:center;
-    align-items:center;vertical-align:top;overflow: auto;
-  }
-  .uploadResult ul li {list-style:none;padding:10px;margin-left:2em;}
-  .uploadResult ul li img {width: 100px;}
+  .form-group {margin-bottom: 30px;}
+.uploadResult {width: 100%;margin-top:10px;}
+.uploadResult ul {
+ display: flex;flex-flow:row;justify-content:center;
+ align-items:center;vertical-align:top;overflow: auto;
+}
+.uploadResult ul li {list-style:none;padding:10px;margin-left:2em;}
+.uploadResult ul li img {width: 100px;}
 
-  .star {position: relative;font-size: 2rem;color: #ddd;}
-  .star input {width: 100%;height: 100%;position: absolute;left: 0;
-    opacity: 0;cursor: pointer;}
-  .star span {width: 0;position: absolute; left: 0;color: red;
-    overflow: hidden;pointer-events: none;}
+.star {position: relative;font-size: 2rem;color: #ddd;}
+.star input {width: 100%;height: 100%;position: absolute;left: 0;
+ opacity: 0;cursor: pointer;}
+.star span {width: 0;position: absolute; left: 0;color: red;
+ overflow: hidden;pointer-events: none;}
 </style>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
   <th:block th:fragment="content">
     <div class="m-5">
-      <h1 class="mt-4 text-primary fw-bold fs-2">Feeds Content</h1>
+      <h1 class=" text-primary fw-bold fs-2">Feeds Content</h1>
       <form th:action="@{/feeds/modify}" th:method="post" id="frmSend">
         <div class="form-group">
-          <label for="fno" class="mt-4 fw-bold fs-4">FNO</label>
+          <label for="fno" class=" fw-bold fs-4">FNO</label>
           <input type="text" name="fno" id="fno" class="form-control"
                  th:value="${feedsDTO.fno}" readonly>
         </div>
         <div class="form-group">
-          <label for="title" class="mt-4 fw-bold fs-4">Title</label>
+          <label for="title" class=" fw-bold fs-4">Title</label>
           <input type="text" name="title" id="title" class="form-control"
                  th:value="${feedsDTO.title}" readonly>
         </div>
         <div class="form-group">
-          <label for="reviewsCnt" class="mt-4 fw-bold fs-4">Review Count</label>
+          <label for="content" class="mt-4 fw-bold fs-4">Content</label>
+          <input class="form-control" th:value="${feedsDTO.content}" name="content"
+                 id="content" style="height: 100px" readonly>
+        </div>
+        <div class="form-group">
+          <label for="reviewsCnt" class=" fw-bold fs-4">Review Count</label>
           <input type="text" name="reviewsCnt" id="reviewsCnt" class="form-control"
                  th:value="${feedsDTO.reviewsCnt}" readonly></input>
         </div>
         <div class="form-group">
-          <label for="regDate" class="mt-4 fw-bold fs-4">RegDate</label>
+          <label for="regDate" class=" fw-bold fs-4">RegDate</label>
           <input type="text" name="regDate" id="regDate" class="form-control" readonly
                  th:value="${#temporals.format(feedsDTO.regDate, 'yyyy/MM/dd hh:mm')}">
         </div>
         <div class="form-group">
-          <label for="modDate" class="mt-4 fw-bold fs-4">ModDate</label>
+          <label for="modDate" class=" fw-bold fs-4">ModDate</label>
           <input type="text" name="modDate" id="modDate" class="form-control" readonly
                  th:value="${#temporals.format(feedsDTO.modDate, 'yyyy/MM/dd hh:mm')}">
         </div>
@@ -243,9 +248,6 @@
             document.querySelector(".modal-body").innerHTML =
               `
               <input type="text" class="form-control" name="mid" placeholder="Member ID(mid)">
-              <label id="notice">Grade</label> <span class="star">★★★★★<span>★★★★★</span>
-                     <input type="range" oninput="drawStar(this)" value="1" step="2" min="0" max="10">
-                     </span><br>
               <input type="text" class="form-control" name="text" placeholder="Review Text...">
               `
             document.querySelector(".modal-footer").innerHTML =
