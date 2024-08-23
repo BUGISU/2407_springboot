@@ -23,7 +23,7 @@ public class ClubUserDetailsService implements UserDetailsService {
   @Override
   // DB에 있는 것 확인 된후,User를 상속받은 ClubMemberAuthDTO에 로그인정보를 담음=>세션
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    log.info("ClubMemberUser.........", username);
+    log.info(">> ClubMemberUser : "+username);
     Optional<ClubMember> result = clubMemberRepository.findByEmail(username);
     if (!result.isPresent()) throw new UsernameNotFoundException("Check Email or Social");
     ClubMember clubMember = result.get(); // DB로부터 검색한 엔티티
@@ -37,7 +37,7 @@ public class ClubUserDetailsService implements UserDetailsService {
     );
     clubMemberAuthDTO.setName(clubMember.getName());
     clubMemberAuthDTO.setFromSocial(clubMember.isFromSocial());
-    log.info("clubMemberAuthDTO >> ", clubMemberAuthDTO.getCno());
+    log.info(">> clubMemberAuthDTO : "+ clubMemberAuthDTO.getCno());
     return clubMemberAuthDTO;
   }
 }

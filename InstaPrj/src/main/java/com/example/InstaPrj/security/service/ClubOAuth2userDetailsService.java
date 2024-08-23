@@ -68,7 +68,6 @@ public class ClubOAuth2userDetailsService extends DefaultOAuth2UserService {
   private ClubMember saveSocialMember(String email) {
     Optional<ClubMember> result = clubMemberRepository.findByEmail(email);
     if (result.isPresent()) return result.get();
-
     // 소셜에서 넘어온 정보가 DB에 없을 때 저장하는 부분
     ClubMember clubMember = ClubMember.builder()
         .email(email)
@@ -79,7 +78,6 @@ public class ClubOAuth2userDetailsService extends DefaultOAuth2UserService {
     clubMemberRepository.save(clubMember);
     return clubMember;
   }
-
   private SocialType getSocialType(String registrationId) {
     if (SocialType.NAVER.name().equals(registrationId)) {
       return SocialType.NAVER;
