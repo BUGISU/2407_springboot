@@ -57,13 +57,14 @@
             <img th:if="${feedsDTO.photosDTOList.size() > 0 && feedsDTO.photosDTOList[0].path != null}"
                  th:src="|@{/display(fileName=${feedsDTO.photosDTOList[0].getThumbnailURL()})}|"
                  class="card-img-top"
-                 alt="Feed Image" />
+                 alt="Feed Image"
+                 style="width: 100%; height:200px; object-fit: cover;"/>
 
 <!--            &lt;!&ndash; 기본 이미지: 피드 이미지가 없거나 유효하지 않을 때 표시 &ndash;&gt;-->
             <img th:unless="${feedsDTO.photosDTOList.size() > 0 && feedsDTO.photosDTOList[0].path != null}"
                  src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
                  class="card-img-top"
-                 alt="Default Image" />
+                 alt="Default Image"  style="width: 100%; height:200px;object-fit: cover;" />
 
             <!-- Product details-->
             <div class="card-body p-4">
