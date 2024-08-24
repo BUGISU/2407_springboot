@@ -102,7 +102,7 @@
         </div>
       </div>
       <script th:inline="javascript">
-        // window.onload : document의 태그를 모두 읽고 난뒤 실행되는 함수
+        ///////////////// window.onload : document의 태그를 모두 읽고 난뒤 실행되는 함수  /////////////////
         window.onload = function(){
           var fno = [[${feedsDTO.fno}]]
           loadReviewJSON();
@@ -119,13 +119,15 @@
               myModal.show()
             }
           }
+
           var myModal = new bootstrap.Modal(document.querySelector('#myModal'),
                             { backdrop: true });
 
-          // Ajax로 리뷰 불러오기
+          ////////////////////////////// Ajax로 리뷰 불러오기 /////////////////
           function loadReviewJSON() {
             const url = /*[[@{/reviews/}]]*/'url'
             const listGroup = document.querySelector(".reviewsList")
+
             fetch(url+fno+"/all", {method: 'GET',})
             .then(response => response.json())
             .then(data => {
@@ -142,7 +144,6 @@
                   <div style="display:inline-block;width:68%;">
                     <h6 style="display:inline-block;width:70px">${data[i].reviewsnum}</h6>
                     <h5 class="card-text" style="display:inline-block;">${data[i].text}
-
                   </div>
                   <div style="display:inline-block;width:30%;text-align: right;right-padding:12px;">
                     <span class="card-subtitle text-muted" style="font-size:10px">${data[i].nickname} /
@@ -153,30 +154,39 @@
                   </div>
                 </div>`
               }
+              //리뷰 카드
               listGroup.innerHTML = str
               const cardBody = document.querySelectorAll(".card-body")
               for(let i=0;i<cardBody.length;i++) {
-                // 리뷰 상세보기
                 cardBody[i].onclick = function() {
                   let reviewsnum = cardBody[i].dataset.reviewsnum;
                   let text = cardBody[i].dataset.text;
                   let mid = cardBody[i].dataset.mid;
-
                   let nickname = cardBody[i].dataset.nickname;
+
+                  //로그인한 사용자의 회원 번호
+                  const loggedInUserId= [[${#authentication.name}]]
+                  //리뷰 작성자의 회원 번호
+                  const reviewOwnerId = data[i].email;
+
                   document.querySelector('#exampleModalLabel').textContent='No '+reviewsnum
                   document.querySelector(".modal-body").innerHTML =
-                    `<input type="hidden" name="reviewsnum" value="${reviewsnum}" readonly>
+                    `
+                     <input type="hidden" name="reviewsnum" value="${reviewsnum}" readonly>
                      <input type="hidden" name="mid" value="${mid}" readonly>
-
-                     <input type="range" oninput="drawStar(this)" value="1" step="2" min="0" max="10">
-                     </span><br>
+                     <span>${reviewOwnerId}</span><br>
                      <input type="text" class="form-control" name="text" value="${text}">
                     `
+                    //선택 카드, 버튼 부분 UI
                   document.querySelector(".modal-footer").innerHTML =
-                    `<button type="button" class="btn btn-danger remove">리뷰 삭제</button>
-                     <button type="button" class="btn btn-warning modify">리뷰 수정</button>
-                     <span class="btn btn-secondary" data-bs-dismiss="modal">Close</span>
                     `
+                    ${loggedInUserId === reviewOwnerId ? '' : `
+                    <button type="button" class="btn btn-danger remove">리뷰 삭제</button>
+                    <button type="button" class="btn btn-warning modify">리뷰 수정</button>
+                    `}
+                      <span class="btn btn-secondary" data-bs-dismiss="modal">Close</span>
+                    `
+                    //선택한 리뷰, 수정하기 버튼
                   document.querySelector(".modal-footer .modify").onclick = function () {
                     let reviewsnum = document.querySelector(".modal-body input[name='reviewsnum']")
                     let text = document.querySelector(".modal-body input[name='text']")
@@ -232,7 +242,7 @@
             });
           }
 
-          // 날짜 형식 맞춤 함수
+          ///////////////////////////////////// 날짜 형식 맞춤 함수  //////////////////////////////////
           function formatDateTime(str) {
             const date = new Date(str)
             return `${date.getFullYear()}/${len2(date.getMonth()+1)}`
@@ -244,12 +254,13 @@
             return (num<10) ? "0"+num : num;
           }
 
-          // 리뷰 추가하기
+          //////////////////////////////////// 리뷰 추가하기   //////////////////////////////////
           document.querySelector('.addReview').onclick = function() {
             document.querySelector('#exampleModalLabel').textContent = '리뷰 추가'
             document.querySelector(".modal-body").innerHTML =
               `
-              <input type="text" class="form-control" name="mid" placeholder="Member ID(mid)">
+             <!-- <input type="text" class="form-control" name="mid" placeholder="Member ID(mid)">-->
+             <span sec:authentication="name">[[${#authentication.name}]]</span>
               <input type="text" class="form-control" name="text" placeholder="Review Text...">
               `
             document.querySelector(".modal-footer").innerHTML =
