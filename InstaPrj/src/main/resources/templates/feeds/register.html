@@ -52,10 +52,10 @@
         fileInput.onchange = function() {
           let formData = new FormData();
           const fileName = fileInput.value.split("\\").pop();
-<!--          let label = document.querySelector("#custom-label")-->
-<!--          label.innerHTML =-->
-<!--            (fileInput.files.length-1) == 0 ? "" :-->
-<!--                  `${fileName} 외 ${fileInput.files.length-1}개`-->
+          let label = document.querySelector("#custom-label")
+          label.innerHTML =
+            (fileInput.files.length-1) == 0 ? "" :
+                  `${fileName} 외 ${fileInput.files.length-1}개`
           let appended = false; // 파일이 잘 추가되는지 확인
           for(let i=0;i<fileInput.files.length;i++) {
             if(!checkExtension(fileInput.files[i].name, fileInput.files.size)) {
@@ -100,7 +100,7 @@
               .then(json => {
                 console.log(json)
                 if(json === true) targetLi.remove()
-<!--                document.querySelector("#custom-label").innerHTML = ''-->
+                document.querySelector("#custom-label").innerHTML = ''
                 document.querySelector("#fileInput").value = '';
               })
               .catch(err => console.log("Error occurred: ", err))
@@ -110,7 +110,7 @@
                 url: removeUrl+fileName,
               }).then(res => {
                 if(res.data === true) targetLi.remove();
-<!--                document.querySelector("#custom-label").innerHTML = '';-->
+                document.querySelector("#custom-label").innerHTML = '';
                 document.querySelector("#fileInput").value = '';
               }).catch(err => {
                 console.log(err);
