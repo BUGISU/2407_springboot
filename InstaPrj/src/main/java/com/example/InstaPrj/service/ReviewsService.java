@@ -19,7 +19,7 @@ public interface ReviewsService {
     Reviews review = Reviews.builder()
         .reviewsnum(reviewsDTO.getReviewsnum())
         .feeds(Feeds.builder().fno(reviewsDTO.getFno()).build())
-        .clubMember(ClubMember.builder().cno(reviewsDTO.getMid()).build())
+        .clubMember(ClubMember.builder().cno(reviewsDTO.getCno()).build())
         .text(reviewsDTO.getText())
         .build();
     return review;
@@ -29,7 +29,7 @@ public interface ReviewsService {
     ReviewsDTO reviewDTO = ReviewsDTO.builder()
         .reviewsnum(reviews.getReviewsnum())
         .fno(reviews.getFeeds().getFno())
-        .mid(reviews.getClubMember().getCno())
+        .cno(reviews.getClubMember().getCno())
         .nickname(reviews.getClubMember().getName())
         .email(reviews.getClubMember().getEmail())
         .text(reviews.getText())

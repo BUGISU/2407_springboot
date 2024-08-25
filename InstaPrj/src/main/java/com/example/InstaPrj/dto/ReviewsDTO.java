@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class ReviewsDTO {
   private Long reviewsnum;
   private Long fno; // Movie
-  private Long mid; // Member
+  private Long cno; // Member
   private String nickname;
   private String email;
   private String text;

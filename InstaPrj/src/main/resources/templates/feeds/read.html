@@ -167,7 +167,7 @@
                   str = str + `<div class="card-body form-control mb-1"
                 onmouseover="this.style.background='#d6e6ff'"
                 onmouseout="this.style.background='white'"
-                data-mid="${data[i].mid}" data-text="${data[i].text}"
+                data-cno="${data[i].cno}" data-text="${data[i].text}"
                 data-nickname="${data[i].nickname}"
                 data-email="${data[i].email}" data-reviewsnum="${data[i].reviewsnum}"
                 style="padding: 5px 20px;cursor:pointer;">
@@ -191,7 +191,7 @@
                   cardBody[i].onclick = function () {
                     let reviewsnum = cardBody[i].dataset.reviewsnum;
                     let text = cardBody[i].dataset.text;
-                    let mid = cardBody[i].dataset.mid;
+                    let cno = cardBody[i].dataset.cno;
                     let nickname = cardBody[i].dataset.nickname;
 
                     //로그인한 사용자의 회원 번호
@@ -204,7 +204,7 @@
                       document.querySelector(".modal-body").innerHTML =
                         `
                      <input type="hidden" name="reviewsnum" value="${reviewsnum}" readonly>
-                     <input type="hidden" name="mid" value="${mid}" readonly>
+                     <input type="hidden" name="cno" value="${cno}" readonly>
                      <span>${reviewOwnerId}</span><br>
                      <input type="text" class="form-control" name="text" value="${text}">
                       `
@@ -220,7 +220,7 @@
                       document.querySelector(".modal-footer .modify").onclick = function () {
                         let reviewsnum = document.querySelector(".modal-body input[name='reviewsnum']")
                         let text = document.querySelector(".modal-body input[name='text']")
-                        let mid = document.querySelector(".modal-body input[name='mid']")
+                        let cno = document.querySelector(".modal-body input[name='cno']")
 
                         let notice = document.querySelector('#notice')
 
@@ -229,7 +229,7 @@
                         }
 
                         let reviews = {
-                          fno: fno, text: text.value, mid: mid.value
+                          fno: fno, text: text.value, cno: cno.value
                           , reviewsnum: reviewsnum.value
                         }
                         const url = /*[[@{/reviews/}]]*/'url';
@@ -277,7 +277,7 @@
                       document.querySelector(".modal-body").innerHTML =
                         `
                      <input type="hidden" name="reviewsnum" value="${reviewsnum}" readonly>
-                     <input type="hidden" name="mid" value="${mid}" readonly>
+                     <input type="hidden" name="cno" value="${cno}" readonly>
                      <span>작성자: ${reviewOwnerId}</span><br>
                      <input type="text" class="form-control" name="text" value="${text}">
                       `
@@ -287,7 +287,7 @@
                       <span class="btn btn-secondary" data-bs-dismiss="modal">Close</span>
                       `;
                       let reviews = {
-                        fno: fno, text: text.value, mid: mid.value
+                        fno: fno, text: text.value, cno: cno.value
                         , reviewsnum: reviewsnum.value
                       }
                       myModal.show()
@@ -309,13 +309,14 @@
           }
 
           //////////////////////////////////// 리뷰 추가하기   //////////////////////////////////
-          document.querySelector('.addReview').onclick = function () {
-           //로그인한 사용자의 회원 번호
+          document.querySelector('.addReview').onclick = function ()
+          {
+            //로그인한 사용자의 회원 번호
             document.querySelector('#exampleModalLabel').textContent = '리뷰 추가'
             document.querySelector(".modal-body").innerHTML =
               `
-             <!-- <input type="text" class="form-control" name="mid" placeholder="Member ID(mid)">-->
-              <span name="mid">[[${ #authentication.name }]]</span>
+             <!-- <input type="text" class="form-control" name="cno" placeholder="Member ID(cno)">-->
+              <span name="cno">[[${ #authentication.name }]]</span>
               <input type="text" class="form-control" name="text" placeholder="Review Text...">
               `
             document.querySelector(".modal-footer").innerHTML =
@@ -325,22 +326,19 @@
               `
             // 모달창에서 댓글 추가하기 버튼 처리
             document.querySelector(".modal-footer .save").onclick = function () {
-               let mid = document.querySelector(".modal-body span[name='mid']").textContent;
+               let cno = document.querySelector(".modal-body span[name='cno']").textContent;
                let text = document.querySelector(".modal-body input[name='text']").value;
                 if (!text) {
                     document.querySelector(".modal-body input[name='text']").setAttribute('placeholder', '댓글 입력하세요');
                     document.querySelector(".modal-body input[name='text']").focus();
                     return;
                 }
-
-                if (!mid) {
+                if (!cno) {
                     alert('회원번호를 확인할 수 없습니다.');
                     return;
                 }
-
-                let reviews = { fno: fno, text: text, mid: mid };
+                let reviews = { fno: fno, text: text, cno: cno };
                 const url = '/reviews/';
-
                 fetch(url + fno, {
                     method: 'POST',
                     headers: { 'Content-type': 'application/json' },
@@ -357,11 +355,10 @@
                 })
                 .catch(function(error) {
                     console.error('Error:', error);
-                });
+                })
             };
-
             myModal.show();
-        }
+          }
           var msg = [[${ msg }]]
           // 일회성 msg의 내용이 비거나 history 상태가 비지 않는 경우 return
           if (msg === '' || history.state) return
