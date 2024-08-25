@@ -69,27 +69,27 @@
         <div class="form-group">
           <label for="content" class="mt-4 fw-bold fs-4">Content</label>
           <input class="form-control" th:value="${feedsDTO.content}" name="content" id="content" style="height: 100px"
-            readonly>
+                 readonly>
         </div>
         <div class="form-group">
           <label for="reviewsCnt" class=" fw-bold fs-4">Review Count</label>
           <input type="text" name="reviewsCnt" id="reviewsCnt" class="form-control" th:value="${feedsDTO.reviewsCnt}"
-            readonly></input>
+                 readonly></input>
         </div>
         <div class="form-group">
           <label for="regDate" class=" fw-bold fs-4">RegDate</label>
           <input type="text" name="regDate" id="regDate" class="form-control" readonly
-            th:value="${#temporals.format(feedsDTO.regDate, 'yyyy/MM/dd hh:mm')}">
+                 th:value="${#temporals.format(feedsDTO.regDate, 'yyyy/MM/dd hh:mm')}">
         </div>
         <div class="form-group">
           <label for="modDate" class=" fw-bold fs-4">ModDate</label>
           <input type="text" name="modDate" id="modDate" class="form-control" readonly
-            th:value="${#temporals.format(feedsDTO.modDate, 'yyyy/MM/dd hh:mm')}">
+                 th:value="${#temporals.format(feedsDTO.modDate, 'yyyy/MM/dd hh:mm')}">
         </div>
         <div class="uploadResult">
           <ul>
             <li th:each="photosDTO : ${feedsDTO.photosDTOList}" th:data-file="${photosDTO.getThumbnailURL}"
-              style="cursor:pointer;">
+                style="cursor:pointer;">
               <img th:if="${photosDTO.path != null}" th:src="|@{/display(fileName=${photosDTO.getThumbnailURL})}|">
             </li>
           </ul>
@@ -202,7 +202,7 @@
                     if (loggedInUserId === reviewOwnerId) {
                       document.querySelector('#exampleModalLabel').textContent = 'No ' + reviewsnum
                       document.querySelector(".modal-body").innerHTML =
-                      `
+                        `
                      <input type="hidden" name="reviewsnum" value="${reviewsnum}" readonly>
                      <input type="hidden" name="mid" value="${mid}" readonly>
                      <span>${reviewOwnerId}</span><br>
@@ -211,12 +211,11 @@
                       //선택 카드, 버튼 부분 UI
                       document.querySelector(".modal-footer").innerHTML =
                       `
-                        ${loggedInUserId === reviewOwnerId ? `
                         <button type="button" class="btn btn-danger remove">리뷰 삭제</button>
                         <button type="button" class="btn btn-warning modify">리뷰 수정</button>
-                      ` : ''}
-                      <span class="btn btn-secondary" data-bs-dismiss="modal">Close</span>
-                      `;
+                         <span class="btn btn-secondary" data-bs-dismiss="modal">Close</span>
+                      `
+
                       //선택한 리뷰, 수정하기 버튼
                       document.querySelector(".modal-footer .modify").onclick = function () {
                         let reviewsnum = document.querySelector(".modal-body input[name='reviewsnum']")
@@ -272,9 +271,30 @@
                       }
                       myModal.show()
                     }
+                    //로그인한 사용자랑 리뷰한 사람이랑 이름이 다른 경우,
+                    else {
+                      document.querySelector('#exampleModalLabel').textContent = 'No ' + reviewsnum
+                      document.querySelector(".modal-body").innerHTML =
+                        `
+                     <input type="hidden" name="reviewsnum" value="${reviewsnum}" readonly>
+                     <input type="hidden" name="mid" value="${mid}" readonly>
+                     <span>작성자: ${reviewOwnerId}</span><br>
+                     <input type="text" class="form-control" name="text" value="${text}">
+                      `
+                      //선택 카드, 버튼 부분 UI
+                      document.querySelector(".modal-footer").innerHTML =
+                        `
+                      <span class="btn btn-secondary" data-bs-dismiss="modal">Close</span>
+                      `;
+                      let reviews = {
+                        fno: fno, text: text.value, mid: mid.value
+                        , reviewsnum: reviewsnum.value
+                      }
+                      myModal.show()
+                    }
                   }
                 }
-              });
+              })
           }
           ///////////////////////////////////// 날짜 형식 맞춤 함수  //////////////////////////////////
           function formatDateTime(str) {
@@ -290,11 +310,12 @@
 
           //////////////////////////////////// 리뷰 추가하기   //////////////////////////////////
           document.querySelector('.addReview').onclick = function () {
+           //로그인한 사용자의 회원 번호
             document.querySelector('#exampleModalLabel').textContent = '리뷰 추가'
             document.querySelector(".modal-body").innerHTML =
               `
              <!-- <input type="text" class="form-control" name="mid" placeholder="Member ID(mid)">-->
-             <span sec:authentication="name">[[${#authentication.name}]]</span>
+              <span name="mid">[[${ #authentication.name }]]</span>
               <input type="text" class="form-control" name="text" placeholder="Review Text...">
               `
             document.querySelector(".modal-footer").innerHTML =
@@ -304,39 +325,44 @@
               `
             // 모달창에서 댓글 추가하기 버튼 처리
             document.querySelector(".modal-footer .save").onclick = function () {
-              let mid = document.querySelector(".modal-body input[name='mid']")
-              let text = document.querySelector(".modal-body input[name='text']")
-              let notice = document.querySelector('#notice')
+               let mid = document.querySelector(".modal-body span[name='mid']").textContent;
+               let text = document.querySelector(".modal-body input[name='text']").value;
+                if (!text) {
+                    document.querySelector(".modal-body input[name='text']").setAttribute('placeholder', '댓글 입력하세요');
+                    document.querySelector(".modal-body input[name='text']").focus();
+                    return;
+                }
 
-              if (!text.value) {
-                text.setAttribute('placeholder', '댓글입력하세요'); text.focus(); return;
-              }
-              if (!mid.value) {
-                mid.setAttribute('placeholder', '회원번호를 입력하세요'); mid.focus(); return;
-              }
+                if (!mid) {
+                    alert('회원번호를 확인할 수 없습니다.');
+                    return;
+                }
 
-              let reviews = { fno: fno, text: text.value, mid: mid.value }
-              const url = /*[[@{/reviews/}]]*/'url';
-              fetch(url + fno, {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(reviews)
-              })
+                let reviews = { fno: fno, text: text, mid: mid };
+                const url = '/reviews/';
+
+                fetch(url + fno, {
+                    method: 'POST',
+                    headers: { 'Content-type': 'application/json' },
+                    body: JSON.stringify(reviews)
+                })
                 .then(res => res.json())
                 .then(function (data) {
-                  document.querySelector(".modal-body").innerHTML = `${data}번 리뷰 등록 완료.`
-                  document.querySelector("#exampleModalLabel").innerHTML = `등록 알림`
-                  document.querySelector(".modal-footer .save").style.display = 'none'
-                  document.querySelector("#revCnt").textContent =
-                    parseInt(document.querySelector("#revCnt").textContent) + 1
-                  loadReviewJSON()
+                    document.querySelector(".modal-body").innerHTML = `${data}번 리뷰 등록 완료.`;
+                    document.querySelector("#exampleModalLabel").innerHTML = `등록 알림`;
+                    document.querySelector(".modal-footer .save").style.display = 'none';
+                    document.querySelector("#revCnt").textContent =
+                        parseInt(document.querySelector("#revCnt").textContent) + 1;
+                    loadReviewJSON();
                 })
-            }
-            myModal.show()
-          }
+                .catch(function(error) {
+                    console.error('Error:', error);
+                });
+            };
 
+            myModal.show();
+        }
           var msg = [[${ msg }]]
-
           // 일회성 msg의 내용이 비거나 history 상태가 비지 않는 경우 return
           if (msg === '' || history.state) return
           // history 이용해서 모달창 보여준거에 대한 기록을 clear!
