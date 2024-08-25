@@ -198,25 +198,25 @@
                     const loggedInUserId = [[${ #authentication.name }]]
                     //리뷰 작성자의 회원 번호
                     const reviewOwnerId = data[i].email;
+                    //사용자랑 리뷰러랑 같으면
                     if (loggedInUserId === reviewOwnerId) {
                       document.querySelector('#exampleModalLabel').textContent = 'No ' + reviewsnum
                       document.querySelector(".modal-body").innerHTML =
-                        `
+                      `
                      <input type="hidden" name="reviewsnum" value="${reviewsnum}" readonly>
                      <input type="hidden" name="mid" value="${mid}" readonly>
                      <span>${reviewOwnerId}</span><br>
                      <input type="text" class="form-control" name="text" value="${text}">
-                    `
+                      `
                       //선택 카드, 버튼 부분 UI
-
                       document.querySelector(".modal-footer").innerHTML =
-                        `
-                    ${loggedInUserId === reviewOwnerId ? `
+                      `
+                        ${loggedInUserId === reviewOwnerId ? `
                         <button type="button" class="btn btn-danger remove">리뷰 삭제</button>
                         <button type="button" class="btn btn-warning modify">리뷰 수정</button>
-                    ` : ''}
-                    <span class="btn btn-secondary" data-bs-dismiss="modal">Close</span>
-                    `;
+                      ` : ''}
+                      <span class="btn btn-secondary" data-bs-dismiss="modal">Close</span>
+                      `;
                       //선택한 리뷰, 수정하기 버튼
                       document.querySelector(".modal-footer .modify").onclick = function () {
                         let reviewsnum = document.querySelector(".modal-body input[name='reviewsnum']")
