@@ -29,7 +29,7 @@ public class ReviewController {
   // @RequestBody : form이나, json 데이터를 전송받을 때
   // @RequestParam : 변수로 데이터를 전송받을 때
   public ResponseEntity<Long> register(@RequestBody ReviewDTO reviewDTO) {
-    log.info(">>" + reviewDTO);
+    log.info(">> reviewDTO :: " + reviewDTO);
     Long reviewnum = reviewService.register(reviewDTO);
     return new ResponseEntity<>(reviewnum, HttpStatus.OK);
   }

@@ -28,7 +28,7 @@ public class ReviewsController {
   // @RequestBody : form이나, json 데이터를 전송받을 때
   // @RequestParam : 변수로 데이터를 전송받을 때
   public ResponseEntity<Long> register(@RequestBody ReviewsDTO reviewsDTO) {
-    log.info(">>" + reviewsDTO);
+    log.info(">> reviewsDTO " + reviewsDTO);
     Long revieswnum = reviewsService.register(reviewsDTO);
     return new ResponseEntity<>(revieswnum, HttpStatus.OK);
   }
