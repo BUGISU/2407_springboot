@@ -328,6 +328,7 @@
             document.querySelector(".modal-footer .save").onclick = function () {
                let cno = document.querySelector(".modal-body span[name='cno']").textContent;
                let text = document.querySelector(".modal-body input[name='text']").value;
+
                 if (!text) {
                     document.querySelector(".modal-body input[name='text']").setAttribute('placeholder', '댓글 입력하세요');
                     document.querySelector(".modal-body input[name='text']").focus();
@@ -338,7 +339,10 @@
                     return;
                 }
                 let reviews = { fno: fno, text: text, cno: cno };
-                const url = '/reviews/';
+                const url = /*[[@{/reviews/}]]*/'url';
+                console.log("Original Object:", reviews);           // 변환 전 객체를 출력
+                console.log("Stringified Object:", JSON.stringify(reviews));  // 변환된 문자열을 출력
+
                 fetch(url + fno, {
                     method: 'POST',
                     headers: { 'Content-type': 'application/json' },
@@ -346,6 +350,7 @@
                 })
                 .then(res => res.json())
                 .then(function (data) {
+                    //console.log(">> data : " +${data});  // 서버에서 반환된 data 확인
                     document.querySelector(".modal-body").innerHTML = `${data}번 리뷰 등록 완료.`;
                     document.querySelector("#exampleModalLabel").innerHTML = `등록 알림`;
                     document.querySelector(".modal-footer .save").style.display = 'none';
