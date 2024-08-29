@@ -50,9 +50,8 @@ public class FeedsController {
   }
 
   @GetMapping({"/read", "/modify"})
-  public void getFeeds(@AuthenticationPrincipal ClubMemberAuthDTO clubMemberAuthDTO, Long fno, PageRequestDTO pageRequestDTO, Model model) {
+  public void getFeeds( Long fno, PageRequestDTO pageRequestDTO, Model model) {
     logger.info("getFeeds called with fno: {}", fno);
-    log.info("clubMemberAuthDTO_cno:", clubMemberAuthDTO.getCno());
     FeedsDTO feedsDTO = feedsService.getFeeds(fno);
     typeKeywordInit(pageRequestDTO);
     model.addAttribute("feedsDTO", feedsDTO);

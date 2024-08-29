@@ -45,7 +45,8 @@ public class ReviewsServiceImpl implements ReviewsService {
   }
 
   @Override
-  public void remove(Long reviewnum) {
-    reviewsRepository.deleteById(reviewnum);
+  public void remove(Long reviewsnum) {
+    log.info("remove reviewnum >> ",reviewsnum);
+    reviewsRepository.deleteById(reviewsnum);
   }
 }

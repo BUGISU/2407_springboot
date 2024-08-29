@@ -17,9 +17,8 @@ import java.util.List;
 public class ReviewsController {
   private final ReviewsService reviewsService;
   @GetMapping(value = "/{fno}/all", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<ReviewsDTO>> getList(@PathVariable("fno") Long fno, @PathVariable("cno") Long cno) {
+  public ResponseEntity<List<ReviewsDTO>> getList(@PathVariable("fno") Long fno) {
     log.info("fno: " + fno);
-    log.info("cno: " + cno);
     List<ReviewsDTO> reviewsDTOList = reviewsService.getListOfFeeds(fno);
     return new ResponseEntity<>(reviewsDTOList, HttpStatus.OK);
   }
@@ -35,16 +34,16 @@ public class ReviewsController {
 
   @PutMapping("/{fno}/{reviewsnum}")
   public ResponseEntity<Long> modify(@RequestBody ReviewsDTO reviewsDTO) {
-    log.info(">>" + reviewsDTO);
+    log.info(">>modify " + reviewsDTO);
     reviewsService.modify(reviewsDTO);
     return new ResponseEntity<>(reviewsDTO.getReviewsnum(), HttpStatus.OK);
   }
 
   @DeleteMapping("/{fno}/{reviewsnum}")
-  public ResponseEntity<Long> delete(@PathVariable Long revieswnum) {
-    log.info(">>" + revieswnum);
-    reviewsService.remove(revieswnum);
-    return new ResponseEntity<>(revieswnum, HttpStatus.OK);
+  public ResponseEntity<Long> delete(@PathVariable Long reviewsnum) {
+    log.info(">>delete" + reviewsnum);
+    reviewsService.remove(reviewsnum);
+    return new ResponseEntity<>(reviewsnum, HttpStatus.OK);
   }
 
 }
