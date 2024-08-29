@@ -2,10 +2,14 @@ package com.example.InstaPrj.controller;
 
 import com.example.InstaPrj.dto.FeedsDTO;
 import com.example.InstaPrj.dto.PageRequestDTO;
+import com.example.InstaPrj.dto.ReviewsDTO;
+import com.example.InstaPrj.security.dto.ClubMemberAuthDTO;
 import com.example.InstaPrj.service.FeedsService;
+import com.example.InstaPrj.service.ReviewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedsController {
   private final FeedsService feedsService;
+  private final ReviewsService reviewsService;
   private static final Logger logger = LoggerFactory.getLogger(FeedsController.class);
 
   @GetMapping("/register")
@@ -45,8 +50,9 @@ public class FeedsController {
   }
 
   @GetMapping({"/read", "/modify"})
-  public void getFeeds(Long fno, PageRequestDTO pageRequestDTO, Model model) {
+  public void getFeeds(@AuthenticationPrincipal ClubMemberAuthDTO clubMemberAuthDTO, Long fno, PageRequestDTO pageRequestDTO, Model model) {
     logger.info("getFeeds called with fno: {}", fno);
+    log.info("clubMemberAuthDTO_cno:", clubMemberAuthDTO.getCno());
     FeedsDTO feedsDTO = feedsService.getFeeds(fno);
     typeKeywordInit(pageRequestDTO);
     model.addAttribute("feedsDTO", feedsDTO);

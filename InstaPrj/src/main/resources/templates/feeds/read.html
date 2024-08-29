@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <style>
   .form-group {
     margin-bottom: 30px;
@@ -317,8 +318,8 @@
             document.querySelector('#exampleModalLabel').textContent = '리뷰 추가'
             document.querySelector(".modal-body").innerHTML =
               `
-<!--          <span name="cno" class="form-control" value="">[[${ #authentication.name }]]</span>-->
-              <input type="text" class="form-control" name="cno" value="cno" >
+             <span name="cno" class="form-control">[[${ #authentication.principal.cno }]]</span>
+              //<input type="text" class="form-control" name="cno" value="cno" >
               <input type="text" class="form-control" name="text" placeholder="Review Text...">
               `
             document.querySelector(".modal-footer").innerHTML =
@@ -328,8 +329,8 @@
               `
             // 모달창에서 댓글 추가하기 버튼 처리
             document.querySelector(".modal-footer .save").onclick = function () {
-<!--           let cno = document.querySelector(".modal-body span[name='cno']").textContent;-->
-               let cno = document.querySelector(".modal-body input[name='cno']").value;
+               let cno = document.querySelector(".modal-body span[name='cno']").textContent;
+               //let cno = document.querySelector(".modal-body input[name='cno']").value;
                let text = document.querySelector(".modal-body input[name='text']").value;
 
                 if (!text) {

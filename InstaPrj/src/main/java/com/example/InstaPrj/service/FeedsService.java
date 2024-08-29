@@ -22,6 +22,7 @@ public interface FeedsService {
 
   FeedsDTO getFeeds(Long fno);
 
+
   void modify(FeedsDTO feedsDTO);
 
   List<String> removeWithReviewsAndPhotos(Long fno);
