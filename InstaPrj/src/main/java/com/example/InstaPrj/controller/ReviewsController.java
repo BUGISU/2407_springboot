@@ -16,10 +16,10 @@ import java.util.List;
 @RequestMapping("/reviews")
 public class ReviewsController {
   private final ReviewsService reviewsService;
-
   @GetMapping(value = "/{fno}/all", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<ReviewsDTO>> getList(@PathVariable("fno") Long fno) {
+  public ResponseEntity<List<ReviewsDTO>> getList(@PathVariable("fno") Long fno, @PathVariable("cno") Long cno) {
     log.info("fno: " + fno);
+    log.info("cno: " + cno);
     List<ReviewsDTO> reviewsDTOList = reviewsService.getListOfFeeds(fno);
     return new ResponseEntity<>(reviewsDTOList, HttpStatus.OK);
   }
@@ -28,7 +28,7 @@ public class ReviewsController {
   // @RequestBody : form이나, json 데이터를 전송받을 때
   // @RequestParam : 변수로 데이터를 전송받을 때
   public ResponseEntity<Long> register(@RequestBody ReviewsDTO reviewsDTO) {
-    log.info(">> reviewsDTO " + reviewsDTO);
+    log.info(">> reviewsDTO register" + reviewsDTO);
     Long revieswnum = reviewsService.register(reviewsDTO);
     return new ResponseEntity<>(revieswnum, HttpStatus.OK);
   }
