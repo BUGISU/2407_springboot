@@ -58,6 +58,7 @@
   <th:block th:fragment="content">
     <div class="m-5">
       <h1 class=" text-primary fw-bold fs-2">Feeds Content</h1>
+<!--      <span sec:authentication="name"></span><br>-->
       <form th:action="@{/feeds/modify}" th:method="post" id="frmSend">
         <div class="form-group">
           <label for="fno" class=" fw-bold fs-4">FNO</label>
@@ -107,7 +108,8 @@
       <div>
         <div class="mt-4">
           <h5>
-            <span sec:authentication="name"></span>
+<!--            <span sec:authentication="name"></span>-->
+            <span>리 뷰</span>
             <span class="btn btn-outline-secondary addReview">Add Review</span>
             <span style="font-size:9pt">Review :
               <span id="revCnt" th:text="${feedsDTO.reviewsCnt}"></span> 개
@@ -137,6 +139,7 @@
         window.onload = function () {
           var fno = [[${ feedsDTO.fno }]]
           loadReviewJSON();
+
           const uploadResultUlLis = document.querySelectorAll(".uploadResult ul li");
           for (let i = 0; i < uploadResultUlLis.length; i++) {
             uploadResultUlLis[i].onclick = function () {
@@ -150,10 +153,9 @@
               myModal.show()
             }
           }
-
           var myModal = new bootstrap.Modal(document.querySelector('#myModal'),
             { backdrop: true });
-
+          //
           ////////////////////////////// Ajax로 리뷰 불러오기 /////////////////
           function loadReviewJSON() {
             const url = /*[[@{/reviews/}]]*/'url'
@@ -284,7 +286,7 @@
                      <input type="hidden" name="reviewsnum" value="${reviewsnum}" readonly>
                      <input type="hidden" name="cno" value="${cno}" readonly>
                      <span>작성자: ${reviewOwnerId}</span><br>
-                     <input type="text" class="form-control" name="text" value="${text}">
+                     <input type="text" class="form-control" name="text" value="${text}" readonly>
                       `
                       //선택 카드, 버튼 부분 UI
                       document.querySelector(".modal-footer").innerHTML =
@@ -312,7 +314,6 @@
           function len2(num) {
             return (num < 10) ? "0" + num : num;
           }
-
           //////////////////////////////////// 리뷰 추가하기   //////////////////////////////////
           document.querySelector('.addReview').onclick = function ()
           {
