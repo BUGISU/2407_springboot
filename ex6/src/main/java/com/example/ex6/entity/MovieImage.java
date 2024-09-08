@@ -13,6 +13,7 @@ public class MovieImage extends BasicEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long inum;
+
   private String uuid; //Universally Unique IDentifier
   private String imgName;
   private String path;

@@ -29,7 +29,7 @@ public class ReviewController {
   // @RequestBody : form이나, json 데이터를 전송받을 때
   // @RequestParam : 변수로 데이터를 전송받을 때
   public ResponseEntity<Long> register(@RequestBody ReviewDTO reviewDTO) {
-    log.info(">> reviewDTO :: " + reviewDTO);
+    log.info(">>" + reviewDTO);
     Long reviewnum = reviewService.register(reviewDTO);
     return new ResponseEntity<>(reviewnum, HttpStatus.OK);
   }
@@ -43,7 +43,7 @@ public class ReviewController {
 
   @DeleteMapping("/{mno}/{reviewnum}")
   public ResponseEntity<Long> delete(@PathVariable Long reviewnum) {
-    log.info(">>delete " + reviewnum);
+    log.info(">>" + reviewnum);
     reviewService.remove(reviewnum);
     return new ResponseEntity<>(reviewnum, HttpStatus.OK);
   }

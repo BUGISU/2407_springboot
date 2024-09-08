@@ -275,10 +275,6 @@
             if(!grade) {notice.textContent='Select Grade!'; return;}
             let review = {mno: mno, text: text.value, mid: mid.value, grade: grade}
             const url = /*[[@{/reviews/}]]*/'url';
-
-            console.log("Original Object:", review);           // 변환 전 객체를 출력
-            console.log("Stringified Object:", JSON.stringify(review));  // 변환된 문자열을 출력
-
             fetch(url+mno, {
               method: 'POST',
               headers: {'Content-type': 'application/json'},

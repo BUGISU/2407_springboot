@@ -5,6 +5,7 @@ import com.example.ex6.dto.PageRequestDTO;
 import com.example.ex6.dto.PageResultDTO;
 import com.example.ex6.entity.Movie;
 import com.example.ex6.entity.MovieImage;
+import com.example.ex6.entity.QMovie;
 import com.example.ex6.repository.MovieImageRepository;
 import com.example.ex6.repository.MovieRepository;
 import com.example.ex6.repository.ReviewRepository;
@@ -78,7 +79,7 @@ public class MovieServiceImpl implements MovieService {
     result.forEach(objects -> movieImages.add((MovieImage) objects[1]));
     Double avg = (Double) result.get(0)[2];
     Long reviewCnt = (Long) result.get(0)[3];
-    log.info(">>movieImages size :: " + movieImages.size());
+
     return entityToDto(movie, movieImages, avg, reviewCnt);
   }
 

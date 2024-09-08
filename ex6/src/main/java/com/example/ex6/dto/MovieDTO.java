@@ -15,11 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 public class MovieDTO {
   private Long mno;
-  private String title; //0
+  private String title;
   @Builder.Default // @AllArgsConstructor가 없으면 에러,기본값초기화
-  private List<MovieImageDTO> imageDTOList = new ArrayList<>();  //1
-  private double avg; //2
-  private Long reviewCnt; //3
+  private List<MovieImageDTO> imageDTOList = new ArrayList<>();
+  private double avg;
+  private Long reviewCnt;
   private LocalDateTime regDate;
   private LocalDateTime modDate;
 }

@@ -5,8 +5,6 @@ import com.example.ex6.dto.PageRequestDTO;
 import com.example.ex6.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +24,6 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class MovieController {
   private final MovieService movieService;
-  private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
 
   @GetMapping("/register")
   public void register() {
@@ -47,7 +44,6 @@ public class MovieController {
 
   @GetMapping({"/read", "/modify"})
   public void getMovie(Long mno, PageRequestDTO pageRequestDTO, Model model) {
-    logger.info("getFeeds called with mno: {}", mno);
     MovieDTO movieDTO = movieService.getMovie(mno);
     typeKeywordInit(pageRequestDTO);
     model.addAttribute("movieDTO", movieDTO);
