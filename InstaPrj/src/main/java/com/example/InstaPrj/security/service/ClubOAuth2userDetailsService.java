@@ -1,8 +1,8 @@
 package com.example.InstaPrj.security.service;
 
-import com.example.InstaPrj.entity.ClubMember;
-import com.example.InstaPrj.entity.ClubMemberRole;
-import com.example.InstaPrj.repository.ClubMemberRepository;
+import com.example.InstaPrj.entity.Members;
+import com.example.InstaPrj.entity.MembersRole;
+import com.example.InstaPrj.repository.MembersRepository;
 import com.example.InstaPrj.security.dto.ClubMemberAuthDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ClubOAuth2userDetailsService extends DefaultOAuth2UserService {
-  private final ClubMemberRepository clubMemberRepository;
+  private final MembersRepository membersRepository;
   private final PasswordEncoder passwordEncoder;
 
   @Override
@@ -48,36 +48,38 @@ public class ClubOAuth2userDetailsService extends DefaultOAuth2UserService {
     if (socialType.name().equals("GOOGLE"))
       email = oAuth2User.getAttribute("email");
     log.info("Email: " + email);
-    ClubMember clubMember = saveSocialMember(email);
+    Members members = saveSocialMember(email);
     ClubMemberAuthDTO clubMemberAuthDTO = new ClubMemberAuthDTO(
-        clubMember.getEmail(),
-        clubMember.getPassword(),
-        clubMember.getCno(),
+        members.getEmail(),
+        members.getPw(),
+        members.getMid(),
         true,
-        clubMember.getRoleSet().stream().map(
+        members.getRoleSet().stream().map(
                 role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
             .collect(Collectors.toList())
         , attributes
     );
-    clubMemberAuthDTO.setFromSocial(clubMember.isFromSocial());
-    clubMemberAuthDTO.setName(clubMember.getName());
+    clubMemberAuthDTO.setFromSocial(members.isFromSocial());
+    clubMemberAuthDTO.setName(members.getName());
     log.info("clubMemberAuthDTO: " + clubMemberAuthDTO);
     return clubMemberAuthDTO;
   }
 
-  private ClubMember saveSocialMember(String email) {
-    Optional<ClubMember> result = clubMemberRepository.findByEmail(email);
+  private Members saveSocialMember(String email) {
+    Optional<Members> result = membersRepository.findByEmail(email);
     if (result.isPresent()) return result.get();
+
     // 소셜에서 넘어온 정보가 DB에 없을 때 저장하는 부분
-    ClubMember clubMember = ClubMember.builder()
+    Members members = Members.builder()
         .email(email)
-        .password(passwordEncoder.encode("1"))
+        .pw(passwordEncoder.encode("1"))
         .fromSocial(true)
         .build();
-    clubMember.addMemberRole(ClubMemberRole.USER);
-    clubMemberRepository.save(clubMember);
-    return clubMember;
+    members.addMemberRole(MembersRole.USER);
+    membersRepository.save(members);
+    return members;
   }
+
   private SocialType getSocialType(String registrationId) {
     if (SocialType.NAVER.name().equals(registrationId)) {
       return SocialType.NAVER;

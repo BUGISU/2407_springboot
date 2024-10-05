@@ -32,8 +32,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         response.sendRedirect(request.getContextPath() + "/feeds/list");
       } else if (result.get(i).equals("ROLE_MANAGER")) {
         response.sendRedirect(request.getContextPath() + "/feeds/list");
-      }
-      else {
+      } else {
         response.sendRedirect(request.getContextPath() + "/feeds/list");
       }
       break;

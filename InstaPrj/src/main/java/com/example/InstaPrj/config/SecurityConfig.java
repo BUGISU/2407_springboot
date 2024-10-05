@@ -1,4 +1,5 @@
 package com.example.InstaPrj.config;
+
 import com.example.InstaPrj.security.handler.CustomAccessDeniedHandler;
 import com.example.InstaPrj.security.handler.CustomAuthenticationFailureHandler;
 import com.example.InstaPrj.security.handler.CustomLoginSuccessHandler;
@@ -21,6 +22,7 @@ import org.springframework.security.web.access.expression.WebExpressionAuthoriza
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -28,8 +30,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+  // 무조건 허용하는 url
   private static final String[] AUTH_WHITElIST = {
-      "/"
+      "/", "/members/join", "/members/login"
   };
 
   @Bean
@@ -42,10 +45,11 @@ public class SecurityConfig {
   @Bean
   protected SecurityFilterChain config(HttpSecurity httpSecurity)
       throws Exception {
-    // csrf 사용안하는 설정
+    // csrf 사용안하는 설정 Cross-Site Request Forgery
     httpSecurity.csrf(httpSecurityCsrfConfigurer -> {
       httpSecurityCsrfConfigurer.disable();
     });
+//    httpSecurity.csrf((csrf)->csrf.csrfTokenRepository(new HttpSessionCsrfTokenRepository()));
 
     // authorizeHttpRequests :: 선별적으로 접속을 제한하는 메서드
     // 모든 페이지가 인증을 받도록 되어 있는 상태
@@ -53,11 +57,11 @@ public class SecurityConfig {
     httpSecurity.authorizeHttpRequests(
         auth -> auth
             .requestMatchers(AUTH_WHITElIST).permitAll()
-            .requestMatchers("/feeds/list").permitAll()
+            //.requestMatchers("/sample/all").permitAll()
             .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/error/**")).permitAll()
-            .requestMatchers("/feeds/list/**").hasRole("ADMIN")
-            .requestMatchers("/feeds/list/**").access(
+            .requestMatchers("/sample/admin/**").hasRole("ADMIN")
+            .requestMatchers("/sample/manager/**").access(
                 new WebExpressionAuthorizationManager(
                     "hasRole('ADMIN') or hasRole('MANAGER')")
             )
@@ -68,9 +72,7 @@ public class SecurityConfig {
       @Override
       public void customize(FormLoginConfigurer<HttpSecurity> httpSecurityFormLoginConfigurer) {
         httpSecurityFormLoginConfigurer
-//            .loginPage("/sample/login")
-//            .loginProcessingUrl("/sample/login")
-//            .defaultSuccessUrl("/")
+            .loginPage("/members/login") // controller에도 추가해야 함.
             .successHandler(getAuthenticationSuccessHandler())
             .failureHandler(getAuthenticationFailureHandler());
       }
@@ -97,8 +99,8 @@ public class SecurityConfig {
       }
     });
     httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
-      httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
-          getAccessDeniedHandler());
+        httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
+            getAccessDeniedHandler());
     });
     httpSecurity.rememberMe(new Customizer<RememberMeConfigurer<HttpSecurity>>() {
       @Override
@@ -147,31 +149,5 @@ public class SecurityConfig {
   public LogoutSuccessHandler getLogoutSuccessHandler() {
     return new CustomLogoutSuccessHandler();
   }
-
-  // InMemory 방식으로 UserDetailsService(인증 관리 객체) 사용
-  /*@Bean
-  public UserDetailsService userDetailsService() {
-    UserDetails user1 = User.builder()
-        .username("user1")
-        .password("$2a$10$XGw3jOo9mQSoij4/so.6H.BtSRWpgPze6ZWMuc7ntyFFWqVNbcmBe")
-        .roles("USER")
-        .build();
-    UserDetails manager = User.builder()
-        .username("manager")
-        .password("$2a$10$AEHcuzENZx7OLeA.s8e.t.CvhE/a/GZf.ZKTPEBIKLv8g03zChnD2")
-        .roles("MANAGER")
-        .build();
-    UserDetails admin = User.builder()
-        .username("admin")
-        .password(passwordEncoder().encode("1"))
-        .roles("ADMIN", "MANAGER")
-        .build();
-    List<UserDetails> list = new ArrayList<>();
-    list.add(user1);
-    list.add(manager);
-    list.add(admin);
-    return new InMemoryUserDetailsManager(list);
-
-  }*/
 
 }
